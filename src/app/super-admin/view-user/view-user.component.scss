@@ -1,0 +1,250 @@
+$app-color: #e9e7e7;
+.tabview{
+    .nav-item{
+    border: none !important;
+    border-bottom: 1px solid !important;
+    }
+    th{
+        border: none;
+        padding-bottom: 2%;
+    }
+}
+.tab-container{
+    border-radius: 1em;
+    background: #eff5ff;
+}
+.main{
+    background-color: #201f25;
+    border-radius: 10px;
+    padding: 1em;
+}
+.tab-content{
+    // padding: 2%;
+    background: #eff5ff;
+}
+tbody{
+    text-align: center;
+    color: #2699fb;
+}
+thead{
+    // color:#939698;
+    text-align: center;
+}
+.drop-down{
+    width: auto;
+    background: transparent;
+    border: none;
+    color:#2699fb;
+    cursor: pointer;
+}
+
+.inner-addon {
+    position: relative;
+  }
+  
+  /* style glyph */
+  .inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+  }
+  
+  /* align glyph */
+  .left-addon .glyphicon  { left:  0px;}
+  .right-addon .glyphicon { right: 0px;}
+  
+  /* add padding  */
+  .left-addon input  { padding-left:  30px; }
+  .right-addon input { padding-right: 30px; }
+  
+
+
+
+  body {
+    background-color: #bcd9f5
+}
+
+.tab-content{
+    background-color: #dff0ff;
+    border-radius: 10px; 
+}
+
+.table thead th{
+    font-size: 0.9em;
+    font-weight: 600;
+    color: $app-color;
+}
+
+.table td{
+    border-bottom: 1px solid #dee2e6;
+    border-top: 0px;
+    color: $app-color;
+    font-size: 0.8em;
+}
+
+.card {
+    // max-width: 25rem;
+    padding: 0;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #f37239;
+}
+
+.nav-link {
+    color: #9c9a9a;
+    font-weight: 500
+}
+
+.nav-link:hover {
+    color: #e9e7e7;
+}
+
+a.active {
+    border-bottom: 2px solid #fff;
+}
+
+.nav-link:hover {
+    color: #000;
+}
+
+.nav-pills .nav-link.active {
+    color: #fff;
+    background-color: #201f25;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-weight: 600
+}
+
+.tab-content {
+    // padding-bottom: 1.3rem
+}
+
+// .form-control {
+//     background-color: rgb(241, 243, 247);
+//     border: none
+// }
+
+// span {
+//     margin-left: 0.5rem;
+//     padding: 1px 10px;
+//     color: white;
+//     background-color: rgb(143, 143, 143);
+//     border-radius: 4px;
+//     font-weight: 600
+// }
+
+.third {
+    padding: 0 1.5rem 0 1.5rem
+}
+
+label {
+    font-weight: 500;
+    color: rgb(104, 104, 104)
+}
+
+.btn-success {
+    float: right
+}
+
+.form-control:focus {
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: ""
+}
+
+ul {
+    list-style: none;
+    margin-top: 1rem;
+    padding-inline-start: 0
+}
+
+.search {
+    padding: 0 1rem 0 1rem
+}
+
+.ccontent li .wrapp {
+    padding: 0.3rem 1rem 0.001rem 1rem
+}
+
+.ccontent li .wrapp div {
+    font-weight: 600
+}
+
+.ccontent li .wrapp p {
+    font-weight: 360
+}
+
+.ccontent li:hover {
+    background-color: rgb(117, 93, 255);
+    color: white
+}
+
+.addinfo {
+    padding: 0 1rem
+}
+.table th{
+    border: none;
+}
+#machineModal{
+    .modal-body{
+        // text-align: center;
+        padding: 5%;
+        padding-top: 0% !important;
+    }
+    .row{
+        padding: 2%;
+    }
+}
+.drop-down{
+    width: auto;
+    background: transparent;
+    border: none;
+    color:$app-color;
+    font-size: 80%;
+    cursor: pointer;
+}
+.locationTxt{
+    font-size: 0.8em;
+} 
+.discountTxt{
+    font-weight: bold;
+    color: #000;
+}
+.healthTitle{
+    font-size: 0.8em;
+    float: left;
+    margin-right: 1em;
+}
+.healthVal{
+    font-size: 0.9em;
+    color: #9c9a9a;
+    float: left;
+}
+.healthLogs{
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #000;
+}
+hr{
+    margin-top: 0em;
+}
+.personalTxt{
+    font-weight: 500;
+    font-size: 0.8em;
+}
+.rewardTopTxt{
+    font-size: 0.9em;
+    color: #000;
+}
+
+.rounded-circle{
+    width: 80px;
+    height: 80px;
+}
+.nameAddress{
+    padding: 1em;
+}

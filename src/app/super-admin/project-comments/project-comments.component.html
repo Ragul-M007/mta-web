@@ -1,0 +1,373 @@
+<div class="container" style="height: 100%;">
+
+
+  <div class="modal fade"  data-backdrop="static" id="uploadModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="color: black;">
+        <div class="row" style="padding: 5%;">
+          <div class="col-md-6">
+            <span class="semiBold-font">Add Comments</span>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="close" #closeModal data-dismiss="modal">&times;</button>
+          </div>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form [formGroup]="uploadForm">
+
+            <div class="row">
+              <div class="col-lg-6">
+                <span class="full-width f-small">Upload File</span>
+                <input type="file" class="form-control  br-2 wth-80 uploaddocs" #fileInput formControlName="file_upload" accept=".jpg, .jpeg, .png, .gif, .pdf, .xlsx, .docx" (change)="fileChangeEvent($event)" />
+                <div *ngIf="uploadFrm.file_upload.hasError('required') && uploadFrm.file_upload.touched" class="font-italic error-box">
+                    <small class="error-font">Please select a File</small>
+                </div>
+              </div>
+
+
+              <div class="col-lg-6">
+                <span class="full-width f-small">Comment</span>
+
+                <textarea type="text" [(ngModel)]="message" class="form-control f-small br-2 wth-80" style="min-height: 40px;max-height: 45px;" formControlName="description"
+                  placeholder="Type your comment"></textarea>
+                  <div *ngIf="uploadFrm.description.hasError('required') && uploadFrm.description.touched" class="font-italic error-box">
+                    <small class="error-font">Please enter Description</small>
+                  </div>
+
+              </div>
+
+            </div>
+
+
+            <i type="submit" class="btn btn-primary btn-bg mt-3 br-2  width-45 semiBold-font app-color"
+              (click)="sendMessage(message,false,'')" aria-hidden="true">Send</i>
+            <div class="text-center">
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" style="height: 100%;color:black">
+
+
+    <div class="dashCard light-font web-scroll" id="dashCards2">
+      <div class="row full-width" style="padding-left:2%;font-size: 16px;">
+        <p (click)="backClicked()"><i class="fa fa-long-arrow-left " aria-hidden="true"></i>&nbsp; <span>BACK</span></p>
+      </div>
+      <div class="row full-width">
+
+        <div class="col-sm-6" style="text-align:left">
+          <div>
+            <img style="height: 20px;" src="assets/image/{{commentsData.ext_img}}.svg"
+              onerror="this.src='assets/image/user.svg'" class="float-left">
+          </div>
+          <div style="padding-left:10px">
+            <div class="semiBold-font">{{commentsData.project_name}}</div>
+          </div>
+
+        </div>
+        <div class="col-sm-6" style="text-align:right">
+          <p><i class="fa fa-commenting secondry-color" aria-hidden="true"></i> {{chatListList}} Comments</p>
+        </div>
+
+      </div>
+      <hr>
+
+      <div class="card-columns full-width" style="column-count: 1;border-radius: 10px; " *ngFor="let item of chatList">
+        <div class="card chatList" [style.padding-bottom]="chatListList === item.count ? '90px' : '0px' ">
+          <div class="card-header d-flex pb-0 r-border" style="background-color: #fff;">
+
+            <div class="row full-width">
+
+              <div class="col-sm-6" style="text-align:left">
+                <div>
+                  <img style="width:10% !important;height: 40px;" src="{{http.imageURL}}{{item.user_img}}"
+                    onerror="this.src='assets/image/user.svg'" class="float-left rounded-circle">
+                </div>
+                <div style="padding-left:50px">
+                  <div class="semiBold-font">{{item.name}} <span class="light-font secondry-color ">.
+                      {{item.date | date:'MMM d, y, h:mm a'}}</span></div>
+
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-sm-12 light-font" class="msg">
+                <div *ngIf="UserRole == 'ADMIN'" class="close" (click)="deleteComment(item)"
+                  style="padding-left: 975;"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  <div *ngIf=" UserRole != 'ADMIN' && userdetails.user_id == item.comment_user_id" class="close" (click)="deleteComment(item)"
+                  style="padding-left: 975;"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                <span class="secondry-color"
+                  *ngIf="item.recipient?.length != 2 || item.category_list?.length != 2">{{item.recipient}}
+                  {{item.category_list}}</span>
+                <div *ngIf="item.filterchart === 'wav'">
+                  <audio controls="" *ngIf="item.audio">
+                    <source src="{{http.imageURL}}{{item.audio}}" type="audio/wav">
+                  </audio>
+                </div>
+
+                <div *ngIf="item.filterchart === 'pdf'">
+                  <!-- <i class="fa fa-file-pdf-o"></i> -->
+                  <p>Open PDF file
+                    <a href="{{http.imageURL}}{{item.audio}}" style="padding-left: 8px;">
+                        <i style="font-size: 35px;" class="fa fa-file-pdf-o"></i> 
+                      <!-- <img src="./../../../assets/image/jpg-img.jpeg" style="height:20px; width: 20px;" /> -->
+                    </a></p>
+                  <!-- <audio controls="" *ngIf="item.audio">
+                                            <source src="{{http.imageURL}}{{item.audio}}" type="audio/wav">
+                                            </audio> -->
+                </div>
+                <div *ngIf="item.filterchart === 'xlsx'">
+                  <!-- <i class="fa fa-file-pdf-o"></i> -->
+                  <p>Open Excel file
+                    <a href="{{http.imageURL}}{{item.audio}}"  style="padding-left: 8px;">
+                      <img  style="width:4% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                        <!-- <i style="font-size: 35px;" class="fa fa-file-pdf-o"></i>  -->
+                      <!-- <img src="./../../../assets/image/jpg-img.jpeg" style="height:20px; width: 20px;" /> -->
+                    </a></p>
+                  <!-- <audio controls="" *ngIf="item.audio">
+                                            <source src="{{http.imageURL}}{{item.audio}}" type="audio/wav">
+                                            </audio> -->
+                </div>
+                <div *ngIf="item.filterchart === 'xls'">
+                  <!-- <i class="fa fa-file-pdf-o"></i> -->
+                  <p>Open Excel file
+                    <a href="{{http.imageURL}}{{item.audio}}"  style="padding-left: 8px;">
+                      <img  style="width:4% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                        <!-- <i style="font-size: 35px;" class="fa fa-file-pdf-o"></i>  -->
+                      <!-- <img src="./../../../assets/image/jpg-img.jpeg" style="height:20px; width: 20px;" /> -->
+                    </a></p>
+                  <!-- <audio controls="" *ngIf="item.audio">
+                                            <source src="{{http.imageURL}}{{item.audio}}" type="audio/wav">
+                                            </audio> -->
+                </div>
+                <div *ngIf="item.filterchart == 'jpeg'">
+                  <p>Open Excel file
+                    <a href="{{http.imageURL}}{{item.audio}}" download>
+                      <img src="./../../../assets/image/jpg-img.jpeg" style="height:5%; width: 5%;" />
+                    </a>
+                  </p>               
+                </div>
+
+                <div *ngIf="item.filterchart == 'png'">
+                  <p>Open Excel file
+                    <a href="{{http.imageURL}}{{item.audio}}" download>
+                      <img src="./../../../assets/image/jpg-img.jpeg" style="height:5%; width: 5%;" />
+                    </a>
+                  </p>
+                </div>
+
+                <div *ngIf="item.filterchart == 'mp4' || item.filterchart == 'mpeg'">
+                  <!-- <img src="{{http.imageURL}}{{item.audio}}" style="height:100px; width: 100px;"/> -->
+                  <!-- <audio controls="" *ngIf="item.audio">
+                                                <source src="{{http.imageURL}}{{item.audio}}" type="audio/wav">
+                                                </audio> -->
+                  <video width="320" height="240" controls>
+                    <source src="{{http.imageURL}}{{item.audio}}" type="video/mp4">
+                  </video>
+                </div>
+                <p style="padding-top:15px;font-size: 13px;" *ngIf="item.comment != 'undefined'">{{ item.comment }}</p>
+              </div>
+
+              <div class="col-sm" style="cursor: pointer;" (click)="openReplies(item)">
+                <span *ngIf="item.replies" class="semiBold-font secondry-color"> {{item.replies.length}} Replies </span>
+                <span *ngIf="!item.replies" class="semiBold-font secondry-color"> Reply </span>
+                <i class="fa fa-share dashIcon" style="font-size:14px;color:black" aria-hidden="true"></i>
+                <div *ngIf="item.showReplies">
+                  <hr>
+                  <div *ngFor="let reply of item.replies" class="replies"> 
+
+                    <div *ngIf="UserRole == 'ADMIN'" class="close" (click)="deleteComment(reply)"
+                    style="padding-left: 975;"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                    <div *ngIf=" UserRole != 'ADMIN' && userdetails.user_id == reply.comment_user_id" class="close" (click)="deleteComment(reply)"
+                    style="padding-left: 975;"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+
+
+                    <img style="width:3% !important" src="{{http.imageURL}}{{reply.user_img}}"
+                      src="assets/image/user.svg" onerror="this.src='assets/image/user.svg'"
+                      class="float-left rounded-circle ">
+
+                    <div style="padding-left:50px">
+                      <div class="semiBold-font">{{reply.comment_by}} <span class="light-font secondry-color">.
+                          {{reply.date | date:'MMM d, y, h:mm a'}}</span></div>
+
+
+                      <div class="light-font">
+                        <span class="secondry-color"
+                          *ngIf="reply?.recipient || reply?.category_list">@{{reply?.recipient}}
+                          {{reply?.category_list}}</span>
+                        <div *ngIf="reply.filterchart === 'wav'">
+                          <audio controls="" >
+                            <source src="{{http.imageURL}}{{reply.audio}}" type="audio/wav">
+                          </audio>
+                        </div>
+ 
+                        <div *ngIf="reply.filterchartRe == 'xlsx'">
+                          <p>Open Excel file
+                            <a href="{{http.imageURL}}{{reply.audio}}"  style="padding-left: 8px;">
+                              <img  style="width:5% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                            </a></p>
+                        </div>
+
+                        <div *ngIf="reply.filterchartRe == 'xls'">
+                          <p>Open Excel file
+                            <a href="{{http.imageURL}}{{reply.audio}}"  style="padding-left: 8px;">
+                              <img  style="width:5% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                            </a></p>
+                        </div>
+
+                        <div *ngIf="reply.filterchartRe  == 'pdf'">
+                          <p>Open PDF file
+                            <a href="{{http.imageURL}}{{reply.audio}}" style="padding-left: 8px;">
+                                <i style="font-size: 20px;" class="fa fa-file-pdf-o"></i> 
+                            </a></p>
+                        </div>
+
+                        <div *ngIf="reply.filterchartRe == 'jpeg'">
+                          <p>Open Image 
+                            <a href="{{http.imageURL}}{{reply.audio}}" download style="padding-left: 8px;">
+                              <img src="./../../../assets/image/jpg-img.jpeg" style="width:5% !important; cursor: pointer;" />
+                            </a>
+                          </p>
+                        </div>
+
+
+                        <div *ngIf="reply.filterchartRe == 'png'">
+                          <img src="{{http.imageURL}}{{reply.audio}}" style="height:40px; width: 30px;" />
+                        </div>
+
+                        <div *ngIf="reply.filterchartRe == 'mp4' || reply.filterchartRe === 'mpeg'">
+                          <video width="20" height="40" controls>
+                            <source src="{{http.imageURL}}{{reply.audio}}" type="video/mp4">
+                          </video>
+                        </div>
+                        <p *ngIf="reply.comment != 'undefined'">
+                          {{reply.comment}}</p>
+                      </div>
+
+                    </div>
+                    <hr>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row" *ngIf="item.showReplies">
+              <div class="col-md-12" >
+
+                <div class="form-group" style="margin-bottom: 0%;display: flex;">
+                  <!-- <mat-form-field class="example-full-width form-group"> -->
+                  <!-- <input matInput class="autoInput form-control"
+                                            aria-label="State" placeholder="Tag user"
+                                            [matAutocomplete]="autoMain"
+                                            [formControl]="stateCtrl"> -->
+                  <ng-multiselect-dropdown class=" wth-80" style="padding:0px;border:none;width:30%"
+                    [placeholder]="'Tag users'" [settings]="dropdownSettings" [data]="userList"
+                    [(ngModel)]="selectedItems" (onSelect)="onUserSelect($event)" (onDeSelect)="onuserDeSelect($event)"
+                    (onSelectAll)="onSelectAllUsers($event)">
+                  </ng-multiselect-dropdown>
+                  <ng-multiselect-dropdown class="  wth-80" style="padding:0px;border:none;width:30%"
+                    [placeholder]="'Tag Categories'" [settings]="dropdownSettingsCat" [data]="catList"
+                    [(ngModel)]="selectedCatItems" (onSelect)="onCatSelect($event)"
+                    (onSelectAll)="onSelectAllCats($event)">
+                  </ng-multiselect-dropdown>
+
+                                               
+                </div>
+
+              </div>
+              <div class="col-md-12">
+
+                <div class="form-group" style="margin-bottom: 0%;display: flex;">
+
+                  <textarea type="text" [(ngModel)]="message" class="form-control"
+                    placeholder="Type your comment"></textarea>
+
+
+                  <div class="custom_fileupload">
+                    <i class="fa fa-plus dashIcon customfileinput sendMsgIcon" data-toggle="modal"
+                      data-target="#uploadModal" (click)="rmveditdata()"></i>
+                  </div>
+                  <!-- <i *ngIf="!recording" class="fa fa-microphone dashIcon  micIcon" 
+                    style="margin-left: 0em;" aria-hidden="true" disabled></i>
+
+                  <i *ngIf="recording" class="fa fa-microphone-slash dashIcon  stopIcon" 
+                    style="margin-left: 0em;" aria-hidden="true" disabled></i> -->
+
+                  <i class="fa fa-paper-plane dashIcon  sendMsgIcon" (click)="sendMessage(message,true,item)"
+                    aria-hidden="true"></i>
+
+
+                </div>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row full-width" *ngIf="showReplies"
+        style="position:fixed; bottom: 0px; background-color: #fff; width: 75% !important;">
+        <div class="col-md-12" style="padding:2%;">
+
+          <div class="form-group" style="margin-bottom: 0%;display: flex;">
+
+            <ng-multiselect-dropdown class=" wth-80" style="padding:0px;border:none;width:30%"
+              [placeholder]="'Add users'" [settings]="dropdownSettings" [data]="userList" [(ngModel)]="selectedItems"  [disableSearch]="isSearchDisabled"  (onSearchChange)="updateSearchResults($event)"  (onDeSelect)="onuserDeSelect($event)"
+              (onSelect)="onUserSelect($event)" (onSelectAll)="onSelectAllUsers($event)">
+            </ng-multiselect-dropdown>
+
+            <ng-multiselect-dropdown class="  wth-80" style="padding:0px;border:none;width:30%"
+              [placeholder]="'Tag Categories'" [settings]="dropdownSettingsCat" [data]="catList"
+              [(ngModel)]="selectedCatItems" (onSelect)="onCatSelect($event)" (onDeSelect)="oncatDeSelect($event)" (onSelectAll)="onSelectAllCats($event)">
+            </ng-multiselect-dropdown>
+
+          </div>
+
+        </div>
+        <div class="col-md-12" style="height: 65px;">
+
+          <div class="form-group" style="margin-bottom: 0%;display: flex;">
+
+            <textarea type="text" style="min-height: 50px;max-height: 50px;margin: 0 !important;" [(ngModel)]="message" class="form-control" (keydown)="whiteSpaceCheck2($event)"
+              placeholder="Type your comment"></textarea>
+            <!-- doms -->
+            <!-- <div class="custom_fileupload">
+                                <i class="fa fa-plus dashIcon customfileinput sendMsgIcon"   aria-hidden="true"><input type="file" id="FileInput" (change)="fileChangeEvent($event)" class="custom_fileupload_input"/> </i>
+                                </div> -->
+            <i class="fa fa-plus dashIcon customfileinput sendMsgIcon ml-2" data-toggle="modal" data-target="#uploadModal"
+              (click)="rmveditdata()"></i>
+            <!-- <i *ngIf="!recording" class="fa fa-microphone dashIcon  micIcon ml-2" (click)="initiateRecording()"
+              aria-hidden="true" style="margin-left: 0em;" disabled></i>
+            <i *ngIf="recording" class="fa fa-microphone-slash dashIcon  stopIcon ml-2" (click)="stopRecording()"
+              aria-hidden="true" style="margin-left: 0em;" disabled></i> -->
+
+            <i class="fa fa-paper-plane dashIcon  sendMsgIcon ml-2" (click)="sendMessage(message,true,commentsData,files)"
+              aria-hidden="true"></i>   
+
+ 
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

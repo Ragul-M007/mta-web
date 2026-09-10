@@ -1,0 +1,133 @@
+body {
+  background: #fff;
+  color: #000;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  margin: 0;
+}
+h1, h2, h3, h4, h5, h6, li, p {
+  margin: 0 0 16px;
+}
+h1 { font-size: 40px; line-height: 60px; }
+h1, h2 { font-weight: 700; }
+h2 { font-size: 32px; line-height: 48px; }
+h3 { font-size: 24px; line-height: 36px; font-weight: 700; }
+h4 { font-size: 20px; line-height: 30px; font-weight: 700; }
+h5, h6 { font-size: 16px; line-height: 24px; font-weight: 700; }
+a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #000;
+}
+a:hover { text-decoration: underline; }
+
+.visible { display: block; }
+.hidden { display: none; }
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-logo {
+  height: 70px !important;
+}
+
+.container {
+  position: relative;
+  width: 90%;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.header {
+  padding: 12px 0 0;
+  border-bottom: 1px solid #eee;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.header-left,
+.header-right {
+  flex: 1;
+}
+
+.header-right {
+  text-align: right;
+}
+
+.header-center {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: #f5f5f5;
+    border-color: #bbb;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.title {
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 700;
+  margin: 16px 0;
+}
+
+.translations-content-container {
+  padding-top: 16px;
+  flex: 1;
+}
+
+.footer-spacer {
+  margin: 32px 0 0;
+  padding: 16px 0;
+  border-top: 1px solid #eee;
+}
+
+.site-footer {
+  background: #f8f8f8;
+  border-top: 1px solid #eee;
+  padding: 20px 0;
+  margin-top: auto;
+
+  .copyright {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+  }
+}

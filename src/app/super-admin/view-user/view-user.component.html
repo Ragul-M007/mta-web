@@ -1,0 +1,190 @@
+<div class="main-content pb-0 app-color">
+        <div class="card r-border">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-1">
+                        <img src="{{ http.imageURL + memberData.picture }}" class="float-left rounded-circle full-width">
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="nameAddress">
+                            <h6>{{ memberData.first_name }}</h6>
+                            <p class="locationTxt">{{ memberData.address }}</p>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="personalTxt">{{ memberData.email_id }}</p>
+                        <p class="personalTxt">+91 {{ memberData.contact_no }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="rightTxt" style="float:right;">
+                            <p>Extra Discount</p>
+                            <p class="discountTxt app-color">2%</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                            <div class="rightTxt" style="float:right;">
+                                <p>Trainer</p>
+                                <p class="discountTxt app-color">Bibin Andrews</p>
+                            </div>
+                        </div>
+                </div><br>
+    
+                <h6 class="healthLogs app-color">Health Logs</h6>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="healthTitle">Age</p>
+                        <p class="healthVal text-black">{{ memberData.age }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="healthTitle">Weight</p>
+                        <p class="healthVal text-black">{{ memberData.weight }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="healthTitle">Height</p>
+                        <p class="healthVal text-black">{{ memberData.height }}</p>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container card  d-flex justify-content-center">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item"> <a class="nav-link active text-fnt80" id="trainers-orders-tab" data-toggle="pill" href="#trainers-orders"
+                    role="tab" aria-controls="pills-home" aria-selected="true" (click)="getOrders()">Orders</a> </li>
+            <li class="nav-item"> <a class="nav-link text-fnt80" id="trainers-wallet-tab" data-toggle="pill" href="#trainers-wallet"
+                    role="tab" aria-controls="pills-contact" aria-selected="false" (click)="getWallet()">Wallet</a> </li>
+        </ul> <!-- content -->
+        <div class="tab-content" id="pills-tabContent p-3">
+            <!-- 1st card -->
+            <div class="tab-pane fade show active" id="trainers-orders" role="tabpanel" aria-labelledby="trainers-orders-tab">
+                <div class="tab-container">
+                    <div class="main">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order id</th>
+                                    <th>Machine Name</th>
+                                    <th>No of Products</th>
+                                    <th>Total Price</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let order of orderList">
+                                    <td>{{ order.order_id }}</td>
+                                    <td>{{ order.machine_name }}</td>
+                                    <td>{{ order.no_of_prod }}</td>
+                                    <td>INR {{ order.total_price }}</td>
+                                    <td>{{ dataService.dateFormat(order.date) }}</td>
+                                    <td>
+                                        <i class="fa fa-eye secondry-color" style="cursor: pointer;" aria-hidden="true" data-toggle="modal"
+                                            data-target="#orderModal" (click)="viewOrders(order)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> <!-- 2nd card -->
+            <div class="tab-pane fade" id="trainers-wallet" role="tabpanel" aria-labelledby="trainers-wallet-tab">
+                <div class="main">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="rewardTopTxt app-color">Amount in Wallet</h6>
+                            <h4 class="secondry-color">RS 1780</h4>
+                        </div>
+                    </div><br>
+                    <table class="table">
+                        <thead>
+                            <tr style="text-align:left;">
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amt</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align:left">
+                                <td>20-01-2021</td>
+                                <td>Added from Bank</td>
+                                <td>RS 300</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderModal" data-backdrop="static">
+            <div class="modal-dialog orderModalDialog">
+                <div class="modal-content">
+                    <div class="modal-header r-border">
+                        <h5 class="modal-title">View Orders</h5>
+                        <!-- <div class="card upload-card"> -->
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <!-- </div> -->
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="displayOrders">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>{{ viewOrderList.machine_name }}</h6>
+                                    <p><span class="title">Order ID :</span> {{ viewOrderList.order_id }}</p>
+                                    <p><span class="title">Payment Type :</span> {{ viewOrderList.payment_type }}</p>
+                                    <p><span class="title" *ngIf="viewOrderList.coupon_code != null || viewOrderList.coupon_code != undefined">Coupon
+                                            Code :</span> {{ viewOrderList.coupon_code }}</p>
+                                    <p><span class="title" *ngIf="viewOrderList.discount_type != null || viewOrderList.discount_type != undefined">Discount
+                                            Type :</span> {{ viewOrderList.discount_type }}</p>
+                                    <p><span class="title" *ngIf="viewOrderList.discounted_amount != null || viewOrderList.discounted_amount != undefined">Discounted
+                                            Amount :</span> INR {{ viewOrderList.discounted_amount }}</p>
+                                    <p><span class="title">Total Amount :</span> INR {{ viewOrderList.total_amount }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="secondry-color" style="float: right; font-weight: bold;">{{
+                                        dataService.dateFormat(viewOrderList.date) }}</p>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="table table-responsive">
+                                <table class="table orderTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Category Name</th>
+                                            <th scope="col">Flavour Name</th>
+                                            <th scope="col">Product Quantity</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col" style="width:25%;">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="app-color" *ngFor="let product of viewOrderList.products">
+                                            <td>
+                                                <span style="margin-right:0.7em;">
+                                                    <img [src]="http.imageURL + product.product_img" onerror="this.src='assets/image/user.svg'"
+                                                        style="float:left;margin-right: 1em;" width="20px" height="20px" class="rounded mx-auto d-block">
+                                                </span>
+                                                {{ product.product_name }}
+                                            </td>
+                                            <td>{{ product.category_name }}</td>
+                                            <td>{{ product.flavour_name }}</td>
+                                            <td>{{ product.prod_qty }}</td>
+                                            <td>Rs {{ product.price }}</td>
+                                            <td style="text-align: justify;">{{ product.product_description }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

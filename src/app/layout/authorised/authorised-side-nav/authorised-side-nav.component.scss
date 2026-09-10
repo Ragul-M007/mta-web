@@ -1,0 +1,228 @@
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa
+}
+
+p {
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s
+}
+
+.navbar {
+    padding: 15px 15px;
+    background: #f37239 !important;
+    border: none;
+    border-radius: 0;
+    // position: fixed;
+    // margin-left: 15.6em;
+    // width: 80%;
+    // z-index: 10;
+    // box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1)
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    background-image: linear-gradient(to right, #313133, #313133);
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    color: #fff;
+    transition: all 0.3s;
+    // z-index: 10;
+    // position: fixed;
+    background-color: #000;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+// .open{
+//     margin-left: 15.5em;
+// }
+
+// .not-open{
+//     margin-left: 0em;
+// }
+
+// #sidebar{
+//     .content-wrapper{
+//         margin-left: 16em;
+//     }
+// }
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    // background-image: linear-gradient(#f05043, #f37239); ;
+}
+
+#sidebar ul.components {
+    padding: 20px 0px;
+}
+
+#sidebar ul p {
+    padding: 10px;
+    font-size: 15px;
+    display: block;
+    color: #fff
+}
+
+#sidebar ul li a {
+    padding: 0.9em 2.5em;
+    font-size: 0.9em;
+    display: block
+}
+
+#sidebar ul li a:hover {
+    color: #fff;
+    background: #201f25;
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #318fb5
+}
+
+a[data-toggle="collapse"] {
+    position: relative
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%)
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #318fb5;
+}
+
+ul.CTAs {
+    padding: 20px
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px
+}
+
+a.download,
+a.download:hover {
+    background: #318fb5;
+    color: #fff
+}
+
+.content {
+    width: 100%;
+    // padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s
+}
+
+.content-wrapper {
+    padding: 15px;
+    background-color: #f37239;
+    padding-top: 2em !important;
+    height: 100% !important;
+}
+
+.content-wrapper{
+    // margin-left: 15.5em;
+}
+
+#sidebarCollapse {
+    background-color: #201f25 !important;
+    color: #f37239;
+    border-color: transparent;
+}
+
+#sidebarCollapseclose{
+    background-color: #201f25 !important;
+    color: #f37239;
+    border-color: transparent;
+}
+
+.dropdown-menu{
+    top: 3em !important;
+    right: 3em !important;
+    left: unset;
+}
+
+.input-group>.input-group-prepend>.input-group-text {
+    font-size: 0.7em;
+    border-radius: 2em 0em 0em 2em;
+    font-weight: 700;
+    background-color: transparent;
+}
+
+.addGym {
+    border-radius: 0em 2em 2em 0em !important;
+}
+
+@media(maz-width:768px) {
+    #sidebar {
+        margin-left: -250px
+    }
+
+    #sidebar.active {
+        margin-left: 0px
+    }
+
+    #sidebarCollapse span {
+        display: none
+    }
+    #sidebarCollapseclose span{
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 600px !important;
+    }
+}
+
+
+
+
+
+
+
+
+// //

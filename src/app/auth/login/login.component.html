@@ -1,0 +1,439 @@
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto bg_img">
+    <!-- <div class="card card0 border-0 b-rad20"> -->
+        <div class="row d-flex" >
+            <div class="col-md-4 col-sm-4">
+                <!-- <div class="card1 pb-5">
+
+                    <div class="row px-3 justify-content-center mt-4 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png"
+                            class="image"> </div>
+                </div> -->
+            </div>
+            <div class="col-md-5 col-sm-5">
+                <div class="card2 card border-0 px-4 py-5 b-rad20">
+                    
+                    <form [formGroup]="loginForm" >
+                        <div class="row" style="margin-left: 35% !important;">
+                            <img class="logo" src="../../../assets/image/icon.png" />
+                        </div>
+                        <div class="row" >
+                            <h6 class="login-text">Login</h6>
+                        </div>
+                        <div class="row px-3 mb-4"> 
+                            <span class="full-width f-small">Email Id</span>
+                            <input class="br-2 f-small" type="text" formControlName="email_id" >
+                            <div *ngIf="(frm.email_id.hasError('required') || frm.email_id.hasError('pattern')) && frm.email_id.touched"
+                                class="font-italic error-box"><small>Please enter valid Email</small></div>
+                        </div>
+
+                        <div class="row px-3"> 
+                            <span class="full-width f-small">Password</span>
+                            <input type="password" class="br-2 f-small" formControlName="password">
+                            <div *ngIf="frm.password.hasError('required') && frm.password.touched" class="font-italic error-box">
+                                <small>Please enter valid password</small>
+                            </div>
+                        </div>
+
+                        <div >
+                            <a href="#" class="f-small" aria-hidden="true" (click)="forgotPassword()" data-toggle="modal" data-target="#forgotPassModal">Forgot
+                                Password?</a>
+                        </div>
+                        <!-- <div class="row px-3 mb-4">
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                <input id="chk1" type="checkbox" name="chk" class="custom-control-input">
+                                <label for="chk1" class="custom-control-label text-sm ">Remember me</label>
+                            </div>
+                        </div> -->
+                    </form>
+                    <div class="row mb-3 px-3" style="padding-left: 30% !important;padding-top: 5% !important;"> <button type="submit" (click)="login();" class="btn btn-bg btn-primary br-2 wth-60 text-center">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-3">
+
+        </div>
+    <!-- </div> -->
+</div>
+
+<div class="modal fade" id="forgotPassModal" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 *ngIf="showEmail">Email Address Verification</h6>
+                <h6 *ngIf="showOTP">OTP Verification</h6>
+                <h6 *ngIf="showChangePwd">Change Password</h6>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <div class="emailID" *ngIf="showEmail">
+                    <!-- <div class="row">
+                        <div class="col-md">
+
+                        </div>
+                        <div class="col-md">
+                            <i class="fa fa-arrow-circle-o-right secondry-color" (click)="otpPage()" style="cursor:pointer; float:right; cursor: pointer; font-size: 1.5em;"
+                                aria-hidden="true"></i>
+                        </div>
+                    </div><br> -->
+
+                    <form [formGroup]="emailForm">
+                        <div class="row full-width">
+                            <div class="col-md-12">
+                                <div class="input-group mb-3 full-width">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text full-width required-field">Email Address</span>
+                                    </div>
+                                    <input type="email" class="form-control emailInput addGym br-2 full-width"
+                                        formControlName="emailid">
+                                </div>
+                                <div *ngIf="emailFrm.emailid.hasError('required') && emailFrm.emailid.touched" class="font-italic error-box">
+                                    <small>Please enter the Email Address</small>
+                                </div>
+                                <div *ngIf="emailFrm.emailid.hasError('pattern')" class="font-italic error-box">
+                                    <small>Not a Valid Email Address</small>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                            (click)="verifyEmail()">Verify</button>
+                        <button type="submit" data-dismiss="modal" style="background-color: #d30000 !important;"  #closeModal class="btn mt-3 br-2 width-45 text-fnt80 app-color">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="OTPscreen" *ngIf="showOTP">
+                    <!-- <div class="row">
+                        <div class="col-md">
+
+                        </div>
+                        <div class="col-md">
+                            <i class="fa fa-arrow-circle-o-right secondry-color" (click)="changePwdPage()" style="float: right;font-size: 1.5em;cursor: pointer;"
+                                aria-hidden="true"></i>
+                            <i class="fa fa-arrow-circle-o-left secondry-color" (click)="emailVerifyPage()" style="padding-right: 0.4em; float: right;font-size: 1.5em;cursor: pointer;"
+                                aria-hidden="true"></i>
+                        </div>
+                    </div><br> -->
+
+                    <div class="otpInput">
+                        <p>Enter OTP code which is send to your registered Email</p>
+                        <ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:5}"></ng-otp-input>
+                        
+                        <p class="secondry-color" style="margin-top: 2em;cursor: pointer;" (click)="verifyEmail()"> Resend OTP </p>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                            (click)="verifyOTP()">Verify</button>
+                        <button type="submit" data-dismiss="modal" #closeModal class="btn btn-primary mt-3 br-2 width-45 text-fnt80 app-color" >Cancel</button>
+                    </div>
+                </div>
+
+                <div class="changePassword" *ngIf="showChangePwd">
+                    <!-- <div class="row">
+                        <div class="col-md">
+
+                        </div>
+                        <div class="col-md">
+                            <i class="fa fa-arrow-circle-o-left secondry-color" (click)="backToOtpPage()" style="float: right;font-size: 1.5em;cursor: pointer;"
+                                aria-hidden="true"></i>
+                        </div>
+                    </div><br> -->
+
+                    <form [formGroup]="changePwdForm">
+                        <div class="row full-width">
+                            <div class="col-md-12">
+                                <div class="input-group mb-3 full-width">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text full-width required-field">New Password</span>
+                                    </div>
+                                    <input type="password" class="form-control emailInput addGym br-2 full-width"
+                                        formControlName="newPassword">
+                                </div>
+                                <div *ngIf="passwdFrm.newPassword.hasError('required') && passwdFrm.newPassword.touched" class="font-italic error-box">
+                                    <small>Please enter new password</small>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <div class="input-group mb-3 full-width">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text full-width required-field">Confirm Password</span>
+                                        </div>
+                                        <input type="password" class="form-control emailInput addGym br-2 full-width"
+                                            formControlName="confirmPassword">
+                                    </div>
+                                    <div *ngIf="passwdFrm.confirmPassword.hasError('required') && passwdFrm.confirmPassword.touched" class="font-italic error-box">
+                                        <small>Please enter confirm password</small>
+                                    </div>
+                                    <!-- <div *ngIf="passwdFrm.newPassword != passwdFrm.confirmPassword " class="font-italic error-box">
+                                        <small>New password & Confirm Password should be same</small>
+                                    </div> -->
+                                </div>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                            (click)="changePass()">Verify</button>
+                        <button type="submit" data-dismiss="modal" #closeModal class="btn btn-primary btn-secon-bg mt-3 br-2 width-45 text-fnt80 app-color">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- <form [formGroup]="addGymForm">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Gym Name</span>
+                                </div>
+                                <input type="text" class="form-control addGym br-2 wth-50" formControlName="gymname">
+                            </div>
+                            <div *ngIf="frm.gymname.hasError('required') && frm.gymname.touched" class="font-italic error-box">
+                                <small>Please enter the Gym name</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Select Payment
+                                        type</span>
+                                </div>
+                                <select class="form-control addGym br-2 wth-50" formControlName="selPayment" (change)='onPaymentSelect($event.target.value)'>
+                                    <option *ngFor="let item of paymentType" [value]="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="frm.selPayment.hasError('required') && frm.selPayment.touched" class="font-italic error-box">
+                                <small>Please select the payment type</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Payment</span>
+                                </div>
+                                <input type="text" class="form-control addGym br-2 wth-50" formControlName="paymentVal">
+                            </div>
+                            <div *ngIf="frm.paymentVal.hasError('required') && frm.paymentVal.touched" class="font-italic error-box">
+                                <small>Please enter the Payment Value</small>
+                            </div>
+                            <div *ngIf="frm.paymentVal.hasError('pattern')" class="font-italic error-box">
+                                <small>Payment must contain numbers only</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Gym owner name</span>
+                                </div>
+                                <input type="text" class="form-control addGym br-2 wth-50" formControlName="gymownername">
+                            </div>
+                            <div *ngIf="frm.gymownername.hasError('required') && frm.gymownername.touched" class="font-italic error-box">
+                                <small>Please enter the Gym owner name</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Account number</span>
+                                </div>
+                                <input type="text" class="form-control br-2 addGym wth-50" minlength="8" maxlength="20"
+                                    formControlName="bankAccNo">
+                            </div>
+                            <div *ngIf="frm.bankAccNo.hasError('required') && frm.bankAccNo.touched" class="font-italic error-box">
+                                <small>Please enter the account number</small>
+                            </div>
+                            <div *ngIf="frm.bankAccNo.hasError('minlength')" class="font-italic error-box">
+                                <small>Account number should be min 8</small>
+                            </div>
+                            <div *ngIf="frm.bankAccNo.hasError('pattern')" class="font-italic error-box">
+                                <small>Account Number must contain numbers only</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Email id</span>
+                                </div>
+                                <input type="email" class="form-control addGym br-2 wth-50" formControlName="email">
+                            </div>
+                            <div *ngIf="(frm.email.hasError('required') || frm.email.hasError('pattern')) && frm.email.touched"
+                                class="font-italic error-box">
+                                <small>Please enter the valid email id</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Account holder
+                                        name</span>
+                                </div>
+                                <input type="text" class="form-control addGym br-2 wth-50" formControlName="accHolderName">
+                            </div>
+                            <div *ngIf="frm.accHolderName.hasError('required') && frm.accHolderName.touched" class="font-italic error-box">
+                                <small>Please enter the account holder name</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Phone number</span>
+                                </div>
+                                <input type="text" class="form-control br-2 addGym wth-50" maxlength="10"
+                                    formControlName="phoneno">
+                            </div>
+                            <div *ngIf="frm.phoneno.hasError('required') && frm.phoneno.touched" class="font-italic error-box">
+                                <small>Please enter the valid mobile number</small>
+                            </div>
+                            <div *ngIf="frm.phoneno.hasError('pattern')" class="font-italic error-box">
+                                <small>Mobile Number must contain numbers only</small>
+                            </div>
+                            <div *ngIf="frm.phoneno.hasError('minlength')" class="font-italic error-box">
+                                <small>Mobile number should be min 10</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Bank Name</span>
+                                </div>
+                                <input type="text" class="form-control br-2 addGym wth-50" formControlName="branch">
+                            </div>
+                            <div *ngIf="frm.branch.hasError('required') && frm.branch.touched" class="font-italic error-box">
+                                <small>Please select the Bank Name</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">State</span>
+                                </div>
+                                <select class="form-control addGym br-2 wth-50" formControlName="selstate" (click)="onChange($event)">
+                                    <option selected disabled value="null"></option>
+                                    <option *ngFor="let state of stateList" [value]="state.code">{{ state.name
+                                        }}</option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="frm.selstate.hasError('required') && frm.selstate.touched" class="font-italic error-box">
+                                <small>Please select State</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">City</span>
+                                </div>
+                                <select class="form-control addGym br-2 wth-50" formControlName="selcity" (click)="onChange($event)">
+                                    <option selected disabled value="null"></option>
+                                    <option *ngFor="let city of cityList" [value]="city.name">{{ city.name
+                                        }}</option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="frm.selcity.hasError('required') && frm.selcity.touched" class="font-italic error-box">
+                                <small>Please select City</small>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">IFSC</span>
+                                </div>
+                                <input type="text" class="form-control br-2 addGym wth-50" formControlName="ifsc">
+                            </div>
+                            <div *ngIf="frm.ifsc.hasError('required') && frm.ifsc.touched" class="font-italic error-box">
+                                <small>Please enter the IFSC</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Address</span>
+                                </div>
+                                <input type="text" class="form-control br-2 addGym wth-50" formControlName="address">
+                            </div>
+                            <div *ngIf="frm.address.hasError('required') && frm.address.touched" class="font-italic error-box">
+                                <small>Please enter the address</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Pincode</span>
+                                </div>
+                                <input type="text" class="form-control br-2 addGym wth-50" minlength="6" maxlength="6"
+                                    formControlName="pincode">
+                            </div>
+                            <div *ngIf="frm.pincode.hasError('required') && frm.pincode.touched" class="font-italic error-box">
+                                <small>Please enter the pincode</small>
+                            </div>
+                            <div *ngIf="frm.pincode.hasError('pattern')" class="font-italic error-box">
+                                <small>Pincode must contain numbers only</small>
+                            </div>
+                            <div *ngIf="frm.pincode.hasError('minlength')" class="font-italic error-box">
+                                <small>Pincode should be min 6</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="showPassword">
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Password</span>
+                                </div>
+                                <input type="password" class="form-control br-2 addGym wth-50" formControlName="pass">
+                            </div>
+                            <div *ngIf="frm.pass.hasError('required') && frm.pass.touched" class="font-italic error-box">
+                                <small>Please enter the password</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend wth-50">
+                                    <span class="input-group-text full-width required-field">Confirm Password</span>
+                                </div>
+                                <input type="password" class="form-control br-2 addGym wth-50" formControlName="cpass"
+                                    [errorStateMatcher]="matcher">
+                            </div>
+                            <div *ngIf="frm.cpass.hasError('required') && frm.cpass.touched" class="font-italic error-box">
+                                <small>Please enter the Confirm Password</small>
+                            </div>
+                            <div *ngIf="showErr" class="font-italic error-box">
+                                <small>Password and Confirm Passwords must be same.</small>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-secon-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                        (click)="addGymSubmit()">Save</button>
+                    <button type="submit" data-dismiss="modal" #closeModal class="btn btn-primary btn-secon-bg mt-3 br-2 width-45 text-fnt80 app-color">Cancel</button> -->
+                <!-- data-dismiss="modal" -->
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+</div>

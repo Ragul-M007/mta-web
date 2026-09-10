@@ -1,0 +1,126 @@
+<div class="container">
+    
+    <div class="main">
+        <div class="heading">Attendance-Report Export Here!</div>
+        <form action="" [formGroup]="excelForm">
+            <div class="row  mb-2">
+                <div class="col-md-8 ">
+                    <div class="checkboxselect">
+                        <small style="font-size: 15px;font-weight: 500;">What do you want to export</small>
+                        <div class="select" *ngFor="let data of selectDatas" style="cursor: pointer;">
+                            <input type="checkbox" [id]="data.id" (change)="showDetails($event,data.id)"
+                                [disabled]="data.disabled">
+                            <small>{{data.name}}</small>
+                        </div>
+
+                    </div>
+                    <p class="col-md-12" style="margin-top: 10px;" *ngIf="checkboxError == true"><small
+                            class="error-box">select
+                            Project or User before export details!</small></p>
+                </div>
+            </div>
+
+            <div class="row" style="margin:25px 0 15px 0;">
+                <div class="col-md-3">
+                    <label for="" style="margin-left: 10px;">From Date</label>
+                    <input type="date" class="form-control my-date" #dateinput [disabled]="notValidDate2"
+                        pattern="\d{2}-\d{2}-\d{4}" (input)="getFromDate($event)" placeholder="From date"
+                        style="border-radius: 10px;width: 16rem !important"
+                        id="date-input">
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <label for="" style="margin-left: 10px;">To Date</label><input type="date" class="form-control"
+                        #dateinputend [disabled]="notValidDate3" pattern="\d{2}-\d{2}-\d{4}"
+                        (input)="getFromDate($event)" placeholder="End date" style="border-radius: 10px;width: 16rem !important"
+                        id="to-input">
+                </div>
+
+                <p class="col-md-12" style="margin-top: 5px;margin-bottom: 5px;" *ngIf="error == true"><small
+                        class="error-box">Please
+                        select a {{dateContent2}} before exporting details! </small></p>
+
+                <p class="col-md-12" style="margin-top: 5px;margin-bottom: 5px;" *ngIf="(futureDate || futureDate2)">
+                    <small class="error-box">Future Date not Accept!</small></p>
+                <p class="col-md-12" style="margin-top: 5px;margin-bottom: 5px;" *ngIf="notValidDate == true"><small
+                        class="error-box">Not
+                        valid Date please select correct Date!</small></p>
+                <!-- <p class="col-md-12" style="margin-top: 5px;margin-bottom: 5px;" *ngIf="notValidDate == true"><small class="error-box">{{dateContent}} is Disabled!</small></p> -->
+
+
+            </div>
+
+
+            <div class="row mt-4 mb-2" style="position: relative; left: 14px;height: 85px;" *ngIf="showProjectDrop">
+                <div class="col-md-3 dropdownclass">
+
+                    <div class="projectlists">
+                        <p style="margin-top: 10px;" *ngIf="noData == true"><small class="error-box">No results matched
+                                your search!</small></p>
+                        <ng-multiselect-dropdown #multiSelect class="wth-60 multiselect-inp" [placeholder]="'select project'"
+                            [(ngModel)]="selectedItems" *ngIf="showProjectDrop" [data]="projectList"
+                            [settings]="dropdownSettings" (onSelect)="onprojectSelect($event)"
+                            (onSearch)="onSearch($event)" (onFilterChange)="onFilterChange($event)"
+                            [noDataAvailablePlaceholderText]="'No data available'"
+                            (onDeSelect)="onprojectDeSelect($event)" (onSelectAll)="onSelectAllProject($event)"
+                            (onDeSelectAll)="onUnSelectAllProject()" formControlName="multiselectfc"
+                            [disableSelectAll]="disableSelectAll" style="width: 200px;">
+                        
+                        </ng-multiselect-dropdown>
+
+
+                    </div>
+                    <p style="margin-top: 10px;" *ngIf="showProjectSelecterror == true"><small class="error-box">select
+                            Projects before export details!</small></p>
+
+                </div>
+
+                <div class="col-md-3 export-style mt-3" *ngIf="submitButtonForProject == true">
+                    <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+                        (click)="accessforDownload()">Confirm To Download</button>
+                </div>
+
+                <div class="col-md-3 export-style mt-3" *ngIf="viewExport == true">
+                    <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+                        (click)="exportExcel()">Export Excel</button>
+                    <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+                        (click)="exportPdfProcheck()">Export PDF</button>
+                </div>
+            </div>
+
+            <div class="row mt-4 mb-2" style="position: relative; left: 14px;height: 85px;" *ngIf="showUserOptions">
+
+                <div class="col-md-3">
+                    <div class="userslist">
+                        <p style="margin-top: 10px;" *ngIf="noData == true"><small class="error-box">No results matched
+                                your search!</small></p>
+                        <ng-multiselect-dropdown *ngIf="showUserOptions" class="wth-80" [placeholder]="'select users'"
+                            [data]="usersList" [settings]="userdropdownSetting" (onSelect)="onuserSelect($event)"
+                            (onDeSelect)="onuserDeSelect($event)" (onSelectAll)="onSelectAllUsers($event)"
+                            (onFilterChange)="onFilterChangeUser($event)" (onDeSelectAll)="onUnSelectAllUsers()"
+                            formControlName="userMultiselct">
+
+                        </ng-multiselect-dropdown>
+                    </div>
+                    <p style="margin-top: 10px;" *ngIf="showUserSelecterror == true"><small class="error-box">select
+                            Users before export details!</small></p>
+                </div>
+
+                <div class="col-md-3 export-style mt-3" *ngIf="submitForUsers == true">
+                    <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+                        (click)="accessforDownload2()">Confirm To Download</button>
+                </div>
+
+                <div class="col-md-3 export-style pt-4 mt-3" *ngIf="viewExportForusers == true">
+                    <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+                        (click)="exportUserExcel()">Export Excel</button>
+                    <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+                        (click)="exportAsPdfUser()">Export PDF</button>
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+</div>

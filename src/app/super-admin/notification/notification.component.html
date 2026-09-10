@@ -1,0 +1,151 @@
+<div class="container">
+  <div class="main">
+    <div class="dashCard light-font">
+      <div class="semiBold-font">Send Notification</div>
+      <form [formGroup]="notiForm">
+        <div class="row" (click)="showCheckboxes2()" style="position: relative;">
+          <div class="col-lg-6">
+            <span class="full-width f-small">Upload File</span>
+
+            <input
+              type="file"
+              class="form-control br-2 wth-80 uploaddocs"
+              id="uploaddocs"
+              formControlName="filename"
+              (change)="fileChangeEvent($event)"
+              accept=".jpg"
+              #fileInput
+            />
+            <div
+              *ngIf="frm.filename.hasError('required') && frm.filename.touched"
+              class="font-italic error-box"
+            >
+              <small>Please select a File</small>
+            </div>  
+          </div>
+          <div class="col-lg-6" style="padding-top: 2%">
+            <span class="full-width f-small required-field">Description</span>
+            <textarea
+              type="text"
+              class="form-control wth-80 br-2"
+              formControlName="description"
+              style="min-height: 111px !important;max-height: 111px;"
+            ></textarea>
+
+            <div
+              *ngIf="
+                frm.description.hasError('required') && frm.description.touched
+              "
+              class="font-italic error-box"
+            >
+              <small>Please enter description</small>
+            </div>
+          </div>
+          
+          <div class="col-lg-6" style="position: absolute;top:80px;">
+            <span class="full-width required-field f-small">Title</span>
+
+            <input
+              type="text"
+              class="form-control f-small br-2 wth-80"
+              formControlName="title"
+            />
+
+            <div
+              *ngIf="frm.title.hasError('required') && frm.title.touched"
+              class="font-italic error-box"
+            >
+              <small>Please enter title</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" (click)="showCheckboxes2()">
+          
+        
+        </div>
+
+      <!-- </form> -->
+
+      <div class="row">
+
+        <!-- Debugger Ends -->
+        <div class="col-lg-6">
+          <span class="full-width f-small">User Roles</span>
+          <select class="form-control wth-80" [(ngModel)]="role_id" formControlName="userType" [ngModelOptions]="{standalone: true}" (change)="getUsers(role_id)">
+            <option value="" disabled selected>Select User</option>
+            <option *ngFor="let role of userRolesList" [value]="role.role_id">{{ role.role }}</option>
+          </select>
+          
+          <div  *ngIf="frm.userType.hasError('required') && frm.userType.touched" class=" errSmall font-italic error-box">
+            Please Select the User Roles
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div *ngIf="userList == ''">
+            <span class="full-width f-small">User Type List</span>
+            <input
+              class="form-control wth-100"
+              type="text"
+              placeholder="No Uers"
+              readonly
+            />
+          </div>
+
+          <div class="multiselect" *ngIf="userList != ''">
+            <div class="selectBox" (click)="showCheckboxes()">
+              <select class="form-control">
+                <option>User Type List</option>
+              </select>
+              <div class="overSelect"></div>
+            </div>
+            <div class="col-md-12">
+              <div style="background-color: #fff; display: flex;flex-direction: column; justify-content: center;align-items: center;">
+                <div style="max-height: 280px;overflow-x: hidden;width: 480px;overflow-y: scroll;" id="style-7">
+                  <li class="list-group-item" style="display: flex;justify-content: space-between;align-items: end;">
+                    <strong class="" style="font-size: 12px;margin-left: 0px;">Select All</strong>
+                    <input class="end" type="checkbox" [(ngModel)]="masterSelected2" [ngModelOptions]="{standalone: true}" name="list_name" value="m1" (change)="checkUncheckAll2()"/> 
+                  </li>
+                  <ul class="list-group" *ngFor="let item of userList" style="display: flex;flex-direction: row;">
+                    <li class="list-group-item list" (click)="toggleCheckbox2(item)">
+                      <span style="font-size: 12px;">{{item?.name}}</span>    
+                      <input class="end" type="checkbox" [(ngModel)]="item.isSelected" [ngModelOptions]="{standalone: true}" name="list_name" value="{{item.user_id}}" (change)="isAllSelected2()"/>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" >
+            <small class="error-font" style="position: absolute;bottom: -6px;font-size: 11px;"
+            *ngIf="((MultiselectErr ) && (role_id.length > 0))"
+              class="font-italic error-box">{{ErrMultiSelect}} </small>
+          </div>
+        </div>
+        <div class="col-md-6" (click)="showCheckboxes2()">
+
+        </div>
+      </div>
+      </form>
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-bg mt-3 br-2 width-45 semiBold-font app-color"
+          style="width: 160px; border-radius: 5px !important"
+          (click)="clearNotification()"
+        >
+          Clear
+        </button>
+        <button
+          type="submit"
+          [disabled]="disableSend"
+          class="btn btn-primary btn-bg mt-3 br-2 semiBold-font app-color ml-5"
+          style="width: 160px; border-radius: 5px !important"
+          (click)="sendNotification()"
+        >
+          Send Notification
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

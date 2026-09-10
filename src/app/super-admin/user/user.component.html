@@ -1,0 +1,1112 @@
+<div class="container">
+  <div class="main-content light-font">
+
+    <div class="container card  d-flex justify-content-center">
+      <!-- nav options -->
+      <div class="row">
+        <div class="col-md-10">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item "> <a class="nav-link active  semiBold-font"
+                [class.active]="isActiveTab('general-home')" id="general-tab" data-toggle="pill" href="#general-home"
+                role="tab" aria-controls="pills-home" aria-selected="true" (click)="searchReset(6)">Clients</a> </li>
+            <li class="nav-item"> <a class="nav-link  semiBold-font" [class.active]="isActiveTab('staffs')"
+                id="gym-owner-tab" data-toggle="pill" href="#gym-owner" role="tab" aria-controls="pills-home"
+                aria-selected="true" (click)="searchReset(2)">Staffs</a> </li>
+            <li class="nav-item"> <a class="nav-link  semiBold-font" [class.active]="isActiveTab('contractors')"
+                id="member-tab" data-toggle="pill" href="#member" role="tab" aria-controls="pills-home"
+                aria-selected="true" (click)="searchReset(5)">Contractors</a>
+            </li>
+            <li class="nav-item"> <a class="nav-link  semiBold-font" [class.active]="isActiveTab('consultants')"
+                id="consult-tab" data-toggle="pill" href="#consult" role="tab" aria-controls="pills-home"
+                aria-selected="true" (click)="searchReset(4)">Consultants</a> </li>
+            <li class="nav-item"> <a class="nav-link  semiBold-font" [class.active]="isActiveTab('vendors')"
+                id="trainer-tab" data-toggle="pill" href="#trainer" role="tab" aria-controls="pills-home"
+                aria-selected="true" (click)="searchReset(3)">Vendors</a> </li>
+
+            <li class="nav-item"> <a class="nav-link  semiBold-font" [class.active]="isActiveTab('publicuser')"
+                id="trainer-tab" data-toggle="pill" href="#publicuser" role="tab" aria-controls="pills-home"
+                aria-selected="true" (click)="searchReset(7)">Public Users</a> </li>
+
+            <li class="nav-item"> <a class="nav-link  semiBold-font" [class.active]="isActiveTab('chataccess')"
+                id="trainer-tab" data-toggle="pill" href="#chataccess" role="tab" aria-controls="pills-home"
+                aria-selected="true" (click)="searchReset(9)">Chat Access</a> </li>
+
+          </ul> <!-- content -->
+        </div>
+        <!-- <div class="col-md-4">
+          <button (click)="adduser();" class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal"
+            data-target="#userModal" (click)="addModal()">Add New User</button>
+        </div> -->
+
+      </div>
+
+
+      <div class="tab-content" id="pills-tabContent p-3">
+
+        <!-- 1st card -->
+        <div class="tab-pane fade show" id="general-home" role="tabpanel" aria-labelledby="general-tab">
+          <div class="col-md-4">
+            <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+              [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(6,1,10,$event)" pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <div class="tab-container">
+            <div class="main">
+
+              <p *ngIf="usersListCus == ''" class="text-center light-font">No Clients Available</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="(usersListCus | filter:searchText | filter:searchdrop) as usersListCus">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListCus | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    }">
+
+                      <div class="dashCard">
+                        <div class="dropdown-dots">
+                          <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                          style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                        </div>                       
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                            data-target="#userModal">Edit</button>
+                          <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                          <!-- <button mat-menu-item data-toggle="modal" (click)="forgotPassword(item)" data-target="#forgotPassModal">Reset Password</button> -->
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" data-toggle="modal" data-target="#viewPicModal"
+                                (click)="viewpic(item)" height="80" for="img"
+                                src="{{http.imageURL}}{{item.user_img}}" onerror="this.src='assets/image/user.svg'"
+                                alt="Profile image">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" (click)="viewUser(item,'general-home')">
+                          <div class="col-md-12">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.name}}</span>
+                              <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <!-- <p class="text-fnt80">{{item.email_id}}</p>
+                                                        <p class="text-fnt80">{{item.contact_no}}</p> -->
+                              <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(6,$event,searchText,page_count)" > </pagination-controls>
+                    
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(6,1,itemsPerPage2,search)">
+                        <option value="10" >10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                    <!-- <pagination-controls class="mt-5 " (pageChange)="page = getUsersAdd(6,$event,search)" > </pagination-controls> -->
+                  </div>
+                
+                  <!--| paginate: { itemsPerPage: http.paginationCount, currentPage: p , totalItems: http.CUSTpages}<div *ngIf="http.CUSTpages > 8">
+                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                    </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- 2nd card -->
+
+        <!-- 1st card -->
+        <div class="tab-pane fade show" id="gym-owner" role="tabpanel" aria-labelledby="gym-owner-tab">
+          <div class="col-md-4">
+            <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+              [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(2,1,10,$event)" pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <div class="tab-container">
+            <div class="main">
+              <p *ngIf="usersListStaf == ''" class="text-center">No Staffs Available</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="(usersListStaf) as usersListStaf">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListStaf | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    } ">
+                      <div class="dashCard">
+                        <!-- <div class="iconTop">
+                                                    <i class="fa fa-pencil-square-o dashIcon" style="margin-right: 0.7em;" aria-hidden="true"
+                                                        data-toggle="modal" data-target="#gymModal" (click)="editGym(item)"></i>
+                                                    <i class="fa fa-trash-o dashIcon" aria-hidden="true" (click)="deleteGym(item.user_id)"></i>
+                                                </div>    
+                                                <br> -->
+                                                <div class="dropdown-dots">
+                                                  <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                                                  style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                                                </div>
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                            data-target="#userModal">Edit</button>
+                          <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                          <!-- <button mat-menu-item data-toggle="modal" (click)="forgotPassword(item)" data-target="#forgotPassModal">Reset Password</button> -->
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" data-toggle="modal" data-target="#viewPicModal"
+                                (click)="viewpic(item)" for="img" width="60px" src="{{http.imageURL}}{{item.user_img}}"
+                                onerror="this.src='assets/image/user.svg'" alt="Profile image">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" (click)="viewUser(item,'staffs',usersListStaf)">
+                          <div class="col-md-12">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.name}}</span>
+                              <p class="light-font">{{item.prof}}</p>
+                              <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <!-- <p class="text-fnt80">{{item.last_name}}</p>
+                                                        <p class="text-fnt80">{{item.email_id}}</p>
+                                                        <p class="text-fnt80">{{item.contact_no}}</p> -->
+                              <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(2,$event,searchText,page_count)" > </pagination-controls>
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(2,1,itemsPerPage2,search)">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                    <!-- <pagination-controls class="mt-5 " (pageChange)="page = $event"> </pagination-controls> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- 2nd card -->
+
+        <!-- 1st card -->
+        <div class="tab-pane fade show" id="member" role="tabpanel" aria-labelledby="member-tab">
+          <div class="col-md-4">
+            <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+              [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(5,1,10,$event)" pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <div class="tab-container">
+            <div class="main">
+
+              <p *ngIf="usersListCont == ''" class="text-center">No Contractors Available</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="(usersListCont | filter:searchText | filter:searchdrop) as usersListCont">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListCont | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    }">
+                      <div class="dashCard">
+                        <!-- <div class="iconTop">
+                                                    <i class="fa fa-pencil-square-o dashIcon" style="margin-right: 0.7em;" aria-hidden="true"
+                                                        data-toggle="modal" data-target="#gymModal" (click)="editGym(item)"></i>
+                                                    <i class="fa fa-trash-o dashIcon" aria-hidden="true" (click)="deleteGym(item.user_id)"></i>
+                                                </div>    
+                                                <br> -->
+                                                <div class="dropdown-dots">
+                                                  <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                                                  style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                                                </div>
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                            data-target="#userModal">Edit</button>
+                          <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                          <!-- <button mat-menu-item data-toggle="modal" (click)="forgotPassword(item)" data-target="#forgotPassModal">Reset Password</button> -->
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" data-toggle="modal" data-target="#viewPicModal"
+                                (click)="viewpic(item)" for="img" width="60px" src="{{http.imageURL}}{{item.user_img}}"
+                                onerror="this.src='assets/image/user.svg'" alt="Profile image">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" (click)="viewUser(item,'contractors')">
+                          <div class="col-md-12">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.name}}</span>
+                              <p class="light-font">{{ item.prof }}</p>
+                              <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <!-- <p class="text-fnt80">{{item.last_name}}</p>
+                                                        <p class="text-fnt80">{{item.email_id}}</p>
+                                                        <p class="text-fnt80">{{item.contact_no}}</p> -->
+                              <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(5,$event,searchText,page_count)"> </pagination-controls>
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(5,1,itemsPerPage2,search)">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                  </div>
+                  <!--| paginate: { itemsPerPage: http.paginationCount, currentPage: p, totalItems: http.CONTpages }<div *ngIf="http.CONTpages > 8">
+                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                    </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- 2nd card -->
+
+        <div class="tab-pane fade show" id="consult" role="tabpanel" aria-labelledby="consult-tab">
+          <div class="col-md-4">
+            <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+              [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(4,1,10,$event)" pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <div class="tab-container">
+            <div class="main">
+
+              <p *ngIf="usersListC == ''" class="text-center">No Consultants Available</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="(usersListC | filter:searchText | filter:searchdrop) as usersListC">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListC | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    }">
+
+                      <!-- <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListC | paginate :{
+                    itemsPerPage:12 ,
+                    currentPage:currentPage4,
+                    totalItems:usersListCtotalLength
+                   } "> -->
+                      <div class="dashCard">
+                        <!-- <div class="iconTop">
+                                                    <i class="fa fa-pencil-square-o dashIcon" style="margin-right: 0.7em;" aria-hidden="true"
+                                                        data-toggle="modal" data-target="#gymModal" (click)="editGym(item)"></i>
+                                                    <i class="fa fa-trash-o dashIcon" aria-hidden="true" (click)="deleteGym(item.user_id)"></i>
+                                                </div>    
+                                                <br> -->
+                                                <div class="dropdown-dots">
+                                                  <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                                                  style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                                                </div>
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                            data-target="#userModal">Edit</button>
+                          <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                          <!-- <button mat-menu-item data-toggle="modal" (click)="forgotPassword(item)" data-target="#forgotPassModal">Reset Password</button> -->
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" data-toggle="modal" data-target="#viewPicModal"
+                                (click)="viewpic(item)" for="img" width="60px" src="{{http.imageURL}}{{item.user_img}}"
+                                onerror="this.src='assets/image/user.svg'" alt="Profile image">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" (click)="viewUser(item,'consultants')">
+                          <div class="col-md-12">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.name}}</span>
+                              <p class="light-font">{{ item.prof }}</p>
+                              <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <!-- <p class="text-fnt80">{{item.last_name}}</p>
+                                                        <p class="text-fnt80">{{item.email_id}}</p>
+                                                        <p class="text-fnt80">{{item.contact_no}}</p> -->
+                              <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(4,$event,searchText,page_count)"> </pagination-controls>
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(4,1,itemsPerPage2,search)">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                  </div>
+                  <!--| paginate: { itemsPerPage: http.paginationCount, currentPage: p, totalItems: http.CONSpages }<div *ngIf="http.CONSpages > 8">
+                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                    </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- 2nd card -->
+
+        <div class="tab-pane fade show" id="trainer" role="tabpanel" aria-labelledby="trainer-tab">
+          <div class="col-md-4">
+            <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+              [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(3,1,10,$event)" pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <div class="tab-container">
+            <div class="main">
+
+
+              <p *ngIf="usersListVend == ''" class="text-center">No Vendors Available</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="(usersListVend | filter:searchText | filter:searchdrop) as usersListVend">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListVend  | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    }">
+                      <div class="dashCard">
+                        <!-- <div class="iconTop">
+                                                    <i class="fa fa-pencil-square-o dashIcon" style="margin-right: 0.7em;" aria-hidden="true"
+                                                        data-toggle="modal" data-target="#gymModal" (click)="editGym(item)"></i>
+                                                    <i class="fa fa-trash-o dashIcon" aria-hidden="true" (click)="deleteGym(item.user_id)"></i>
+                                                </div>    
+                                                <br> -->
+                                                <div class="dropdown-dots">
+                                                  <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                                                  style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                                                </div>
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                            data-target="#userModal">Edit</button>
+                          <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                          <!-- <button mat-menu-item data-toggle="modal" (click)="forgotPassword(item)" data-target="#forgotPassModal">Reset Password</button> -->
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" for="img" for="img" data-toggle="modal"
+                                data-target="#viewPicModal" (click)="viewpic(item)"
+                                src="{{http.imageURL}}{{item.user_img}}" onerror="this.src='assets/image/user.svg'"
+                                alt="Profile image">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" (click)="viewUser(item,'vendors')">
+                          <div class="col-md-12">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.name}}</span>
+                              <p class="light-font">{{ item.prof }}</p>
+                              <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <!-- <p class="text-fnt80">{{item.last_name}}</p>
+                                                        <p class="text-fnt80">{{item.email_id}}</p>
+                                                        <p class="text-fnt80">{{item.contact_no}}</p> -->
+                              <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(3,$event,searchText,page_count)"> </pagination-controls>
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(3,1,itemsPerPage2,search)">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                  </div>
+                  <!--| paginate: { itemsPerPage: http.paginationCount, currentPage: p , totalItems: http.VENDpages}<div *ngIf="http.VENDpages   > 8">
+                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                    </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="publicuser" role="tabpanel" aria-labelledby="trainer-tab">
+          <div class="col-md-4">
+            <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+              [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(7,1,10,$event)" pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$"
+              placeholder="Search" aria-label="Search">
+          </div>
+          <div class="tab-container">
+            <div class="main">
+
+
+              <p *ngIf="usersListPublicUser == ''" class="text-center">No Publicusers Available</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row"
+                    *ngIf="(usersListPublicUser | filter:searchText | filter:searchdrop) as usersListPublicUser">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of usersListPublicUser | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    }">
+                      <div class="dashCard">
+                        <ng-container *ngIf="item.newuser">
+                          <div class="ribbon-green"  *ngIf="item.new_user == null">
+                          NEW
+                          </div></ng-container>
+                        <!-- <div [ngClass]="{'your-class-name': condition}" class="dashCard"> -->
+                        <!-- <div class="iconTop">
+                                                    <i class="fa fa-pencil-square-o dashIcon" style="margin-right: 0.7em;" aria-hidden="true"
+                                                        data-toggle="modal" data-target="#gymModal" (click)="editGym(item)"></i>
+                                                    <i class="fa fa-trash-o dashIcon" aria-hidden="true" (click)="deleteGym(item.user_id)"></i>
+                                                </div>    
+                                                <br> -->
+                                                <div class="dropdown-dots">
+                                                  <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                                                  style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                                                </div>
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                            data-target="#userModal">Edit</button>
+                          <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                          <!-- <button mat-menu-item data-toggle="modal" (click)="forgotPassword(item)" data-target="#forgotPassModal">Reset Password</button> -->
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" for="img" for="img" data-toggle="modal"
+                                data-target="#viewPicModal" (click)="viewpic(item)"
+                                src="{{http.imageURL}}{{item.user_img}}" onerror="this.src='assets/image/user.svg'"
+                                alt="Profile image">
+
+                            </div>
+                            <!-- <span class="badge badge-success" style="font-size: 10px;padding: 5px;" *ngIf="item.new_user == null ">New</span> -->
+                          </div>
+
+                        </div>
+                        <div class="row" (click)="viewUser(item,'publicuser')">
+                          <div class="col-md-12">
+                            <div class="textDsgn">
+                              <p class="semiBold-font">{{ item.name }}</p>
+                              <p class="light-font">{{ item.prof }}</p>
+                              <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <p class="light-font">{{item.created_at | date: "dd-MMM-yyyy hh-mm a"}} </p>
+                              <!-- <p class="text-fnt80">{{item.last_name}}</p>
+                                                        <p class="text-fnt80">{{item.email_id}}</p>
+                                                        <p class="text-fnt80">{{item.contact_no}}</p> -->
+                              <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(7,$event,searchText,page_count)"> </pagination-controls>
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(7,1,itemsPerPage2,search)">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                  </div>
+                  <!--| paginate: { itemsPerPage: http.paginationCount, currentPage: p , totalItems: http.VENDpages}<div *ngIf="http.VENDpages   > 8">
+                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                    </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- chat access card -->
+        <div class="tab-pane fade show" id="chataccess" role="tabpanel" aria-labelledby="trainer-tab">
+          <div class="row">
+            <div class="col-md-4">
+              <input type="text" style="background: white !important;" class="form-control br-2 semiBold-font searchBox"
+                [(ngModel)]="searchText" (ngModelChange)="getUsersAdd(9,1,10,$event)"
+                pattern="^(?=.*[a-zA-Z])[a-zA-Z ]+$" placeholder="Search" aria-label="Search">
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-bg btn-primary app-bg  semiBold-font add-user" style="width: 135px;"
+                data-toggle="modal" data-target="#chatAccess" (click)="addChatModal()"><i class="fa fa-plus"
+                  style="position: relative;right: 7px;" aria-hidden="true"></i>Chat Access</button>
+            </div>
+          </div>
+
+          <div class="tab-container">
+            <div class="main">
+              <p *ngIf="chatAccesUsersList == ''" class="text-center">No Chat Access Users Available!</p>
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="gymDsgn">
+                  <div class="row"
+                    *ngIf="(chatAccesUsersList | filter:searchText | filter:searchdrop) as chatAccesUsersList">
+                    <div class="col-md-3" style="margin-top: 2em;" *ngFor="let item of chatAccesUsersList | paginate : {
+                      itemsPerPage:12,
+                    currentPage:page,
+                    totalItems:totalLength
+                    }">
+                      <div class="dashCard">
+
+                        <div class="dropdown-dots">
+                          <!-- <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                          style="float: right;font-size: 1em;" aria-hidden="true"></i> -->
+                        </div>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="removeUserFromChatAccess(item)">Remove Access</button>
+                        </mat-menu>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="profileImage">
+                              <img class="card-img-top rounded-circle" for="img" for="img" data-toggle="modal"
+                                data-target="#viewPicModal" (click)="viewpic(item)"
+                                src="{{http.imageURL}}{{item.user_img}}" onerror="this.src='assets/image/user.svg'"
+                                alt="Profile image">
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="row" >
+                          <div class="col-md-12" style="cursor: pointer;">
+                            <div class="textDsgn">
+                              <p class="semiBold-font" style="margin-top: 5px;margin-bottom: 0;">{{ item.name }}</p>
+                              <p class="light-font removeClass" (click)="removeUserFromChatAccess(item)"><i class="fa fa-times" 
+                                style="font-size: 1.6em;position: relative;right: 3px;color: #eb4141;" aria-hidden="true"></i>Remove Access</p>
+                              <!-- <p class="light-font">{{ item.prof }}</p>
+                                 <p class="light-font">+91 {{item.mobile_no}}</p>
+                              <p class="light-font">{{item.created_at | date: "dd-MMM-yyyy hh-mm a"}} </p> -->
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix">
+                    <pagination-controls class="mt-5 " (pageChange)="onPageClick(9,$event,searchText,page_count)"> </pagination-controls>
+                    <div class="page-dropdown">
+                      <label for="itemsPerPage">Items per page:</label> 
+                      <select class="page-list" id="itemsPerPage" [(ngModel)]="itemsPerPage2" (ngModelChange)="getUsersAdd(9,1,itemsPerPage2,search)">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="viewPicModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black;">
+
+          <div class="row" style="padding: 5%;">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{selectedUser.name}}</span>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="margin-left: 5%;">
+            <!-- <div class="dashCard" > -->
+
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <div class="imgBox"> -->
+                <div class="profileimage" style="text-align: center;">
+                  <img class="feedmodalImg" for="img" src="{{http.imageURL}}{{selectedUser.user_img}}"
+                    onerror="this.src='assets/image/bg.jpg'" alt="Profile image" width="80%">
+                </div>
+              </div>
+            </div>
+
+
+            <!-- </div> -->
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" #closeModal id="userModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black;">
+
+          <div class="row" style="padding: 5%;">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{addEditlabel}}</span>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="close" data-dismiss="modal" (click)="backfun()">&times;</button>
+            </div>
+          </div>
+          <div class="modal-header r-border" style="padding: 0%;">
+
+            <div class="row full-width">
+              <div class="col-md-7">
+                <div class="profileimage">
+                  <input type="file" style="float:right;" id="uploadImage" #fileInput
+                    (change)="fileChangeEvent($event)" />
+                  <img class="rounded-circle" #img style="float:right;" width="80px" height="80px"
+                    onerror="this.src='assets/image/user.svg'" [src]="images" />
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="imgCropDisplay">
+                  <image-cropper *ngIf="showImg" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                    [aspectRatio]="4 / 4" [resizeToWidth]="256" format="png" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()">
+                  </image-cropper>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <div class="cropBtn" *ngIf="showImg">
+                  <button class="btn-primary btn-secon-bg br-2 text-fnt80 app-color" (click)="saveImage()">Crop</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="margin-left: 5%;">
+            <form [formGroup]="addUserForm" class="form-text-correction">
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <span class="full-width f-small">User Name</span>
+                  <input type="text" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.userName"
+                    formControlName="userName">
+
+                  <div *ngIf="frm.userName.hasError('required') && frm.userName.touched" class="font-italic error-box">
+                    <small class="error-font">Please enter the user name</small>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+
+                  <span class=" full-width f-small">Email id</span>
+
+                  <input type="email" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.email"
+                    formControlName="email">
+
+                  <div *ngIf="(frm.email.hasError('required') || frm.email.hasError('pattern')) && frm.email.touched"
+                    class="font-italic error-box">
+                    <small class="error-font">Please enter the valid email id</small>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <span class="full-width f-small">User Type</span>
+                  <select class="form-control f-small br-2 wth-80" [(ngModel)]="userData.userType"
+                    formControlName="userType" (change)="getProf(userData.userType)">
+                    <option selected disabled [value]="null"></option>
+                    <option *ngFor="let roles of userRolesList" [ngValue]="roles.role_id">{{ roles.role
+                      }}</option>
+                  </select>
+                  <div *ngIf="frm.userType.hasError('required') && frm.userType.touched" class="font-italic error-box">
+                    <small class="error-font">Please select the User Type</small>
+                  </div>
+                </div>
+
+
+                <!-- <div class="col-lg-6">
+                                    <span class="full-width f-small">Proffession</span>
+                                    <select class="form-control f-small br-2 wth-80" [(ngModel)]="userData.prof" formControlName="prof" (change)="getProf(userData.prof)">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let roles of prof_staff" [ngValue]="roles.category_name">{{ roles.category_name
+                                            }}</option>
+                                    </select>
+                                <div *ngIf="frm.prof.hasError('required') && frm.prof.touched" class="font-italic error-box">
+                                    <small>Please select the User Type</small>
+                                </div>
+                            </div> -->
+
+
+                <div class="col-lg-6" *ngIf="newAdduser == true">
+                  <span class=" full-width f-small">Profession</span>
+                  <div>
+                    <select *ngIf="profession == 2" class="form-control f-small br-2 wth-80" formControlName="prof"
+                      [(ngModel)]="userData.prof">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let city of prof_staff" [ngValue]="city.category_id">{{city.category_name}}
+                      </option>
+                    </select>
+
+                    <select *ngIf="profession == 3" class="form-control f-small br-2 wth-80" formControlName="prof"
+                      [(ngModel)]="userData.prof">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let city of prof_vendors" [ngValue]="city.category_id">{{city.category_name}}
+                      </option>
+                    </select>
+
+                    <select *ngIf="profession == 4" class="form-control f-small br-2 wth-80" formControlName="prof"
+                      [(ngModel)]="userData.prof">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let city of prof_consultants" [ngValue]="city.category_id">{{city.category_name}}
+                      </option>
+                    </select>
+
+                    <select *ngIf="profession == 5" class="form-control f-small br-2 wth-80" formControlName="prof"
+                      [(ngModel)]="userData.prof">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let city of prof_contractors" [ngValue]="city.category_id">{{city.category_name}}
+                      </option>
+                    </select>
+
+                    <select *ngIf="profession == 6" class="form-control f-small br-2 wth-80" formControlName="prof"
+                      [ngModel]="userData.prof">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let city of prof_clients" [ngValue]="city.category_id">{{city.category_name}}
+                      </option>
+                    </select>
+                  </div>
+
+
+                  <div *ngIf="frm.prof.hasError('required') && frm.prof.touched" class="font-italic error-box">
+                    <small class="error-font">Please select the Profession</small>
+                  </div>
+                </div>
+
+                <div class="col-lg-6" *ngIf="newAdduser2">
+                  <span class=" full-width f-small">Profession</span>
+                  <select class="form-control f-small br-2 wth-80" formControlName="prof" [ngModel]="userData.prof">
+                    <option selected disabled [value]="null"></option>
+                    <option *ngFor="let city of finalusersLists" [ngValue]="city.category_id"
+                      [selected]="city.category_id == userData.prof || city.category_name == userData.prof">
+                      {{city.category_name}}
+                    </option>
+                  </select>
+
+                  <div *ngIf="frm.prof.hasError('required') && frm.prof.touched" class="font-italic error-box">
+                    <small class="error-font">Please select the Profession</small>
+                  </div>
+
+                </div>
+
+
+
+              </div>
+
+              <div class="row" *ngIf="!addUser">
+                <div class="col-lg-6">
+
+                  <span class=" full-width f-small">State</span>
+
+                  <select class="form-control f-small br-2 wth-80" formControlName="state" [(ngModel)]="userData.state"
+                    (change)="getCities($event)">
+                    <option selected disabled [value]="null"></option>
+                    <option *ngFor="let state of stateList" [value]="state.code">{{state.name}}</option>
+                  </select>
+                  <div *ngIf="frm.state.hasError('required') && frm.state.touched" class="font-italic error-box">
+                    <small class="error-font">Please Select the State name</small>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <span class=" full-width f-small">City</span>
+
+                  <select class="form-control f-small br-2 wth-80" formControlName="city" [(ngModel)]="userData.city">
+                    <option selected disabled [value]="null"></option>
+                    <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                  </select>
+                  <div *ngIf="frm.city.hasError('required') && frm.city.touched" class="font-italic error-box">
+                    <small class="error-font">Please Select the City name</small>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="row" *ngIf="addUser">
+                <div class="col-lg-6">
+
+                  <span class=" full-width f-small">State</span>
+
+                  <select class="form-control f-small br-2 wth-80" formControlName="state" [(ngModel)]="userData.state"
+                    (change)="getCities($event)">
+                    <option selected disabled [value]="null"></option>
+                    <option *ngFor="let state of stateList" [value]="state.code">{{state.name}}</option>
+                  </select>
+                  <div *ngIf="frm.state.hasError('required') && frm.state.touched" class="font-italic error-box">
+                    <small class="error-font">Please Select the State name</small>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <span class="full-width f-small ">New Password</span>
+
+                  <input type="password" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.pass"
+                    formControlName="pass">
+
+                  <div *ngIf="frm.pass.hasError('required') && frm.pass.touched" class="font-italic error-box"
+                    style="margin-left: 1em;">
+                    <small class="error-font">Please enter the New password</small>
+                  </div>
+                  <div *ngIf="frm.pass.hasError('minlength')" class="font-italic error-box" style="margin-left: 1em;">
+                    <small class="error-font">New Password should be minimum 4 Characters</small>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row" *ngIf="addUser">
+                <div class="col-lg-6">
+
+                  <span class=" full-width f-small">City</span>
+
+                  <select class="form-control f-small br-2 wth-80" formControlName="city" [(ngModel)]="userData.city">
+                    <option selected disabled [value]="null"></option>
+                    <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                  </select>
+                  <div *ngIf="frm.city.hasError('required') && frm.city.touched" class="font-italic error-box">
+                    <small class="error-font">Please Select the City name</small>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <span class=" full-width f-small">Confirm New Password</span>
+
+                  <input type="password" class="form-control f-small br-2  wth-80" [(ngModel)]="userData.cpass"
+                    formControlName="cpass">
+
+                  <div *ngIf="frm.cpass.hasError('required') && frm.cpass.touched" class="font-italic error-box"
+                    style="margin-left: 1em;">
+                    <small class="error-font">Please enter the Confirm New Password</small>
+                  </div>
+                  <div *ngIf="userData.pass && (userData.cpass != userData.pass)" class="font-italic error-box"
+                    style="margin-left: 1em;">
+                    <small class="error-font">New Password and Confirm Passwords must be same.</small>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <span class="full-width f-small">Area</span>
+
+                  <input type="text" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.area"
+                    formControlName="area">
+
+                  <div *ngIf="frm.area.hasError('required') && frm.area.touched" class="font-italic error-box">
+                    <small class="error-font">Please enter the Area name</small>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <span class="full-width f-small">Mobile number</span>
+                  <input type="text" id="input" class="form-control mobile-number-inp"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    minlength="2" maxlength="10" [(ngModel)]="userData.phoneno" formControlName="phoneno"
+                    (input)="checkLength()" style="width: 220px ;">
+
+                  <div *ngIf="frm.phoneno.hasError('required') && frm.phoneno.touched" class="font-italic error-box"
+                    style="margin-left: 1em;">
+                    <small class="error-font">Please enter the Mobile number</small>
+                  </div>
+
+                  <div *ngIf="addUserForm.controls['phoneno'].hasError('minlength')" class="font-italic error-box"
+                    style="margin-left: 1em;">
+                    Mobile number must be 10 Digits.
+                  </div>
+
+                  <!-- <div *ngIf="lengthErr" class="font-italic error-box" style="margin-left: 1em;">
+                    <small class="error-font">Mobile number must be 10 Digits</small>
+                  </div> -->
+
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <span class=" full-width f-small">Date of Birth</span>
+
+                  <input type="date" class="form-control f-small  br-2  wth-80" [(ngModel)]="userData.dob"
+                    placeholder="Select DOB" formControlName="dob" id="date-input" (input)="preventFuturedate($event)"/>
+
+                  <!--<div *ngIf="(frm.dob.hasError('required') || frm.dob.hasError('pattern')) && frm.dob.touched"
+                                      class="font-italic error-box">
+                                      <small>Please enter the DOB</small>
+                                  </div>-->
+
+                </div>
+                <div class="col-lg-6">
+                  <span class=" full-width f-small">Managed By</span>
+                  <select class="form-control f-small br-2 wth-80" formControlName="created_by"
+                    [(ngModel)]="userData.created_by">
+                    <option selected disabled [ngValue]="undefined"></option>
+                    <option *ngFor="let data of managedBy" [ngValue]="data.type">{{data.city}}</option>
+                  </select>
+                  <div *ngIf="frm.created_by.hasError('required') && frm.created_by.touched"
+                    class="font-italic error-box">
+                    <small class="error-font">Please select Managed By</small>
+                  </div>
+                  <!-- <span class=" full-width f-small">Date of Anniversary</span>
+                  <input type="date" class="form-control f-small br-2  wth-80" [(ngModel)]="userData.annDate"
+                    placeholder="Select Date" formControlName="annDate" /> -->
+                </div>
+              </div>
+
+
+            </form>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 semiBold-font app-color"
+                (click)="adduserSubmit()">{{addEditBtn}}</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" style="height: 100%;overflow-y: hidden !important;"  id="chatAccess" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black;display: flex;">
+
+          <div class="row" style="padding: 3%;">
+            <div class="col-md-6">
+              <span class="semiBold-font">Chat Access</span>
+            </div>
+            <div class="col-md-6">
+              <button type="button" #closeModalChat class="close" data-dismiss="modal" (click)="backfun()">&times;</button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="margin-left: 5%;">
+            <form [formGroup]="addChatAccesUserForm">
+              <div class="row">
+                <div class="multiselect col-md-3"></div>
+                <div class="multiselect col-md-5 dropdown-container">
+                  <p style="margin-top: 3px;" *ngIf="noData == true"><small class="error-box">No results matched your search!</small></p>
+                  <ng-multiselect-dropdown class="wth-80" [placeholder]="'select users'" *ngIf="showProjectDrop" #multiSelect
+                    formControlName="userMultiselct" [data]="chatUsersList" [settings]="dropdownSettings"
+                    [noDataLabel]="'No results matched your search!'"   [(ngModel)]="selectedItems"
+                    (onSelect)="onuserSelect($event)" (onDeSelect)="onuserDeSelect($event)" (onFilterChange)="onFilterChangeUser($event)"
+                    (onSelectAll)="onSelectAllUsers($event)" (onDeSelectAll)="onUnSelectAllUsers()" (onDropDownClose)="onDropDownClose()">
+                  </ng-multiselect-dropdown>
+                </div>
+                <div class="multiselect col-md-2"></div>
+              </div>
+
+              <div class="row" style="height: 20px;margin-top: 5px">
+                <div class="multiselect col-md-3"></div>
+                <div class="multiselect col-md-4">
+                  <div *ngIf="form.userMultiselct.hasError('required') && form.userMultiselct.touched"
+                    class="error-box">
+                    <small class="error-box">Please select the users!</small>
+                  </div>
+                </div>
+                <div class="multiselect col-md-2"></div>
+              </div>
+
+            </form>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 semiBold-font app-color"
+                (click)="createChatAccess()">Grant Access</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="forgotPassModal" *ngIf="showOTP">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6>Change Password</h6>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="OTPscreen">
+          <form #f="ngForm" name="form" (submit)="onSubmit(f)" autocomplete="off">
+            <input type="type" name="Password" [(ngModel)]="password"
+              class="form-control emailInput addGym br-2 full-width" placeholder="Enter the New Password">
+
+            <div class="text-center">
+              <button type="submit"
+                class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color">Send</button>
+
+              <button type="submit" data-dismiss="modal" #closeModal
+                class="btn btn-primary btn-secon-bg mt-3 br-2 width-45 text-fnt80 app-color">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,662 @@
+<div class="container">
+
+    <div class="main" style="color:black">
+
+
+        <div class="row full-width" style="padding-left:2%;font-size: 16px;">
+            <p (click)="backClicked()"><i class="fa fa-long-arrow-left " aria-hidden="true"></i> BACK</p>
+        </div>
+
+        <div class="row full-width dashCard">
+
+            <div class="col-sm-8" style="text-align:left">
+                <div>
+                    <img style="height: 40px;" data-toggle="modal" data-target="#viewPicModal"
+                        (click)="viewpic(userDetails)" src="{{http.imageURL}}{{userDetails.user_img}}"
+                        onerror="this.src='assets/image/user.svg'" class="float-left rounded-circle">
+                </div>
+                <div style="margin-left:60px">
+                    <div class="semiBold-font">{{userDetails.name}}</div>
+                    <p class="light-font"><i class="fa fa-map-marker secondry-color"></i> {{userDetails.city}},
+                        {{userDetails.state}} <br><span class="light-font"> {{userDetails.area}}</span></p>
+
+
+                    <p class="light-font">Email : <span class="secondry-color">{{userDetails.email}} </span> | Mobile:
+                        <span class="secondry-color">{{userDetails.mobile_no}}</span>
+                    </p>
+
+                </div>
+
+            </div>
+            <div class="col-md-4" style="text-align: right;">
+                <button (click)="editUser(userDetails)" class="btn btn-bg btn-primary app-bg  semiBold-font add-user"
+                    data-toggle="modal" data-target="#addUserModal">Edit</button>
+            </div>
+        </div>
+
+
+
+
+        <hr><br>
+        <p *ngIf="adminList == ''" class="text-center semiBold-font">No Admins Available</p>
+
+        <div class="gymDsgn" *ngIf="userdetails.role === 'ADMIN'" style="padding-left:2%;">
+            <div class="row">
+                <div class="col-6">
+                    <span class="semiBold-font"> Sub Admin's List</span>
+                </div>
+                <div class="col-6" style="text-align: right;">
+                    <button (click)="adduser();" class="btn btn-bg btn-primary app-bg  semiBold-font add-user"
+                        data-toggle="modal" data-target="#addUserModal" (click)="addModal()">Add Sub Admin</button>
+                </div>
+            </div>
+            <div class="row">
+
+                <!-- <div class="col-md-3"
+                    *ngFor="let item of adminList | paginate: { itemsPerPage: http.paginationCount, currentPage: p }"> -->
+                    <div class="col-md-3"
+                    *ngFor="let item of adminList">
+                    <div class="dashCard">
+                        <i class="fa fa-ellipsis-h " mat-button [matMenuTriggerFor]="menu"
+                            style="float: right;font-size: 1em;" aria-hidden="true"></i>
+                        <!-- <button >Menu</button> -->
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="editUser(item)" data-toggle="modal"
+                                data-target="#addUserModal">Edit</button>
+                            <button mat-menu-item (click)="deleteUser(item)">Delete</button>
+                        </mat-menu>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- <div class="imgBox"> -->
+                                <div class="profileimage" style="width: 30%;">
+                                    <img class="card-img-top rounded-circle" for="img" data-toggle="modal"
+                                        data-target="#viewPicModal" (click)="viewpic(item)" width="60px"
+                                        src="{{http.imageURL}}{{item.user_img}}"
+                                        onerror="this.src='assets/image/user.svg'" alt="Profile image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" (click)="viewUser(item)">
+                            <div class="col-md-12" style="padding-right:0px;">
+                                <div class="textDsgn">
+                                    <span class="semiBold-font">{{ item.name}}</span>
+                                    <span class="light-font">+91 {{item.mobile_no}}</span>
+                                    <span class="light-font">{{item.email}}</span>
+                                    <!-- <p class="text-fnt80">{{item.email_id}}</p>
+                                    <p class="text-fnt80">{{item.contact_no}}</p> -->
+                                    <!-- <p class="text-fnt80"><i class="fa fa-map-marker"></i>  {{item.address}},{{item.city}},{{item.state}}</p> -->
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="modal fade" id="viewPicModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="color: black;">
+
+                    <div class="row" style="padding: 2% 3% 2% 1%;">
+                        <div class="col-md-6">
+                            <span class="semiBold-font">{{selectedUser.name}}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body" style="margin-left: 5%;">
+                        <!-- <div class="dashCard" > -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- <div class="imgBox"> -->
+                                <div class="profileimage" style="text-align: center;">
+                                    <img class="feedmodalImg" for="img" src="{{http.imageURL}}{{selectedUser.user_img}}"
+                                    onerror="this.src='assets/image/user.svg'" alt="Profile image">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- </div> -->
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="userModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="color: black;">
+
+                    <div class="row" style="padding: 5%;">
+                        <div class="col-md-6">
+                            <span class="semiBold-font">{{modelTitle}}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="close"  #closeModal data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+                    <div class="modal-header r-border" style="padding: 0%;">
+
+                        <div class="row full-width">
+                            <div class="col-md-7">
+                                <div class="profileimage">
+                                    <input type="file" style="float:right;" id="uploadImage"
+                                        (change)="fileChangeEvent($event)" accept=".jpg" #fileInput />
+                                    <img class="rounded-circle" #img style="float:right;" width="80px" height="80px"
+                                        [src]="images" onerror="this.src='assets/image/user.svg'" />
+                                       
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="imgCropDisplay">
+                                    <image-cropper *ngIf="showImg" [imageChangedEvent]="imageChangedEvent"
+                                        [maintainAspectRatio]="true" [aspectRatio]="4 / 4" [resizeToWidth]="256"
+                                        format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                                        (cropperReady)="cropperReady()"
+                                        (loadImageFailed)="loadImageFailed()"></image-cropper>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="cropBtn" *ngIf="showImg">
+                                    <button class="btn-primary btn-secon-bg br-2 text-fnt80 app-color"
+                                        (click)="saveImage()">Crop</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body" style="margin-left: 5%;">
+                        <form [formGroup]="editUserForm">
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">User Name</span>
+                                    <input type="text" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.name" formControlName="userName">
+
+                                    <div *ngIf="frmedit.userName.hasError('required') && frmedit.userName.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the user name</small>
+                                    </div>  
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">Email id</span>
+
+                                    <input type="email" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.email_id" formControlName="email">
+
+                                    <div *ngIf="(frmedit.email.hasError('required') || frmedit.email.hasError('pattern')) && frm.email.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the valid email id</small>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- <div class="col-lg-6">
+                            <span class="full-width f-small">User Type</span>
+                            <select class="form-control f-small br-2 wth-80" [(ngModel)]="userData.role" formControlName="userType">
+                                <option selected disabled [value]="null"></option>
+                                <option *ngFor="let roles of userRolesList" [ngValue]="roles.role_id">{{ roles.role
+                                    }}</option>
+                            </select>
+                        <div *ngIf="frm.userType.hasError('required') && frm.userType.touched" class="font-italic error-box">
+                            <small>Please select the User Type</small>
+                        </div>
+                    </div> -->
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">Mobile number</span>
+
+                                    <!-- <input type="number" class="form-control f-small br-2 wth-80" id="input" [(ngModel)]="userData.mobile_no" maxlength="10"
+                                formControlName="phoneno"> -->
+
+                                    <input type="number" id="input" class="form-control"
+                                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        minlength="2" maxlength="10" [(ngModel)]="userData.mobile_no"
+                                        formControlName="phoneno">
+
+                                    <div *ngIf="frmedit.phoneno.hasError('required') && frmedit.phoneno.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the valid mobile number</small>
+                                    </div>
+                                    <div *ngIf="frmedit.phoneno.hasError('pattern')" class="font-italic error-box">
+                                        <small>Mobile Number must contain numbers only</small>
+                                    </div>
+                                    <div *ngIf="frmedit.phoneno.hasError('minlength')" class="font-italic error-box">
+                                        <small>Mobile number should be min 10</small>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">State</span>
+
+                                    <select class="form-control f-small br-2 wth-80" formControlName="state"
+                                        [(ngModel)]="userData.state" (change)="getCities($event)">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let state of stateList" [value]="state.code">{{state.name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="frmedit.state.hasError('required') && frmedit.state.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the State name</small>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+
+
+                                <!-- <div class="col-lg-6">
+                        <span class="full-width f-small ">New Password</span>
+                           
+                            <input type="password" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.pass" formControlName="pass">
+                       
+                        <div *ngIf="frm.pass.hasError('required') && frm.pass.touched" class="font-italic error-box"
+                            style="margin-left: 1em;">
+                            <small>Please enter the New password</small>
+                        </div>
+                       </div>
+                    </div> -->
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">City</span>
+
+                                    <select class="form-control f-small br-2 wth-80" [(ngModel)]="userData.city"
+                                        formControlName="city">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                                    </select>
+                                    <div *ngIf="frmedit.city.hasError('required') && frmedit.city.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the City name</small>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">Area</span>
+
+                                    <input type="text" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.area" formControlName="area">
+
+                                    <div *ngIf="frmedit.area.hasError('required') && frmedit.area.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the Area name</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="row"> -->
+                            <!-- <div class="col-lg-6">
+                       
+                        <span class=" full-width f-small">City</span>
+                    
+                    <select class="form-control f-small br-2 wth-80" [(ngModel)]="city" formControlName="userData.city" >
+                        <option selected disabled [value]="null"></option>
+                        <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                    </select>
+                <div *ngIf="frm.city.hasError('required') && frm.city.touched" class="font-italic error-box">
+                    <small>Please enter the City name</small>
+                </div>
+            </div> -->
+                            <!-- <div class="col-lg-6">
+                <span class=" full-width f-small">Confirm New Password</span>
+                    
+                    <input type="password" class="form-control f-small br-2  wth-80" [(ngModel)]="cPass" formControlName="cpass">
+                
+                <div *ngIf="frm.cpass.hasError('required') && frm.cpass.touched" class="font-italic error-box"
+                    style="margin-left: 1em;">
+                    <small>Please enter the Confirm New Password</small>
+                </div>
+                <div *ngIf="showErr" class="font-italic error-box" style="margin-left: 1em;">
+                    <small>New Password and Confirm New Passwords must be same.</small>
+                </div>
+            </div> -->
+
+                            <!-- <div class="col-lg-6">
+                <span class=" full-width f-small">Date of Birth</span>
+                    
+                      <input type="date" class="form-control f-small  br-2  wth-80" [(ngModel)]="userData.dob" placeholder="Select DOB" formControlName="dob"/>
+                 
+                  <div *ngIf="(frm.dob.hasError('required') || frm.dob.hasError('pattern')) && frm.dob.touched"
+                      class="font-italic error-box">
+                      <small>Please enter the DOB</small>
+                  </div> -->
+
+                            <!-- </div>
+                    
+                       
+                    </div>
+                     -->
+
+
+                            <!-- <div class="row">
+                    
+                    <div class="col-lg-6">
+                     <span class=" full-width f-small">Date of Anniversary</span>
+                   
+                        <input type="date" class="form-control f-small br-2  wth-80" [(ngModel)]="userData.doa" placeholder="Select Date" formControlName="annDate"/>
+                        </div>
+                        
+            
+            </div> -->
+                            <!-- <div class="row">
+                <div class="col-lg-6">
+                    <span class=" full-width f-small">Date of Birth</span>
+                        
+                          <input type="date" class="form-control f-small  br-2  wth-80" [(ngModel)]="userData.dob" placeholder="Select DOB" formControlName="dob"/>
+                     
+                      <div *ngIf="(frm.dob.hasError('required') || frm.dob.hasError('pattern')) && frm.dob.touched"
+                          class="font-italic error-box">
+                          <small>Please enter the DOB</small>
+                      </div>
+              
+              </div>
+            </div> -->
+
+
+
+
+                        </form>
+                        <div class="text-center">
+                            <button type="submit"
+                                class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 semiBold-font app-color"
+                                (click)="adduserSubmit()" >{{modelTitle}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addUserModal" data-backdrop="static">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="color: black;">
+
+                    <div class="row" style="padding: 5%;">
+                        <div class="col-md-6">
+                            <span class="semiBold-font">{{modelTitle}}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" (click)="backFun()" #addUserModal class="close"
+                                data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+                    <div class="modal-header r-border" style="padding: 0%;">
+
+                        <div class="row full-width">
+                            <div class="col-md-7">
+                                <div class="profileimage">
+                                    <input type="file" style="float:right;" id="uploadImage" #fileInput
+                                        (change)="fileChangeEvent($event)" accept=".jpg" />
+                                    <img class="rounded-circle" #img style="float:right;" width="80px" height="80px"
+                                        onerror="this.src='assets/image/user.svg'" [src]="images" />
+                                        <a class="remove-image" *ngIf="showImg" style="display: inline;"
+                                        (click)=removeImg()>&#215;</a>
+                                      <a class="remove-image" *ngIf="editImg" style="display: inline;"
+                                        (click)=removeImg()>&#215;</a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="imgCropDisplay">
+                                    <image-cropper *ngIf="showImg" [imageChangedEvent]="imageChangedEvent"
+                                        [maintainAspectRatio]="true" [aspectRatio]="4 / 4" [resizeToWidth]="256"
+                                        format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                                        (cropperReady)="cropperReady()"
+                                        (loadImageFailed)="loadImageFailed()"></image-cropper>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="cropBtn" *ngIf="showImg">
+                                    <button class="btn-primary btn-secon-bg br-2 text-fnt80 app-color"
+                                        (click)="saveImage()">Crop</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body" style="margin-left: 5%;">
+                        <form [formGroup]="addUserForm">
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">User Name</span>
+                                    <input type="text" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.userName" formControlName="userName">
+
+                                    <div *ngIf="frm.userName.hasError('required') && frm.userName.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the user name</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">Email id</span>
+
+                                    <input type="email" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.email" formControlName="email">
+
+                                    <div *ngIf="(frm.email.hasError('required') || frm.email.hasError('pattern')) && frm.email.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the valid email id</small>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">User Type</span>
+                                    <select class="form-control f-small br-2 wth-80" [(ngModel)]="userData.userType"
+                                        formControlName="userType">
+                                        <option *ngFor="let roles of userRolesList" [ngValue]="roles.role_id">{{
+                                            roles.role
+                                            }}</option>
+                                    </select>
+                                    <div *ngIf="frm.userType.hasError('required') && frm.userType.touched"
+                                        class="font-italic error-box">
+                                        <small>Please select the User Type</small>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">Mobile number</span>
+
+                                    <input type="number" class="form-control f-small br-2 wth-80"
+                                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        minlength="2" maxlength="10" formControlName="phoneno" (input)="lengthCheck($event)"
+                                        [(ngModel)]="userData.phoneno">
+
+                                    <div *ngIf="frm.phoneno.hasError('required') && frm.phoneno.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the valid mobile number</small>
+                                    </div>
+                                    <div *ngIf="frm.phoneno.hasError('pattern')" class="font-italic error-box">
+                                        <small>Mobile Number must contain numbers only</small>
+                                    </div>
+                                    <div *ngIf="phoneNumberLength" class="font-italic error-box">
+                                        <small>Mobile number should be 10 Digits!</small>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row" *ngIf="!showAdd">
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">State</span>
+
+                                    <select class="form-control f-small br-2 wth-80" formControlName="state"
+                                        [(ngModel)]="userData.state" (change)="getCities($event)">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let state of stateList" [value]="state.code">{{state.name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="frm.state.hasError('required') && frm.state.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the State name</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">City</span>
+
+                                    <select class="form-control f-small br-2 wth-80" formControlName="city"
+                                        [(ngModel)]="userData.city">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                                    </select>
+                                    <div *ngIf="frm.city.hasError('required') && frm.city.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the City name</small>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row" *ngIf="showAdd">
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">State</span>
+
+                                    <select class="form-control f-small br-2 wth-80" formControlName="state"
+                                        [(ngModel)]="userData.state" (change)="getCities($event)">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let state of stateList" [value]="state.code">{{state.name}}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="frm.state.hasError('required') && frm.state.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the State name</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small ">New Password</span>
+
+                                    <input type="password" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.pass" formControlName="pass">
+
+                                    <div *ngIf="frm.pass.hasError('required') && frm.pass.touched"
+                                        class="font-italic error-box" style="margin-left: 1em;">
+                                        <small>Please enter the New password</small>
+                                    </div>
+
+                                    <div *ngIf="frm.pass.hasError('minlength')" class="font-italic error-box"
+                                        style="margin-left: 1em;">
+                                        <small>Password must be minimum 4 Characters Above!</small>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row" *ngIf="showAdd">
+                                <div class="col-lg-6">
+
+                                    <span class=" full-width f-small">City</span>
+
+                                    <select class="form-control f-small br-2 wth-80" formControlName="city"
+                                        [(ngModel)]="userData.city">
+                                        <option selected disabled [value]="null"></option>
+                                        <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                                    </select>
+                                    <div *ngIf="frm.city.hasError('required') && frm.city.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the City name</small>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <span class=" full-width f-small">Confirm New Password</span>
+
+                                    <input type="password" class="form-control f-small br-2  wth-80"
+                                        [(ngModel)]="userData.cpass" formControlName="cpass">
+
+                                    <div *ngIf="frm.cpass.hasError('required') && frm.cpass.touched"
+                                        class="font-italic error-box" style="margin-left: 1em;">
+                                        <small>Please enter the Confirm New Password</small>
+                                    </div>
+
+                                    <div *ngIf="frm.cpass.hasError('minlength')" class="font-italic error-box"
+                                        style="margin-left: 1em;">
+                                        <small> Confirm New Password must be minimum 4 Characters Above!</small>
+                                    </div>
+
+                                    <div *ngIf="showErr" class="font-italic error-box" style="margin-left: 1em;">
+                                        <small>New Password and Confirm New Passwords must be same.</small>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <span class="full-width f-small">Area</span>
+
+                                    <input type="text" class="form-control f-small br-2 wth-80"
+                                        [(ngModel)]="userData.area" formControlName="area">
+
+                                    <div *ngIf="frm.area.hasError('required') && frm.area.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the Area name</small>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-lg-6">
+                                    <span class=" full-width f-small">Date of Anniversary</span>
+
+                                    <input type="date" class="form-control f-small br-2  wth-80"
+                                        [(ngModel)]="userData.annDate" placeholder="Select Date"
+                                        formControlName="annDate" />
+                                </div> -->
+
+                                <div class="col-lg-6">
+                                    <span class=" full-width f-small">Date of Birth</span>
+
+                                    <input type="date" class="form-control f-small  br-2  wth-80" [(ngModel)]="userData.dob"
+                                    placeholder="Select DOB" formControlName="dob" id="date-input" (input)="preventFuturedate($event)"/>
+
+                                    <!-- <input type="date" class="form-control f-small  br-2  wth-80"
+                                        [(ngModel)]="userData.dob" placeholder="Select DOB" formControlName="dob"  id="date-input"/> -->
+
+                                    <div *ngIf="(frm.dob.hasError('required') || frm.dob.hasError('pattern')) && frm.dob.touched"
+                                        class="font-italic error-box">
+                                        <small>Please enter the DOB</small>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </form>
+                        <div class="text-center">
+                            <button type="submit"
+                                class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 semiBold-font app-color"
+                                (click)="adduserSubmit()">{{modelBtn}}</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- <button type="button" id="sidebarCollapse" (click)="openMenu()" class="btn btn-info"> <i class="fa fa-align-justify"></i>
+        </button> -->
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> -->
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <div class="topOptions" style="float:right;">
+                    <i class="fa fa-bell" style="padding: 0em 1em;" aria-hidden="true"></i>
+                    <i class="fa fa-cog" style="padding: 0em 1em;" aria-hidden="true" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                    <span style="padding: 0em 1em;color: #000;">{{ userdetails.first_name }} {{
+                        userdetails.last_name }} <img src="{{ http.imageURL+userdetails.picture }}" style="float:right;"
+                            onerror="this.src='assets/image/user.svg'" width="30px" height="30px" class="rounded mx-auto d-block"></span>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#changePassword">Change Password</a>
+                        <a class="dropdown-item" routerLink="profileEdit">Profile</a>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </nav>

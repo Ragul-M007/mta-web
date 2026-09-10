@@ -1,0 +1,822 @@
+<div class="container" style="height: 100%;">
+
+  <div class="main" style="height: 100%;color:black">
+
+
+    <div class="dashCard light-font">
+      <div class="row full-width" style="padding-left:2%;font-size: 16px;">
+        <p (click)="backClicked()"><i class="fa fa-long-arrow-left " aria-hidden="true"></i> BACK</p>
+      </div>
+      <div class="row full-width">
+
+        <div class="col-sm-6" style="text-align:left">
+          <div>
+            <img style=" width: 55px !important;height: 55px;" src="{{http.imageURL}}{{projectDetails.project_img}}"
+              onerror="this.src='assets/image/project.jpg'" class="float-left rounded-circle">
+          </div>
+          <div style="padding-left:65px;padding-top: 5px;">
+            <div class="semiBold-font">{{projectDetails?.project_name}}</div>
+            <p class="light-font"><i class="fa fa-map-marker secondry-color"
+                style="margin-right: 2px;font-size: 17px !important;"></i>
+              {{projectDetails?.address}},{{projectDetails?.city}},{{projectDetails?.state}}</p>
+            <div class="userCount">
+              <a><span class="light-font" data-toggle="modal" data-target="#userDetailModal">{{usersinProject.length}}
+                  Users </span></a>
+              <a class="semiBold-font" data-toggle="modal" (click)="mapusers()" data-target="#mapuserModal"
+                *ngIf="projectDetails?.status != 'Cancelled'">Map User</a>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-sm-6" style="text-align:right">
+          <!-- <button (click)="adduser();" *ngIf="projectDetails?.status != 'Cancelled'"
+            class="btn btn-bg btn-primary app-bg  semiBold-font add-user" data-toggle="modal" data-target="#userModal"
+            (click)="addModal()">Add New User</button> -->
+          <button (click)="addcategory();" *ngIf="projectDetails?.status != 'Cancelled'"
+            style="opacity: 0.6;margin-left:1%" class="btn btn-bg btn-primary semiBold-font app-bg add-cate">Categories
+            <i class="fa fa-arrow-right"></i></button><br>
+          <p>{{categoryList.length}} Categories</p>
+        </div>
+      </div>
+      <hr>
+
+      <div>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item"> <a class="nav-link active semiBold-font" id="info-tab" data-toggle="pill" href="#info"
+              (click)="clearFun()" [class.active]="activeTab === 'info'" role="tab" aria-controls="pills-home"
+              aria-selected="true">Info</a> </li>
+          <li class="nav-item" (click)="getDocuments()"> <a class="nav-link semiBold-font" id="document-tab"
+              [class.active]="activeTab === 'documents'" data-toggle="pill" href="#documents" role="tab"
+              aria-controls="pills-home" aria-selected="true">Documents</a> </li>
+        </ul>
+      </div>
+      <div class="tab-content" id="pills-tabContent p-3">
+        <div class="tab-pane fade show " id="info" [class.active]="activeTab === 'info'" role="tabpanel"
+          aria-labelledby="info-tab">
+          <div class="tab-container">
+            <div class="main">
+
+
+              <div class="row">
+
+                <span class="semiBold-font">
+                  Description
+                </span>
+              </div>
+
+              <div class="row light-font" style="padding-top: 15px;">
+                <p>{{projectDetails?.description}}</p>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="documents" role="tabpanel" [class.active]="activeTab === 'documents'"
+          aria-labelledby="document-tab">
+          <div class="tab-container">
+            <div class="main">
+              <div class="card-columns full-width" style="column-count: 1;border-radius: 10px;">
+                <div class="col-md-4 searchField">
+                  <input type="text" style="background: white !important;" [(ngModel)]="searchText"
+                    class="form-control br-2 semiBold-font searchBox" placeholder="Search" aria-label="Search"
+                    (input)="searchDocument($event)">
+                  <i class="fa fa-search searchIcon" aria-hidden="true"></i>
+                </div>
+
+                <p *ngIf="documents == ''" class="text-center">No Documents Available</p>
+
+                <div class="gymDsgn">
+                  <div class="row">
+                    <div class="col-md-4" style="margin-bottom: 2em; " *ngFor="let item of documents">
+                      <div class="dashCard doc">
+
+                        <div class="row">
+
+                          <img style="width:30% !important;" (click)="viewDocument(item)" data-toggle="modal"
+                            data-target="#viewDocsModal" src="assets/image/{{item.ext_img}}.svg"
+                            onerror="this.src='assets/image/txt.svg'" />
+
+                          <div class="info-eye" *ngIf="UserRole == 'ADMIN'">
+                            <i class="fa fa-eye " data-toggle="modal" data-target="#userViewRights"
+                              (click)="editDoc(item)"></i>
+                          </div>
+                          <div class="info-edit">
+                            <i class="fa fa-edit " data-toggle="modal" data-target="#uploadModal"
+                              (click)="editDoc(item)"></i>
+                          </div>
+                          <div class="info" (click)="viewDoc(item)" data-toggle="modal" data-target="#viewDocsModal">
+                            <i class="fa fa-info secondry-color " aria-hidden="true"></i>
+                          </div>
+                          <div class="info-bin" (click)="viewDocDel(item)" data-toggle="modal">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                          </div>
+                          <div class="col-sm-10" style="display: inline-flex;">
+                            <div class="semiBold-font" style="max-width: 200px;word-wrap: break-word;"
+                              (click)="viewDocument(item)" data-toggle="modal" data-target="#viewDocsModal">
+                              {{item.file_name}}</div>
+
+
+                          </div>
+                          <div class="col-sm-2">
+                            <a class="secondry-color light-font" style="padding-left: 10%;float: right;" target="_blank"
+                              href="{{http.imageURL}}{{item.file}}" download=""><i class="fa fa-download secondry-color"
+                                aria-hidden="true"></i></a>
+
+                          </div>
+                          <div class="col-sm-12">
+                            <a class="secondry-color light-font" (click)="showComments(item)"><i
+                                class="fa fa-commenting secondry-color" aria-hidden="true"></i> {{item.commentsCount}}
+                              Comments</a>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="files">
+              <button class="btn btn-bg btn-primary app-bg add-files" *ngIf="projectDetails?.status != 'Cancelled'"
+                data-toggle="modal" data-target="#uploadModal" (click)="rmveditdata()"> <i
+                  class="fa fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" data-backdrop="static" id="uploadModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black;">
+            <div class="row" style="padding: 5%;">
+              <div class="col-md-6">
+                <span class="semiBold-font">Add Documents</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" #closeModal data-dismiss="modal">&times;</button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form [formGroup]="uploadForm">
+
+                <div class="row " style="margin-left: 10px;">
+                  <div class="col-lg-6" *ngIf="fileCheck">
+                    <span class="full-width f-small required-field">Upload File  </span>
+                    <input type="file" class="form-control  br-2 wth-80 uploaddocs" style="width: 90%;" id="uploaddocs"
+                      #fileInput formControlName="filename" (change)="fileChangeEvent($event)"
+                      accept=".jpg, .jpeg, .png, .gif, .pdf, .xlsx, .docx, .doc,.dwg" />
+                    <div *ngIf="frmUpload.filename.hasError('required') && frmUpload.filename.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please select a File</small>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-6 " *ngIf="title_true">
+
+                    <span class="full-width f-small required-field">Title</span>
+
+                    <input type="text" style="width: 96%;" class="form-control f-small br-2 wth-80"
+                      formControlName="title">
+
+                    <div *ngIf="frmUpload.title.hasError('required') && frmUpload.title.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please enter title</small>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12" *ngIf="!title_true">
+
+                    <span class="full-width f-small required-field pl-3">Title</span>
+
+                    <input type="text" style="width: 87%;" class="form-control f-small br-2 wth-80"
+                      formControlName="title"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      minlength="1" maxlength="50">
+
+                    <div *ngIf="frmUpload.title.hasError('required') && frmUpload.title.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please enter title</small>
+                    </div>
+                  </div>
+
+                </div>
+
+
+
+                <div class="row padding-left">
+                  <span class="full-width f-small required-field"
+                    style=" padding-left: 7% !important;">Description</span>
+
+                  <textarea type="text" class="form-control  br-2 wth-80" formControlName="description"
+                    style="max-height: 100px;min-height: 45px;width: 80%; margin-left: 39px;"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    minlength="1" maxlength="250"></textarea>
+
+
+
+                  <div *ngIf="frmUpload.description.hasError('required') && frmUpload.description.touched"
+                    class="font-italic error-box">
+                    <small class="error-font">Please enter description</small>
+                  </div>
+                </div>
+
+
+              </form>
+              <div class="text-center">
+                <button type="submit" *ngIf="fileCheck"
+                  class="btn btn-primary btn-bg mt-3 br-2  width-45 semiBold-font app-color"
+                  (click)="uploadSubmit(selectededitDoc)">Upload</button>
+                <button type="submit" *ngIf="!fileCheck"
+                  class="btn btn-primary btn-bg mt-3 br-2  width-45 semiBold-font app-color"
+                  (click)="uploadSubmit(selectededitDoc)">Update</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" data-backdrop="static" id="userDetailModal">
+        <div class="modal-dialog">
+          <div class="modal-content" style="color: black;">
+            <div class="row" style="padding: 5%;">
+              <div class="col-md-6">
+                <p class="semiBold-font">Project - <span class="secondry-color">{{projectDetails?.project_name}}</span>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal" #userDetailModal>&times;</button>
+              </div>
+            </div>
+
+
+            <!-- Modal body -->
+            <div class="modal-body" style="padding: 0px 40px;padding-bottom: 25px;height: 400px;">
+              <div class="row" *ngIf="usersinProject ==  '' ">
+                <h5 style="position: absolute;
+                padding-left: 26px;
+                bottom: 17px;
+                font-family: 'Poppins', sans-serif !important;
+                font-size: 14px;" *ngIf="usersinProject.length == 0 || usersinProject == ''">No Users Available!</h5>
+              </div>
+
+              <div class="row" *ngIf="usersinProject != '' "
+                style="max-height: 300px; overflow-y: scroll;overflow-x: hidden; padding-top: 15px;" id="style-7">
+                <div class="col-sm-12" *ngFor="let user of usersinProject">
+                  <div>
+                    <img style="height: 40px;" src="https://mta.multitechcorp.in/mta-img/{{user.user_img}}"
+                      onerror="this.src='assets/image/user.svg'" class="float-left rounded-circle">
+                  </div>
+                  <div style="padding-left:4em">
+
+                    <div class="info-bin" (click)="deleteassignproject(user.user_id)" data-toggle="modal">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </div>
+                    <div class="semiBold-font">{{user.name}}</div>
+                    <p class="light-font">{{user.prof}}</p>
+                    <p class="light-font">{{user.mobile_no}}</p>
+
+                  </div>
+                  <hr>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="userViewRights" data-backdrop="static">
+        <div class="modal-dialog">
+          <div class="modal-content" style="color: black;">
+            <div class="row" style="padding: 5%;">
+              <div class="col-md-6">
+                <p class="semiBold-font">Project - User Rights</p>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+            </div>
+
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div class="row">
+
+                <div class="col-sm-12" *ngFor="let user of usersinProject">
+                  <div>
+                    <img style="height: 40px;" src="{{http.imageURL}}{{user.user_img}}"
+                      onerror="this.src='assets/image/user.svg'" class="float-left rounded-circle">
+                  </div>
+                  <div style="padding-left:4em">
+
+
+                    <div *ngIf="user.vw_rights.indexOf(selectededitDoc.document_id)===-1" class="info-bin-plus"
+                      (click)="addViewRights({user_id:user.user_id,document_id:selectededitDoc.document_id})"
+                      ng-init="user.vw_rights == 0" data-toggle="modal">
+                      <i class="fa fa-plus"></i>
+                    </div>
+
+                    <div *ngIf="user.vw_rights.indexOf(selectededitDoc.document_id)!==-1" class="info-bin"
+                      (click)="removeViewRights({user_id:user.user_id,document_id:selectededitDoc.document_id})"
+                      data-toggle="modal">
+                      <i class="fa fa-trash"></i>
+                    </div>
+
+                    <div class="semiBold-font">{{user.name}}<p class="light-font">{{user.prof}}</p>
+                    </div>
+                    <p class="light-font">{{user.mobile_no}}</p>
+
+                  </div>
+                  <hr>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" data-backdrop="static" id="mapCatModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black;">
+
+            <div class="row" style="padding: 5%;">
+              <div class="col-md-6">
+                <span class="semiBold-font">Add Categories to Project</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal" #closeModal>&times;</button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form [formGroup]="mapCatForm">
+
+                <div class="row pad-cent">
+
+                  <span class="full-width required-field">Project Name</span>
+                  <select class="form-control  br-2 wth-80" placeholder="Select Project" formControlName="projectname">
+                    <option selected disabled [value]="null">Select Project</option>
+                    <option *ngFor="let project of projectList" [ngValue]="project.project_id">{{ project.project_name
+                      }}</option>
+                  </select>
+                  <div *ngIf="frmCat.projectname.hasError('required') && frmCat.projectname.touched"
+                    class="font-italic error-box">
+                    <small class="error-font">Please select the project name</small>
+                  </div>
+                </div>
+
+                <div class="row pad-cent">
+
+                  <span class="full-width required-field">Category Name</span>
+                  <select class="form-control  br-2 wth-80" placeholder="Select category" formControlName="categoryname"
+                    (change)="categoryChange($event)">
+                    <option selected [value]="all">All Categories</option>
+                    <option *ngFor="let cat of categoriesList" [ngValue]="cat.category_id">{{ cat.category_name
+                      }}</option>
+                  </select>
+                  <div *ngIf="frmCat.categoryname.hasError('required') && frmCat.categoryname.touched"
+                    class="font-italic error-box">
+                    <small class="error-font">Please select the Category Name</small>
+                  </div>
+                </div>
+
+
+
+
+              </form>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-bg mt-3 br-2  width-45 text-fnt80 app-color"
+                  (click)="mapCatSubmit()">Add</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="viewDocsModal" *ngIf="!docViewer" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black;">
+
+            <div class="row" style="padding: 5% 5% 1% 6%;">
+              <div class="col-md-6">
+                <span class="semiBold-font">{{selectedDoc.file_name}}</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="margin-left: 5%;display: block;">
+              <div class="row descript col-lg-12 col-md-12">
+                <div class="col-lg-6 col-md-6">
+                  <h5 class="semiBold-font">Description : </h5>
+                  <div class="card">
+                    <p style="word-wrap: wrap;" class="light-font f-small">{{selectedDoc.description}}</p>
+                  </div>
+                </div>
+                <div class="descript col-lg-6 col-md-6" style="display: block;">
+                  <h6 class="semiBold-font">Added by :<span class="light-font">{{selectedDoc.name}}</span></h6>
+                  <h6 class="semiBold-font">Uploaded on :<span class="light-font">{{selectedDoc.created_at | date
+                      }}</span></h6>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="viewDocsModal" *ngIf="docViewer" data-backdrop="static">
+        <div class="modal-dialog modal-lg" style="max-width: 90% !important;">
+          <div class="modal-content" style="color: black;">
+
+            <div class="row" style="padding: 2%;">
+              <div class="col-md-6">
+                <span class="semiBold-font">{{selectedDoc.file_name}}</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal" (click)="removePDFData()">&times;</button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div class="dashCard">
+
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <div class="profileimage"
+                      *ngIf="selectedDoc.ext_img == 'pdf' || selectedDoc.ext_img == 'docx' || selectedDoc.ext_img == 'doc' || selectedDoc.ext_img == 'xls' || selectedDoc.ext_img == 'xlsx' || selectedDoc.ext_img == 'ppt' || selectedDoc.ext_img == 'dwg'">
+                      <ngx-doc-viewer url="{{http.imageURL}}{{selectedDoc.file}}" googleCheckContentLoaded=true
+                        googleCheckInterval=3000 googleMaxChecks=5 loaded viewer="google"
+                        style="width:100%;height:75vh;"></ngx-doc-viewer>
+
+
+                    </div>
+                    <div class="profileimage" style="text-align: center;"
+                      *ngIf="selectedDoc.ext_img == 'png' || selectedDoc.ext_img == 'jpg' || selectedDoc.ext_img == 'jpeg' || selectedDoc.ext_img == 'svg' || selectedDoc.ext_img == 'dwg'">
+                      <img style="width:auto;height:50vh" for="img" src="{{http.imageURL}}{{selectedDoc.file}}"
+                        onerror="this.src='assets/image/not-found.jpg'" alt="Profile image">
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="mapuserModal" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black;">
+            <div class="row" style="padding: 2%;">
+              <div class="col-md-6">
+                <span class="semiBold-font">Add User to Project</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" (click)="backFun()" #mapuserModal
+                  data-dismiss="modal">&times;</button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <!-- <form [formGroup]="mapUserForm"> -->
+
+
+                <div class="row" style="display: flex;flex-direction: column;align-items: center;padding-top: 20px;">
+                  <div class="col-lg-6">
+                    <span class="full-width f-small">User Roles</span>
+                    <select class="form-control wth-80" [(ngModel)]="role_id" (change)="getUsers(role_id)">
+                      <option value="" disabled selected>Select User</option>
+                      <option *ngFor="let role of userRolesList" [value]="role.role_id">{{ role.role }}</option>
+                    </select>
+                    <div *ngIf="role_id === null && role_id !== undefined" class="font-italic error-box">
+                      <small class="error-font">Please Select the User Roles</small>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div *ngIf="userCheck" style="margin-top: 15px;">
+                      <input type="text" class="form-control  br-2 wth-100" [(ngModel)]="searchUser"
+                        [ngModelOptions]="{standalone: true}" (input)="checkUser($event)" placeholder="Search User">
+                    </div>
+                  </div>
+                 
+
+                  <div class="col-lg-6 " style="padding-top: 10px;">
+                    <div *ngIf="userList == ''">
+                      <!-- <span class="full-width f-small">User Type List</span> -->
+                      <input
+                        class="form-control wth-100"
+                        type="text"
+                        placeholder="No Uers"
+                        readonly
+                      />
+                    </div>
+          
+                    <div class="multiselect" *ngIf="userList != ''">
+                      <div class="selectBox" (click)="showCheckboxes()">
+                        <select class="form-control">
+                          <option>User Type List</option>
+                        </select>
+                        <div class="overSelect"></div>
+                      </div>
+                      <div class="col-md-12">
+                        <div style="background-color: #fff; display: flex;flex-direction: column; justify-content: center;align-items: center;">
+                          <div style="max-height: 230px;overflow-x: hidden;width: 290px;overflow-y: scroll;" id="style-7">
+                            <li class="list-group-item" style="display: flex;justify-content: space-between;align-items: end;">
+                              <strong class="" style="font-size: 12px;margin-left: 16px;">Select All</strong>
+                              <input class="end" type="checkbox" [(ngModel)]="masterSelected2" name="list_name" value="m1" (change)="checkUncheckAll2()"/> 
+                            </li>
+                            <ul class="list-group" *ngFor="let item of userList" style="display: flex;flex-direction: row;">
+                              <!-- <li class="list-group-item list" (click)="toggleCheckbox2(item)">
+                                <span style="font-size: 12px;" >{{item?.name}}</span> 
+                                <input class="end" type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.user_id}}" (change)="isAllSelected2()"/>
+                              </li> -->
+                              <li class="list-group-item list" (click)="toggleCheckbox2(item)">
+                                <span style="font-size: 12px;">{{item?.name}}</span>    
+                                <input class="end" type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.user_id}}" (change)="isAllSelected2()"/>
+                              </li>
+                              
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                </div>
+                  <div class="col-md-6" *ngIf="ErrMultiSelect && userList.length > 0 ">
+                    <small class="error-font" style="position: absolute;bottom: -6px;font-size: 11px;"
+
+                      class="font-italic error-box text-center" >{{ErrMultiSelect}}</small>
+                  </div>
+
+               
+             
+
+
+              <!-- </form> -->
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-bg mt-3 br-2  width-45 semiBold-font app-color"
+                  (click)="mapuserSubmit()">Add</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" data-backdrop="static" id="userModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black;">
+
+            <div class="row" style="padding: 5%;">
+              <div class="col-md-6">
+                <span class="semiBold-font">Add New User</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal" #newUserModal>&times;</button>
+              </div>
+            </div>
+            <div class="modal-header r-border" style="padding: 0%;">
+
+              <div class="row full-width">
+                <div class="col-md-7">
+                  <div class="profileimage">
+                    <input type="file" style="float:right;" id="uploadImage" (change)="fileChangeEvent($event)" />
+                    <img class="rounded-circle" #img style="float:right;" width="80px" height="80px"
+                      onerror="this.src='assets/image/user.svg'" [src]="images" />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="imgCropDisplay">
+                    <image-cropper *ngIf="showImg" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                      [aspectRatio]="4 / 4" [resizeToWidth]="256" format="png" (imageCropped)="imageCropped($event)"
+                      (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"
+                      (loadImageFailed)="loadImageFailed()"></image-cropper>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="cropBtn" *ngIf="showImg">
+                    <button class="btn-primary btn-secon-bg br-2 text-fnt80 app-color"
+                      (click)="saveImage()">Crop</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="margin-left: 5%;">
+              <form [formGroup]="addUserForm" name="myForm">
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <span class="full-width f-small">User Name</span>
+                    <input type="text" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.userName"
+                      formControlName="userName">
+
+                    <div *ngIf="frm.userName.hasError('required') && frm.userName.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please enter the user name</small>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+
+                    <span class=" full-width f-small">Email id</span>
+
+                    <input type="email" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.email"
+                      formControlName="email">
+
+                    <div *ngIf="(frm.email.hasError('required') || frm.email.hasError('pattern')) && frm.email.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please enter the valid email id</small>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <span class="full-width f-small">User Type</span>
+                    <select class="form-control f-small br-2 wth-80" [(ngModel)]="userData.userType"
+                      formControlName="userType">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let roles of userRolesList" [ngValue]="roles.role_id">{{ roles.role
+                        }}</option>
+                    </select>
+                    <div *ngIf="frm.userType.hasError('required') && frm.userType.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please select the User Type</small>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <span class="full-width f-small">Mobile number</span>
+                    <input type="number" id="input"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      class="form-control" minlength="10" maxlength="10" formControlName="phoneno">
+
+                    <!-- <div
+                      *ngIf="(frm.phoneno.hasError('required') || frm.phoneno.hasError('pattern')) && frm.phoneno.touched"
+                      class="font-italic error-box"><small>Please enter Valid Mobile Number</small>
+                    </div> -->
+
+                    <div *ngIf="frm.phoneno.hasError('required') && frm.phoneno.touched" class="font-italic error-box"
+                      style="margin-left: 1em;">
+                      <small class="error-font">Please enter the Mobile number</small>
+                    </div>
+                    <div *ngIf="frm.phoneno.hasError('pattern')" class="font-italic error-box"
+                      style="margin-left: 1em;">
+                      <small class="error-font">Mobile number should be min 4</small>
+                    </div>
+
+                  </div>
+                </div>
+
+
+
+
+
+                <div class="row">
+                  <div class="col-lg-6">
+
+                    <span class=" full-width f-small">State</span>
+
+                    <select class="form-control f-small br-2 wth-80" formControlName="state"
+                      [(ngModel)]="userData.state" (change)="getCities($event)">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let state of stateList" [value]="state.code">{{state.name}}</option>
+                    </select>
+                    <div *ngIf="frm.state.hasError('required') && frm.state.touched" class="font-italic error-box">
+                      <small class="error-font">Please enter the State name</small>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <span class="full-width f-small ">New Password</span>
+
+                    <input type="password" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.pass"
+                      formControlName="pass">
+
+                    <div *ngIf="frm.pass.hasError('required') && frm.pass.touched" class="font-italic error-box"
+                      style="margin-left: 1em;">
+                      <small class="error-font">Please enter the New password</small>
+                    </div>
+                    <div *ngIf="frm.pass.hasError('minlength')" class="font-italic error-box" style="margin-left: 1em;">
+                      <small class="error-font">password should be min 4</small>
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div class="row">
+                  <div class="col-lg-6">
+
+                    <span class=" full-width f-small">City</span>
+
+                    <select class="form-control f-small br-2 wth-80" formControlName="city" [(ngModel)]="userData.city">
+                      <option selected disabled [value]="null"></option>
+                      <option *ngFor="let city of cityList" [value]="city.name">{{city.name}}</option>
+                    </select>
+                    <div *ngIf="frm.city.hasError('required') && frm.city.touched" class="font-italic error-box">
+                      <small class="error-font">Please enter the City name</small>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <span class=" full-width f-small">Enter Confirm Password</span>
+
+                    <input type="password" class="form-control f-small br-2  wth-80" [(ngModel)]="userData.cpass"
+                      formControlName="cpass">
+
+                    <div *ngIf="frm.cpass.hasError('required') && frm.cpass.touched" class="font-italic error-box"
+                      style="margin-left: 1em;">
+                      <small class="error-font">Please enter the Confirm Password</small>
+                    </div>
+                    <div *ngIf="userData.pass && (userData.cpass != userData.pass)" class="font-italic error-box"
+                      style="margin-left: 1em;">
+                      <small class="error-font">New Password and Confirm Passwords must be same.</small>
+                    </div>
+                  </div>
+
+
+
+                </div>
+
+
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <span class="full-width f-small">Area</span>
+
+                    <input type="text" class="form-control f-small br-2 wth-80" [(ngModel)]="userData.area"
+                      formControlName="area">
+
+                    <div *ngIf="frm.area.hasError('required') && frm.area.touched" class="font-italic error-box">
+                      <small class="error-font">Please enter the Area name</small>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <span class=" full-width f-small">Date of Anniversary</span>
+
+                    <input type="date" class="form-control f-small br-2  wth-80" id="date-input"
+                      [(ngModel)]="userData.annDate" placeholder="Select Date" formControlName="annDate" />
+                  </div>
+
+
+                </div>
+
+                <div class="row">
+
+                  <div class="col-lg-6">
+                    <span class=" full-width f-small">Date of Birth</span>
+                    <input type="date" class="form-control f-small  br-2  wth-80" name="setTodayDate"
+                      [(ngModel)]="userData.dob" placeholder="Select DOB" formControlName="dob" />
+
+                    <div *ngIf="(frm.dob.hasError('required') || frm.dob.hasError('pattern')) && frm.dob.touched"
+                      class="font-italic error-box">
+                      <small class="error-font">Please enter the DOB</small>
+                    </div>
+
+                  </div>
+                </div>
+
+
+
+
+              </form>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 semiBold-font app-color"
+                  (click)="adduserSubmit()">ADD</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

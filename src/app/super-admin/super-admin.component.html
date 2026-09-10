@@ -1,0 +1,145 @@
+<div class="d-flex" id="wrapper">
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <div class="row" style="margin-left: 25% !important;">
+        <img class="logo" src="../../../assets/image/icon.png" />
+      </div>
+
+    </div>
+    <ul class="list-unstyled components" style="position:fixed; padding-top:100px; width:250px;">
+      
+      <li> <a routerLink="dashboard" routerLinkActive="active2" (click)="closeSubmenu()">TEAMS</a></li>
+      <li> <a routerLink="project" routerLinkActive="active2" (click)="closeSubmenu()">PROJECTS</a></li>
+      <li> <a routerLink="user" *ngIf="usersCounts > '0'" (click)="updateUsersList()" routerLinkActive="active2">USERS <span class="circle"> {{usersCounts}} </span> </a> </li>
+      <li> <a routerLink="user" *ngIf="usersCounts == 0" routerLinkActive="active2" (click)="closeSubmenu()">USERS</a> </li>
+      <li> <a routerLink="attendanceView" *ngIf="attendanceCount > '0'" (click)="updateAttendance()"  data-toggle="collapse" data-target="#submenu" routerLinkActive="active2" >ATTENDANCE <span class="circle" >{{attendanceCount}}</span><i style="position: absolute;right: 40px;font-size: 20px;" class="fa fa-angle-down" aria-hidden="true"></i></a> </li>
+      <li> <a routerLink="attendanceView" *ngIf="attendanceCount == 0"  data-toggle="collapse"  data-target="#submenu" routerLinkActive="active2" >ATTENDANCE<i style="position: absolute;right: 40px;font-size: 20px;" class="fa fa-angle-down" aria-hidden="true"></i></a>
+        <div class="collapse" id="submenu">
+          <ul class="nav flex-column submenu">
+            <li class="nav-item">
+              <a routerLink="attendance-report" routerLinkActive="active3">ATTENDANCE-REPORT </a>
+            </li>
+          </ul>
+        </div></li>
+      <li> <a routerLink="notifications" routerLinkActive="active2" (click)="closeSubmenu()">NOTIFICATION</a></li>
+      <li> <a routerLink="newsfeed" routerLinkActive="active2" (click)="closeSubmenu()">NEWS & HIGHLIGHTS</a></li>
+      <!-- <li> <a routerLink="settings" routerLinkActive="active2" (click)="closeSubmenu()"> SETTINGS</a></li> -->
+      <li> <a class="cursor-pointer" (click)="logout()">LOGOUT</a> </li>
+    </ul>
+    <div class="ocean">
+      <div class="wave"></div>
+      <div class="wave"></div>
+    </div>
+  </nav>
+  <div class="content" id="content-togg">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <!-- <div class="row full-width"> -->
+      <!-- <div class="col-md-3"> -->
+      <button type="button" id="sidebarCollapse" (click)="openMenu()" class="btn btn-info"> <i
+          class="fa fa-align-justify"></i>
+      </button>
+      <!-- </div> -->
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- <div class="col-md-9"> -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <div class="topOptions" style="display: contents;" (click)="GotoProfile()">
+
+
+            <img src="{{http.imageURL}}{{userdetails.user_img}}" onerror="this.src='assets/image/user.svg'" width="30px"
+              height="30px" class="rounded mx-auto d-block">
+            <span class="semiBold-font" style="padding: 0.3em;">{{ userdetails.name }}
+            </span>
+            <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#changePassword">Change
+                                        Password</a>
+                                    <a class="dropdown-item" routerLink="profileEdit">Profile</a>
+                                </div> -->
+          </div>
+        </ul>
+      </div>
+      <!-- </div> -->
+      <!-- </div> -->
+    </nav>
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="changePassword" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Change Password</h5>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form [formGroup]="changePasswordForm">
+          <div class="row">
+            <!-- <div class="col-lg-6"> -->
+            <div class="input-group" style="padding: 0.5em 1em;">
+              <div class="input-group-prepend wth-50" style="width: 30% !important;">
+                <span class="input-group-text full-width required-field">Old Password</span>
+              </div>
+              <input type="password" class="form-control addGym br-2 wth-50" formControlName="oldPass">
+            </div>
+            <div
+              *ngIf="(passwdFrm.oldPass.hasError('required') || passwdFrm.oldPass.hasError('pattern')) && passwdFrm.oldPass.touched"
+              class="font-italic error-box" style="margin-left: 1em;">
+              <small>Please enter the Old Password</small>
+            </div>
+            <!-- </div> -->
+          </div>
+
+          <div class="row">
+            <!-- <div class="col-lg-6"> -->
+            <div class="input-group" style="padding: 0.5em 1em;">
+              <div class="input-group-prepend wth-50" style="width: 30% !important;">
+                <span class="input-group-text full-width required-field">New Password</span>
+              </div>
+              <input type="password" class="form-control br-2 addGym wth-50" formControlName="pass">
+            </div>
+            <div *ngIf="passwdFrm.pass.hasError('required') && passwdFrm.pass.touched" class="font-italic error-box"
+              style="margin-left: 1em;">
+              <small>Please enter the New password</small>
+            </div>
+            <!-- </div> -->
+            <!-- <div class="col-lg-6"> -->
+            <!-- </div> -->
+          </div>
+          <div class="row">
+            <div class="input-group" style="padding: 0.5em 1em;">
+              <div class="input-group-prepend wth-50" style="width: 30% !important;">
+                <span class="input-group-text full-width required-field">Confirm New Password</span>
+              </div>
+              <input type="password" class="form-control br-2 addGym wth-50" formControlName="cpass">
+            </div>
+            <div *ngIf="passwdFrm.cpass.hasError('required') && passwdFrm.cpass.touched" class="font-italic error-box"
+              style="margin-left: 1em;">
+              <small>Please enter the Confirm New Password</small>
+            </div>
+            <div *ngIf="showErr" class="font-italic error-box" style="margin-left: 1em;">
+              <small>New Password and Confirm New Passwords must be same.</small>
+            </div>
+          </div>
+
+        </form>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-secon-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+            (click)="addGymSubmit()">Save</button>
+          <button type="submit" data-dismiss="modal" #closeModal
+            class="btn btn-primary btn-secon-bg mt-3 br-2 width-45 text-fnt80 app-color">Cancel</button>
+          <!-- data-dismiss="modal" -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <router-outlet></router-outlet> -->

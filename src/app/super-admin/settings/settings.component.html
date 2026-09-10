@@ -1,0 +1,35 @@
+<div class="container" >
+
+    <div class="main" >
+        <div class="semiBold-font" style="font-size: 16px;">Settings</div>
+           
+        <div class="dashCard light-font" >
+           
+            <div class="semiBold-font">Update Document Deletion Time</div>
+<div class="row" >
+    <div class="col-lg-6">
+    <span class="semiBold-font">Duration</span>
+    <input type="number" class="form-control f-small br-2" [(ngModel)]="duration">
+
+   
+    </div>
+    <div class="col-lg-6">
+        <span class="semiBold-font">Days / Months</span>
+        <select class="form-control br-2 wth-80" [(ngModel)]="type">
+            <option selected disabled [value]="null"></option>
+            <option *ngFor="let item of types" [ngValue]="item.name">{{item.name}}</option>
+            
+        </select>
+    <!-- <div *ngIf="frm.userType.hasError('required') && frm.userType.touched" class="font-italic error-box">
+        <small>Please select the User Type</small>
+    </div> -->
+</div>
+<div style="width: 100%; text-align: right;padding-right: 22px;">
+    <button type="submit" style="width: 17%;float: right;" class="btn btn-primary btn-bg mt-3 br-2  width-45 semiBold-font app-color"
+        (click)="update()" >Update</button>
+    </div>
+</div>
+</div>
+</div>
+</div>
+

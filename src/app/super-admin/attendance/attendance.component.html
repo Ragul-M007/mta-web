@@ -1,0 +1,666 @@
+<div class="container">
+  <div class="main">
+    <div class="mainContent">
+      <div class="row">
+        <div class="col-lg-6">
+          <div>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a
+                  class="nav-link active semiBold-font"
+                  id="employees-tab"
+                  data-toggle="pill"
+                  href="#employees"
+                  role="tab"
+                  aria-controls="pills-home"
+                  aria-selected="true"
+                  (click)="changeUsertab()"
+                  >Employees</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link semiBold-font"
+                  id="contractors-tab"
+                  data-toggle="pill"
+                  href="#contractors"
+                  role="tab"
+                  aria-controls="pills-home"
+                  aria-selected="true"
+                  (click)="changeUsertab()"
+                  >Contractors</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link semiBold-font"
+                  id="adminss-tab"
+                  data-toggle="pill"
+                  href="#admins"
+                  role="tab"
+                  aria-controls="pills-home"
+                  aria-selected="true"
+                  (click)="changeUsertab()"
+                  >Admins</a
+                >
+              </li>
+
+              <li class="nav-item" style="display: 'flex'">
+                <a
+                  class="nav-link semiBold-font"
+                  (click)="exportAsXLSX()"
+                  download=""
+                >
+                  <img
+                    style="width: 15% !important; cursor: pointer"
+                    src="assets/image/xls.svg"
+                  />
+                  <!-- <p style="cursor: pointer;">{{selectDate}} Report</p> -->
+                  <p style="cursor: pointer">{{ dateResult }} Report</p>
+                </a>
+                <a
+                  class="nav-link semiBold-font"
+                  (click)="exportAsMonthXLSX2()"
+                  download=""
+                >
+                  <img
+                    style="width: 15% !important; cursor: pointer"
+                    src="assets/image/xls.svg"
+                  />
+                  <p style="cursor: pointer">
+                    {{ selectDate4 }} Daily Report Download
+                  </p>
+                </a>
+              </li>
+
+              <li class="nav-item" style="display: 'flex'">
+                <a
+                  class="nav-link semiBold-font"
+                  (click)="exportAsXLSX2()"
+                  download=""
+                >
+                  <img
+                    style="width: 15% !important; cursor: pointer"
+                    src="assets/image/xls.svg"
+                  />
+                  <!-- <p style="cursor: pointer;">{{selectDate}} Report</p> -->
+                  <p style="cursor: pointer">{{ selectDate3 }} Report</p>
+                </a>
+                <a
+                  class="nav-link semiBold-font"
+                  (click)="exportAsMonthXLSX()"
+                  download=""
+                >
+                  <img
+                    style="width: 15% !important; cursor: pointer"
+                    src="assets/image/xls.svg"
+                  />
+                  <p style="cursor: pointer">
+                    {{ displayMonth }} Monthly Report Download
+                  </p>
+                </a>
+              </li>
+
+              <!-- <li class="nav-item">
+                                <a class="nav-link semiBold-font" (click)="exportAsXLSX()"   download="" > <img style="width:15% !important;"   src="assets/image/xls.svg"  /> <p>Download</p> </a> 
+                            </li> -->
+
+              <!-- <li class="nav-item">
+                                   
+                               </li>  -->
+            </ul>
+          </div>
+
+          <div class="tab-content" id="pills-tabContent p-3">
+            <!-- 1st card -->
+            <div class="col-md-12" style="padding-top: 2%">
+              <input
+                type="text"
+                class="form-control br-2 searchBox"
+                [(ngModel)]="searchText"
+                placeholder="Search"
+              />
+            </div>
+            <div
+              class="tab-pane fade show active"
+              id="employees"
+              role="tabpanel"
+              aria-labelledby="employees-tab"
+            >
+              <div class="tab-container" id="style-7">
+                <div class="main">
+                  <p *ngIf="staffList == ''" class="text-center light-font">
+                    No Staffs Available
+                  </p>
+                  <div
+                    class="card-columns full-width"
+                    style="column-count: 1; border-radius: 10px"
+                  >
+                    <div class="gymDsgn">
+                      <div class="row">
+                        <div
+                          class="col-md-12 user-li"
+                          [ngClass]="{
+                            activeted: item.name === activeState.name,
+                            inactive: item.name != activeState.name
+                          }"
+                          *ngFor="let item of staffList | filter : searchText"
+                          (click)="fetchuserMonthlyAttendance(item)"
+                        >
+                          <div>
+                            <img
+                              style="height: 20px"
+                              src="{{http.imageURL}}{{
+                                item.user_img
+                              }}"
+                              onerror="this.src='assets/image/user.svg'"
+                              class="float-left rounded-circle"
+                            />
+                          </div>
+
+                          <div style="padding-left: 4em">
+                            <p class="semiBold-font">
+                              {{ item.name }}
+                              <span
+                                *ngIf="item.attendance_status > 0"
+                                class="semiBold-font badge"
+                                style="
+                                  background-color: #ddf5f0;
+                                  color: #1eb56a;
+                                  background-size: 200% 100%;
+                                  background-position: right bottom;
+                                  transition: all 0.5s ease-out;
+                                  float: right;
+                                "
+                                >Attendance Marked</span
+                              >
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="contractors"
+              role="tabpanel"
+              aria-labelledby="contractors-tab"
+            >
+              <div class="tab-container" id="style-7">
+                <div class="main">
+                  <p
+                    *ngIf="contractorList == ''"
+                    class="text-center light-font"
+                  >
+                    No contractors Available
+                  </p>
+                  <div
+                    class="card-columns full-width"
+                    style="column-count: 1; border-radius: 10px"
+                  >
+                    <div class="gymDsgn">
+                      <div class="row">
+                        <div
+                          class="col-sm-12 user-li"
+                          [ngClass]="{
+                            activeted: item.name === activeState.name,
+                            inactive: item.name != activeState.name
+                          }"
+                          *ngFor="
+                            let item of contractorList | filter : searchText
+                          "
+                          (click)="fetchuserMonthlyAttendance(item)"
+                        >
+                          <div>
+                            <img
+                              style="height: 20px"
+                              src="https://mta.multitechcorp.in/mta-img/{{
+                                item.user_img
+                              }}"
+                              onerror="this.src='assets/image/user.svg'"
+                              class="float-left rounded-circle"
+                            />
+                          </div>
+                          <div style="padding-left: 4em">
+                            <p class="semiBold-font">
+                              {{ item.name }}
+                              <span
+                                *ngIf="item.attendance_status > 0"
+                                class="semiBold-font badge"
+                                style="
+                                  background-color: #ddf5f0;
+                                  color: #1eb56a;
+                                  background-size: 200% 100%;
+                                  background-position: right bottom;
+                                  transition: all 0.5s ease-out;
+                                  float: right;
+                                "
+                                >Attendance Marked</span
+                              >
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="admins"
+              role="tabpanel"
+              aria-labelledby="admins-tab"
+            >
+              <div class="tab-container" id="style-7">
+                <div class="main">
+                  <p *ngIf="AdminList == ''" class="text-center light-font">
+                    No admins Available
+                  </p>
+                  <div
+                    class="card-columns full-width"
+                    style="column-count: 1; border-radius: 10px"
+                  >
+                    <div class="gymDsgn">
+                      <div class="row">
+                        <div
+                          class="col-sm-12 user-li"
+                          [ngClass]="{
+                            activeted: item.name === activeState.name,
+                            inactive: item.name != activeState.name
+                          }"
+                          *ngFor="let item of AdminList | filter : searchText"
+                          (click)="fetchuserMonthlyAttendance(item)"
+                        >
+                          <div>
+                            <img
+                              style="height: 20px"
+                              src="{{http.imageURL}}{{
+                                item.user_img
+                              }}"
+                              onerror="this.src='assets/image/user.svg'"
+                              class="float-left rounded-circle"
+                            />
+                          </div>
+                          <div style="padding-left: 4em">
+                            <p class="semiBold-font">
+                              {{ item.name }}
+                              <span
+                                *ngIf="item.attendance_status > 0"
+                                class="semiBold-font badge"
+                                style="
+                                  background-color: #ddf5f0;
+                                  color: #1eb56a;
+                                  background-size: 200% 100%;
+                                  background-position: right bottom;
+                                  transition: all 0.5s ease-out;
+                                  float: right;
+                                "
+                                >Attendance Marked</span
+                              >
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="calenderView">
+            <mwl-demo-utils-calendar-header
+              [(view)]="view"
+              [(viewDate)]="viewDate"
+              (click)="monthClicked(viewDate)"
+            >
+            </mwl-demo-utils-calendar-header>
+
+            <div [ngSwitch]="view">
+              <mwl-calendar-month-view
+                *ngSwitchCase="'month'"
+                [viewDate]="viewDate"
+                [events]="events"
+                (dayClicked)="dayClicked2($event.day)"
+              >
+              </mwl-calendar-month-view>
+              <mwl-calendar-week-view
+                *ngSwitchCase="'week'"
+                [viewDate]="viewDate"
+                [events]="events"
+              >
+              </mwl-calendar-week-view>
+              <mwl-calendar-day-view
+                *ngSwitchCase="'day'"
+                [viewDate]="viewDate"
+                [events]="events"
+              >
+              </mwl-calendar-day-view>
+            </div>
+          </div>
+
+          <div
+            class="row attendInfo"
+            *ngIf="
+              userPerdate || userMonth || excelMonthTotal || datemonthexcel
+            "
+          >
+            <div class="col-sm-4">
+              <!-- <div class="datesec">
+                <span class="semiBold-font">{{selectedDate}}</span>
+              </div> -->
+
+              <div
+                class="excel-styles semiBold-font"
+                *ngIf="
+                  (excel && userPerdate && excel.length > 0 && excel != null) ||
+                  undefined
+                "
+                (click)="downloadUserDailyReport()"
+              >
+                <!-- <img  style="width: 40% !important; cursor: pointer;" src="assets/image/xls.svg" /> -->
+                <i
+                  class="fa fa-download"
+                  style="
+                    width: 40% !important;
+                    cursor: pointer;
+                    font-size: 30px;
+                    color: rgb(94, 114, 228);
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-image: linear-gradient(310deg, #e9ecef, #e9ecef);
+                  "
+                  aria-hidden="true"
+                ></i>
+                <p style="cursor: pointer">Download Report</p>
+              </div>
+
+              <div
+                class="excel-styles semiBold-font"
+                *ngIf="
+                  (excel2 &&
+                    userMonth &&
+                    excel2.length > 0 &&
+                    excel2 != null) ||
+                  undefined
+                "
+                (click)="downloadUserMonthReport()"
+              >
+                <!-- <img  style="width: 40% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                <p style="cursor: pointer;">{{ selectDate3}} Report</p> -->
+                <i
+                  class="fa fa-download"
+                  style="
+                    width: 40% !important;
+                    cursor: pointer;
+                    font-size: 30px;
+                    color: rgb(94, 114, 228);
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-image: linear-gradient(310deg, #e9ecef, #e9ecef);
+                  "
+                  aria-hidden="true"
+                ></i>
+                <p style="cursor: pointer">Download Report</p>
+              </div>
+
+              <div
+                class="excel-styles semiBold-font"
+                *ngIf="
+                  (excelMonth &&
+                    excelMonthTotal &&
+                    excelMonth.length > 0 &&
+                    excelMonth != null) ||
+                  undefined
+                "
+                (click)="allUserMonthReport()"
+              >
+                <i
+                  class="fa fa-download"
+                  style="
+                    width: 40% !important;
+                    cursor: pointer;
+                    font-size: 30px;
+                    color: rgb(94, 114, 228);
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-image: linear-gradient(310deg, #e9ecef, #e9ecef);
+                  "
+                  aria-hidden="true"
+                ></i>
+                <p style="cursor: pointer">Download Report</p>
+                <!-- <img  style="width: 40% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                <p style="cursor: pointer;"> {{displayMonth}} Monthly Report Download</p> -->
+              </div>
+
+              <div
+                class="excel-styles semiBold-font"
+                *ngIf="
+                  (excelMonth2 &&
+                    datemonthexcel &&
+                    excelMonth2.length > 0 &&
+                    excelMonth2 != null) ||
+                  undefined
+                "
+                (click)="allUserDailyReport()"
+              >
+                <i
+                  class="fa fa-download"
+                  style="
+                    width: 40% !important;
+                    cursor: pointer;
+                    font-size: 30px;
+                    color: rgb(94, 114, 228);
+                    padding: 5px;
+                    border-radius: 5px;
+                    background-image: linear-gradient(310deg, #e9ecef, #e9ecef);
+                  "
+                  aria-hidden="true"
+                ></i>
+                <p style="cursor: pointer">Download Report</p>
+                <!-- <img  style="width: 40% !important; cursor: pointer;" src="assets/image/xls.svg" />
+                <p style="cursor: pointer;"> {{selectDate4}} Daily Report Download</p> -->
+              </div>
+            </div>
+
+            <!-- <div class="col-sm-8" style="padding-top: 1em;">
+              <div class="light-font text-center" style="padding-top: 15%;" *ngIf="attendanceList == null">No Entries
+                found</div>
+              <div *ngFor="let item of attendanceList">
+                <div *ngIf="item.checkType == 'IN'">
+                  <span class="light-font">Start Time - <span
+                      class="semiBold-font">{{item.checkTime | date:'EEEE, MMMM d, y,h:mm:ss a'}}</span></span>
+                  <p class="light-font"><i class="fa fa-map-marker secondry-color"></i> {{item.location_name}}</p>
+                </div>
+                <div *ngIf="item.checkType == 'OUT'">
+                  <span class="light-font">End Time - <span
+                      class="semiBold-font">{{item.checkTime | date:'EEEE, MMMM d, y,h:mm:ss a'}}</span></span>
+                  <p class="light-font"><i class="fa fa-map-marker secondry-color"></i> {{item.location_name}}</p>
+                </div>
+              </div>
+            </div> -->
+
+            <div
+              class="col-sm-8"
+              style="padding-top: 1em"
+              *ngIf="excel && userPerdate"
+            >
+              <div
+                class="light-font2 text-center"
+                style="padding: 10% 0"
+                *ngIf="excel.length == 0 || excel == null || excel == undefined"
+              >
+                No Entries found
+              </div>
+              <div *ngFor="let item of excel">
+                <p class="semiBold-font">{{ item.name }} Day Report</p>
+                <div *ngIf="item.checkType == 'IN'">
+                  <span class="light-font"
+                    >Start Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+                <div *ngIf="item.checkType == 'OUT'">
+                  <span class="light-font"
+                    >End Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="col-sm-8"
+              style="padding-top: 1em"
+              *ngIf="excel2 && userMonth"
+            >
+              <div
+                class="light-font2 text-center"
+                style="padding: 10% 0"
+                *ngIf="
+                  excel2.length == 0 || excel2 == null || excel2 == undefined
+                "
+              >
+                No Entries found
+              </div>
+              <div *ngFor="let item of excel2">
+                <p class="semiBold-font">{{ item.name }} Monthly Report</p>
+                <div *ngIf="item.checkType == 'IN'">
+                  <span class="light-font"
+                    >Start Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+                <div *ngIf="item.checkType == 'OUT'">
+                  <span class="light-font"
+                    >End Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="col-sm-8"
+              style="padding-top: 1em"
+              *ngIf="excelMonth && excelMonthTotal"
+            >
+              <div
+                class="light-font2 text-center"
+                style="padding: 10% 0"
+                *ngIf="
+                  excelMonth.length == 0 ||
+                  excelMonth == null ||
+                  excelMonth == undefined
+                "
+              >
+                No Entries found
+              </div>
+              <div *ngFor="let item of excelMonth">
+                <p class="semiBold-font">All Users Monthly report</p>
+                <div *ngIf="item.checkType == 'IN'">
+                  <span class="light-font"
+                    >Start Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+                <div *ngIf="item.checkType == 'OUT'">
+                  <span class="light-font"
+                    >End Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="col-sm-8"
+              style="padding-top: 1em"
+              *ngIf="excelMonth2 && datemonthexcel"
+            >
+              <div
+                class="light-font2 text-center"
+                style="padding: 10% 0"
+                *ngIf="
+                  excelMonth2.length == 0 ||
+                  excelMonth2 == null ||
+                  excelMonth2 == undefined
+                "
+              >
+                No Entries found
+              </div>
+              <div *ngFor="let item of excelMonth2">
+                <p class="semiBold-font">All Users Daily Report</p>
+                <div *ngIf="item.checkType == 'IN'">
+                  <span class="light-font"
+                    >Start Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+                <div *ngIf="item.checkType == 'OUT'">
+                  <span class="light-font"
+                    >End Time -
+                    <span class="semiBold-font">{{
+                      item.checkTime | date : "EEEE, MMMM d, y,h:mm:ss a"
+                    }}</span></span
+                  >
+                  <p class="light-font">
+                    <i class="fa fa-map-marker secondry-color"></i>
+                    {{ item.location_name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,336 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;1,200&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+html,
+body {
+  height: 100%;
+
+}
+
+$app-color: #e9e9ff;
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+.form-control:focus {
+  // border-color: #ced4da; /* default B5 color or set your own color*/
+  // border: none !important; /* if you want to remove borders at all*/
+  outline: none !important;
+  box-shadow: none !important;
+} 
+
+.app-bg {
+  background: $app-color;
+  outline: none;
+  // height: 100%;
+}
+
+.app-color {
+  color: $app-color !important;
+}
+
+.bg-app {
+  background-color: $app-color !important;
+  color: white !important;
+}
+
+.p5 {
+  padding: 5% !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.pt5 {
+  margin-top: 5em;
+}
+
+.p10 {
+  padding: 10% !important;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.m-a {
+  margin: auto !important;
+}
+
+.mt-0 {
+  margin-top: 0%;
+}
+
+.mb-0 {
+  margin-bottom: 0% !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-4em {
+  margin-top: 4em;
+}
+
+.br-2 {
+  border-radius: 2em !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.p-rl0 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.p-2 {
+  padding: 2% !important;
+}
+
+.mr-1 {
+  margin: 1% !important;
+}
+
+.br-1 {
+  border-radius: 1em !important;
+}
+
+.tab-bg {
+  background: transparent;
+  border: none;
+}
+
+.text-fnt80 {
+  font-size: 80% !important;
+}
+
+.r-border {
+  border: none !important;
+}
+
+.wth-50 {
+  width: 50% !important;
+}
+
+.wth-25 {
+  width: 25%;
+}
+
+.br-b {
+  border-bottom: inset 5px $app-color;
+}
+
+.mt-1 {
+  margin-top: 1em;
+}
+
+.text-black {
+  color: black !important;
+}
+
+.text-app {}
+
+.container {
+  color: black;
+  ;
+}
+
+.p7 {
+  padding: 7em;
+}
+
+.error-box {
+  font-size: 12px;
+  color: red;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.width-10em {
+  width: 10em;
+}
+
+.width-45 {
+  width: 45%;
+}
+.error-font{
+  font-size: 13px;
+  font-weight: 6 00;
+}
+.f-small {
+  font-size: 14px;
+  font-family: "Myriad Pro Light" !important;
+  padding-left: 1em;
+  color: gray;
+}
+
+input,
+textarea,
+select {
+  // background: #f1f1ff !important;
+  background-color: #fff !important;
+  border: 1px solid rgba(0,0,0,.54) !important;
+  margin-top: 1%;
+  border-radius: 0.25rem !important;
+  
+}
+
+
+.btn-bg {
+  background-image: linear-gradient(to right, #3b5998, #3b5998);
+  color: $app-color;
+  border: 0px solid transparent;
+}
+
+.secondry-color {
+  color: #3b5998 !important;
+}
+
+.padrightleft {
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+.btn-secon-bg {
+  background-image: linear-gradient(to right, grey, grey);
+  color: $app-color;
+  border: 0px solid transparent;
+}
+
+.modal-content {
+  border-radius: 20px;
+}
+
+.modal-content span {
+  padding-top: 5%;
+  padding-left: 5%;
+
+
+}
+
+.wth-60 {
+  width: 60% !important;
+}
+
+.regular-font {
+  font-family: "Myriad Pro Regular" !important;
+}
+
+.semiBold-font {
+  font-family: "Myriad Pro Semibold" !important;
+  font-size: 14px;
+}
+
+.bold-font {
+  font-family: "Myriad Pro Bold" !important;
+}
+
+.light-font {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 11px !important;
+}
+
+.bshadow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(5px 5px 5px #222222);
+  opacity: .5;
+
+  img {
+    width: 250px;
+  }
+}
+
+.ngx-pagination .current,
+.btn-info {
+  background-color: #313133 !important;
+}
+
+.ngx-pagination .current:hover {
+  background-color: #313133 !important;
+}
+
+.required-field::after {
+  content: "*";
+  color: red;
+}
+
+.ng-select .ng-select-container {
+  border-radius: 0em 2em 2em 0em !important;
+  min-height: 0px;
+}
+
+.ng-select {
+  width: 75%;
+}
+
+.merger-div{
+  border: 1px solid #ced4da;
+  background-color: #f1f1ff;
+  p{
+align-self: center;
+padding-right: 15px;
+transform: translateY(50%);
+  }
+}
+
+.text_wrap{
+  width: 100%;
+  padding-left: 0px;
+  max-width: 500px;
+  min-width: 100px;
+  word-break: break-word;
+  max-height: 100px;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  line-height: 21px;
+  display: -webkit-box;
+}
+
+#style-7::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+#style-7::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-7::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-image: -webkit-gradient(linear,
+									   left bottom,
+									   left top,
+									   color-stop(0.44, rgb(122,153,217)),
+									   color-stop(0.72, rgb(73,125,189)),
+									   color-stop(0.86, rgb(28,58,148)));
+}

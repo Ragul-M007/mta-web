@@ -1,0 +1,1678 @@
+<div class="container">
+  <div class="main">
+    <div class="row">
+      <div class="col-md-4">
+        <i class="fa fa-search searchIcon" aria-hidden="true"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          style="background: white !important"
+          class="form-control br-2 semiBold-font searchBox"
+          (keypress)="omit_special_char($event)"
+          (ngModelChange)="chngFun($event)"
+          placeholder="Search"
+          aria-label="Search"
+        />
+      </div>
+      <div class="col-md-4">
+        <select
+          class="form-control br-2 semiBold-font searchBox"
+          [(ngModel)]="searchdrop"
+          (change)="checkFilter()"
+          placeholder="Search"
+          aria-label="Search"
+        >
+          <option selected value="">All</option>
+          <option value="Active">Active</option>
+          <option value="Hold">Hold</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Completed">Completed</option>
+          <option value="Proposed">Proposed</option>
+        </select>
+      </div>
+
+      <div class="col-md-2" *ngIf="addTeamBtn">
+        <button
+          (click)="addProjectInTeam()"
+          class="btn btn-secon-bg btn-primary semiBold-font app-bg add-project"
+          data-target="#gymModal"
+          data-toggle="modal"
+          (click)="addModal2()"
+        >
+          ADD PROJECT</button
+        ><br />
+      </div>
+
+      <div class="col-md-2" *ngIf="!addTeamBtn">
+        <button
+          (click)="addProject()"
+          class="btn btn-secon-bg btn-primary semiBold-font app-bg add-project"
+          data-toggle="modal"
+          data-target="#gymModal"
+          (click)="addModal()"
+        >
+          ADD PROJECT</button
+        ><br />
+      </div>
+      <div class="col-md-2">
+        <button
+          (click)="addcategoryForm()"
+          class="btn btn-secon-bg btn-primary semiBold-font app-bg add-cate"
+          data-toggle="modal"
+          data-target="#catModal"
+        >
+          ADD CATEGORIES</button
+        ><br />
+      </div>
+    </div>
+
+    <div class="gymDsgn">
+      <div class="row project_class" *ngIf="projectList as filterResults">
+        <!-- | filter:searchText | filter:searchdrop -->
+        <div
+          class="text-center"
+          style="width: 100%"
+          *ngIf="filterResults.length == 0 || projectList == ''"
+        >
+          <!-- <p *ngIf="">No Projects Available</p> -->
+          <p *ngIf="filterResults.length == 0 || projectList == ''">
+            No Projects Available
+          </p>
+        </div>
+        <div
+          class="col-md-3 media-class"
+          style="margin-top: 2em"
+          *ngFor="
+            let item of filterResults
+              | paginate
+                : {
+                    itemsPerPage: 12,
+                    currentPage: page,
+                    totalItems: totalLength
+                  }
+          "
+        >
+          <div class="dashCard">
+            <div class="dropdown-dots">
+              <i
+                class="fa fa-ellipsis-h"
+                mat-button
+                [matMenuTriggerFor]="menu"
+                style="float: right; font-size: 1em"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <!-- <button >Menu</button> -->
+            <!-- <mat-menu #menu="matMenu">
+                                                  <button mat-menu-item (click)="editProject(item,'Active')">Active</button>
+                                                  <button mat-menu-item (click)="editProject(item,'Hold')">Hold</button>
+                                                  <button mat-menu-item (click)="editProject(item,'Cancelled')">Cancelled</button>
+                                                  <button mat-menu-item (click)="editProject(item,'Completed')">Completed</button>
+                                                </mat-menu> -->
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                (click)="editProject(item, $event )"
+                data-toggle="modal"
+                data-target="#gymModal"
+              >
+                Edit
+              </button>
+              <button mat-menu-item (click)="deleteProject(item)">
+                Delete
+              </button>
+            </mat-menu>
+            <div class="row">
+              <div class="col-md-8">
+                <!-- <div class="imgBox"> -->
+                <div>
+                  <img
+                    class="rounded-circle"
+                    data-toggle="modal"
+                    data-target="#viewPicModal"
+                    (click)="viewpic(item)"
+                    for="img"
+                    style="height: 60px; width: 60px"
+                    src="{{ http.imageURL }}{{ item.project_img }}"
+                    onerror="this.src='assets/image/project.jpg'"
+                    alt="Profile image"
+                  />
+                </div>
+              </div>
+              <div
+                class="col-md-4"
+                style="
+                  text-align: left;
+                  display: flex;
+                  padding-top: 15%;
+                  padding-left: 0px;
+                "
+                (click)="viewProjects(item)"
+              >
+                <i
+                  class="fa fa-dot-circle-o {{ item.status }}"
+                  style="font-size: 1em"
+                  aria-hidden="true"
+                ></i
+                ><span class="light-font" style="padding-left: 10%">{{
+                  item.status
+                }}</span>
+              </div>
+            </div>
+            <div
+              class="row"
+              (click)="viewProjects(item)"
+              routerLinkActive="active"
+            >
+              <div class="col-md-12" style="padding-right: 0px">
+                <div class="textDsgn">
+                  <span class="semiBold-font text_wrap">{{
+                    item.project_name
+                  }}</span>
+                  <!-- <p class="text-fnt80">{{item.last_name}}</p>
+                                <p class="text-fnt80">{{item.email_id}}</p>
+                                <p class="text-fnt80">{{item.contact_no}}</p> -->
+                  <p
+                    class="light-font"
+                    style="display: flex; gap: 7px; align-items: center"
+                  >
+                    <i class="fa fa-map-marker secondry-color"></i
+                    ><span class="address text_wrap"
+                      >{{ item.address }},{{ item.city }},</span
+                    >
+                  </p>
+                  <p class="light-font">
+                    <span class="test-span">{{ item.state }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row col-md-12">
+              <a class="secondry-color light-font" (click)="openComments(item)"
+                ><i
+                  class="fa fa-commenting secondry-color"
+                  aria-hidden="true"
+                ></i>
+                Comments</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="clearFix"
+        *ngIf="projectList != '' && projectList.length > 12"
+      >
+        <pagination-controls class="mt-5" (pageChange)="page = $event">
+        </pagination-controls>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="modal fade" data-backdrop="static" id="gymModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 2%; padding-bottom: 0">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{ projectAction }}</span>
+            </div>
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="close"
+                #closeModal
+                (click)="backFun()"
+                data-dismiss="modal"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <mat-tab-group [selectedIndex]="selectedIndex" #tabGroup>
+              <mat-tab label="Step 1" id="firstTab" class="firstTab">
+                <app-tab1>
+                  <div
+                    class="modal-header r-border"
+                    style="padding: 0 !important"
+                  >
+                    <div class="row full-width">
+                      <div class="col-md-7">
+                        <div class="profileimage">
+                          <input
+                            type="file"
+                            style="float: right"
+                            id="uploadImage"
+                            (change)="fileChangeEvent($event)"
+                            accept=".jpg"
+                          />
+
+                          <img
+                            class="rounded-circle"
+                            #img
+                            style="float: right"
+                            width="80px"
+                            height="80px"
+                            [src]="images"
+                            onerror="this.src='assets/image/pro-default.png'"
+                          />
+                          <a
+                            class="remove-image"
+                            *ngIf="showImg"
+                            style="display: inline"
+                            (click)="removeImg()"
+                            >&#215;</a
+                          >
+                          <a
+                            class="remove-image"
+                            *ngIf="editImg"
+                            style="display: inline"
+                            (click)="removeImg()"
+                            >&#215;</a
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="imgCropDisplay">
+                          <image-cropper
+                            *ngIf="showImg"
+                            [imageChangedEvent]="imageChangedEvent"
+                            [maintainAspectRatio]="true"
+                            [aspectRatio]="4 / 4"
+                            [resizeToWidth]="256"
+                            format="png"
+                            (imageCropped)="imageCropped($event)"
+                            (imageLoaded)="imageLoaded()"
+                            (cropperReady)="cropperReady()"
+                            (loadImageFailed)="loadImageFailed()"
+                          >
+                          </image-cropper>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="cropBtn" *ngIf="showImg">
+                          <button
+                            class="btn-primary btn-secon-bg br-2 text-fnt80 app-color"
+                            (click)="saveImage()"
+                          >
+                            Crop
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <form [formGroup]="addProjectForm">
+                    <div class="row">
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Project Name</span>
+                        <input
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="projectname"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          minlength="1"
+                          maxlength="50"
+                        />
+
+                        <div
+                          *ngIf="
+                            frm.projectname.hasError('required') &&
+                            frm.projectname.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Enter the Project name</small
+                          >
+                        </div>
+                        <div
+                          *ngIf="frm.projectname.hasError('pattern')"
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Numbers & Special characters not allowed!</small
+                          >
+                        </div>
+                      </div>
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Area</span>
+
+                        <input
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="area"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          minlength="1"
+                          maxlength="60"
+                        />
+
+                        <div
+                          *ngIf="
+                            frm.area.hasError('required') && frm.area.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Enter the Area name</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">State</span>
+
+                        <select
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="state"
+                          (change)="getCities($event)"
+                        >
+                          <option selected disabled [value]="null"></option>
+                          <option
+                            *ngFor="let state of stateList"
+                            [value]="state.code"
+                          >
+                            {{ state.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            frm.state.hasError('required') && frm.state.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the State name</small
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Description</span>
+
+                        <textarea
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="description"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          minlength="1"
+                          maxlength="200"
+                          style="max-height: 100px; min-height: 45px"
+                        ></textarea>
+
+                        <div
+                          *ngIf="
+                            frm.description.hasError('required') &&
+                            frm.description.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Enter the Description</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px">
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">City</span>
+
+                        <select
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="city"
+                        >
+                          <option
+                            *ngFor="let city of cityList"
+                            [value]="city.name"
+                          >
+                            {{ city.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            frm.city.hasError('required') && frm.city.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the City name</small
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Status</span>
+
+                        <select
+                          class="form-control br-2 wth-80"
+                          formControlName="status"
+                          placeholder="Status"
+                        >
+                          <option
+                            *ngFor="let item of statusList"
+                            [value]="item.name"
+                          >
+                            {{ item.name }}
+                          </option>
+                        </select>
+
+                        <div
+                          *ngIf="
+                            frm.status.hasError('required') &&
+                            frm.status.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font">Please Select Status</small>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                      (click)="stepMap(selectededitProject)"
+                    >
+                      NEXT
+                    </button>
+
+                    <!-- <button type="submit"
+                    class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                    (click)="addprojectSubmit(selectededitProject)">{{projectActionBtn}} PROJECT</button> -->
+                  </div>
+                </app-tab1>
+              </mat-tab>
+
+              <mat-tab label="Step 2">
+                <app-tab2>
+                  <!-- Google Map Integration -->
+
+                  <div class="row">
+                    <!-- <input
+    style="position: absolute"
+    class="input"
+    [(ngModel)]="autocompleteInput"
+    #addresstext
+    style="padding: 12px 20px; border: 1px solid #ccc; width: 400px"
+  /> -->
+                    <br />
+
+                    <div class="form-allign">
+                      <form action="" [formGroup]="mapForm">
+                        <svg class="my-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M57.7 193l9.4 16.4c8.3 14.5 21.9 25.2 38 29.8L163 255.7c17.2 4.9 29 20.6 29 38.5l0 39.9c0 11 6.2 21 16 25.9s16 14.9 16 25.9l0 39c0 15.6 14.9 26.9 29.9 22.6c16.1-4.6 28.6-17.5 32.7-33.8l2.8-11.2c4.2-16.9 15.2-31.4 30.3-40l8.1-4.6c15-8.5 24.2-24.5 24.2-41.7l0-8.3c0-12.7-5.1-24.9-14.1-33.9l-3.9-3.9c-9-9-21.2-14.1-33.9-14.1L257 256c-11.1 0-22.1-2.9-31.8-8.4l-34.5-19.7c-4.3-2.5-7.6-6.5-9.2-11.2c-3.2-9.6 1.1-20 10.2-24.5l5.9-3c6.6-3.3 14.3-3.9 21.3-1.5l23.2 7.7c8.2 2.7 17.2-.4 21.9-7.5c4.7-7 4.2-16.3-1.2-22.8l-13.6-16.3c-10-12-9.9-29.5 .3-41.3l15.7-18.3c8.8-10.3 10.2-25 3.5-36.7l-2.4-4.2c-3.5-.2-6.9-.3-10.4-.3C163.1 48 84.4 108.9 57.7 193zM464 256c0-36.8-9.6-71.4-26.4-101.5L412 164.8c-15.7 6.3-23.8 23.8-18.5 39.8l16.9 50.7c3.5 10.4 12 18.3 22.6 20.9l29.1 7.3c1.2-9 1.8-18.2 1.8-27.5zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/></svg>
+                        <hr class="icon_line"/>
+                        <hr class="icon_line2"/>
+
+                        <input
+                          [(ngModel)]="combinedCoordinates"
+                          placeholder="Enter Latitude & Longitude ....."
+                          type="text"
+                          class="form-control my-inp-margin input_gmap my-margin-left"
+                          (input)="getLocation($event)"
+                          (keydown)="whiteSpaceCheck2($event)"
+                          (input)="updateWithLatLng(latitudes, longitudes)"
+                          formControlName="longitude"
+                        />
+  
+                        <div
+                          *ngIf="mapform.longitude.hasError('pattern')"
+                          class="font-italic error-box err-b"
+                        >
+                          <small class="error-font"
+                            >Not a Valid Lattitude & Longitude!
+                          </small>
+                        </div>
+  
+                    
+                      </form>
+                      <div class="hr-div">
+                       <hr class="line-tag"/><sapn class="line-span">OR</sapn><hr class="line-tag"/>
+                      </div>
+                      
+                      <svg
+                      class="my-svg2"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 384 512"
+                    >
+                      <path
+                        d="M32 32C32 14.3 46.3 0 64 0L320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-29.5 0 11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3L32 352c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64 64 64C46.3 64 32 49.7 32 32zM160 384l64 0 0 96c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-96z"
+                      />
+                    </svg>
+                      <input
+                        type="text"
+                        [(ngModel)]="link"
+                        placeholder="Enter location link ....."
+                        class="gmap-inp form-control"
+                        (input)="extractCoordinates()"
+                      />
+
+                     
+                   
+                    
+                      <!-- <button
+                        (click)="extractCoordinates()"
+                        class="animated-button"
+                      >
+                        Get &nbsp;
+
+                        <svg
+                          class="my-svg"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 384 512"
+                        >
+                          <path
+                            d="M32 32C32 14.3 46.3 0 64 0L320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-29.5 0 11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3L32 352c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64 64 64C46.3 64 32 49.7 32 32zM160 384l64 0 0 96c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-96z"
+                          />
+                        </svg>
+                      </button> -->
+                    </div>
+
+                    <div
+                      #map
+                      style="height: 300px; width: 750px; position: relative"
+                    ></div>
+
+                    <!-- <label>Latitude & Longitude</label> -->
+                    <br />
+
+                   
+                  </div>
+                 
+
+                  <!-- Google Map Integration Ends-->
+
+                  <!-- <form action="" [formGroup]="mapForm">
+                    <div class="row" style="margin-top: 5px">
+
+                      <div class="col-lg-6 modal2">
+                        <span class="full-width f-small  ">Latitude & Longitude</span>
+                        <input type="text" style="margin-top: 5px;" id="input" class="form-control f-small br-2 wth-80"
+                          max="999" formControlName="longitude" (input)="getLocation($event)"
+                          (keydown)="whiteSpaceCheck2($event)">
+
+
+                        <div *ngIf="mapform.longitude.hasError('pattern')" class="font-italic error-box">
+                          <small class="error-font">Not a Valid Lattitude & Longitude! </small>
+                        </div>
+                      </div>
+                    </div>
+                  </form>  -->
+                  <!-- Google Maps  -->
+                  <!-- <iframe [src]='mapsURL | safe ' width="100%" height="250" style="position: relative;top:10px"
+                    frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen>
+                  </iframe> -->
+                  <!-- Google Maps end -->
+
+                  <!-- Mapsmy india start -->
+                  <!-- <div id="map" style="width: 100%; height: 30vh;"></div> -->
+                  <!-- <div>
+  <label>Latitude</label>
+  <input type="text" [(ngModel)]="latitude"  placeholder="Latitude" readonly>
+  <label>Longitude</label>
+  <input type="text" [(ngModel)]="longitude"  placeholder="Longitude" readonly>
+</div> -->
+                  <!-- Mapsmy india End -->
+
+                  <div class="text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-bg mt-1 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                      (click)="finalAddprojectSubmit(selectededitProject)"
+                    >
+                      {{ projectActionBtn }} PROJECT
+                    </button>
+                  </div>
+                </app-tab2>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" data-backdrop="static" id="gymModalTeam">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 2%; padding-bottom: 0">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{ projectAction }}</span>
+            </div>
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="close"
+                #closeModal
+                (click)="backFun()"
+                data-dismiss="modal"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <mat-tab-group [selectedIndex]="selectedIndex" #tabGroup>
+              <mat-tab label="Step 1" id="firstTab" class="firstTab">
+                <app-tab1>
+                  <div
+                    class="modal-header r-border"
+                    style="padding: 0 !important"
+                  >
+                    <div class="row full-width">
+                      <div class="col-md-7">
+                        <div class="profileimage">
+                          <input
+                            type="file"
+                            style="float: right"
+                            id="uploadImage"
+                            (change)="fileChangeEvent($event)"
+                            accept=".jpg"
+                          />
+
+                          <img
+                            class="rounded-circle"
+                            #img
+                            style="float: right"
+                            width="80px"
+                            height="80px"
+                            [src]="images"
+                            onerror="this.src='assets/image/pro-default.png'"
+                          />
+                          <a
+                            class="remove-image"
+                            *ngIf="showImg"
+                            style="display: inline"
+                            (click)="removeImg()"
+                            >&#215;</a
+                          >
+                          <a
+                            class="remove-image"
+                            *ngIf="editImg"
+                            style="display: inline"
+                            (click)="removeImg()"
+                            >&#215;</a
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="imgCropDisplay">
+                          <image-cropper
+                            *ngIf="showImg"
+                            [imageChangedEvent]="imageChangedEvent"
+                            [maintainAspectRatio]="true"
+                            [aspectRatio]="4 / 4"
+                            [resizeToWidth]="256"
+                            format="png"
+                            (imageCropped)="imageCropped($event)"
+                            (imageLoaded)="imageLoaded()"
+                            (cropperReady)="cropperReady()"
+                            (loadImageFailed)="loadImageFailed()"
+                          >
+                          </image-cropper>
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="cropBtn" *ngIf="showImg">
+                          <button
+                            class="btn-primary btn-secon-bg br-2 text-fnt80 app-color"
+                            (click)="saveImage()"
+                          >
+                            Crop
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <form [formGroup]="addProjectForm">
+                    <div class="row">
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Project Name</span>
+                        <input
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="projectname"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          minlength="1"
+                          maxlength="50"
+                        />
+
+                        <div
+                          *ngIf="
+                            frm.projectname.hasError('required') &&
+                            frm.projectname.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Enter the Project name</small
+                          >
+                        </div>
+                        <div
+                          *ngIf="frm.projectname.hasError('pattern')"
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Numbers & Special characters not allowed!</small
+                          >
+                        </div>
+                      </div>
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Area</span>
+
+                        <input
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="area"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          minlength="1"
+                          maxlength="60"
+                        />
+
+                        <div
+                          *ngIf="
+                            frm.area.hasError('required') && frm.area.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Enter the Area name</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">State</span>
+
+                        <select
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="state"
+                          (change)="getCities($event)"
+                        >
+                          <option selected disabled [value]="null"></option>
+                          <option
+                            *ngFor="let state of stateList"
+                            [value]="state.code"
+                          >
+                            {{ state.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            frm.state.hasError('required') && frm.state.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the State name</small
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Description</span>
+
+                        <textarea
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="description"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          minlength="1"
+                          maxlength="200"
+                          style="max-height: 100px; min-height: 45px"
+                        ></textarea>
+
+                        <div
+                          *ngIf="
+                            frm.description.hasError('required') &&
+                            frm.description.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Enter the Description</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px">
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">City</span>
+
+                        <select
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="city"
+                        >
+                          <option
+                            *ngFor="let city of cityList"
+                            [value]="city.name"
+                          >
+                            {{ city.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            frm.city.hasError('required') && frm.city.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the City name</small
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6 label">
+                        <span class="full-width f-small">Status</span>
+
+                        <select
+                          class="form-control br-2 wth-80"
+                          formControlName="status"
+                          placeholder="Status"
+                        >
+                          <option
+                            *ngFor="let item of statusList"
+                            [value]="item.name"
+                          >
+                            {{ item.name }}
+                          </option>
+                        </select>
+
+                        <div
+                          *ngIf="
+                            frm.status.hasError('required') &&
+                            frm.status.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font">Please Select Status</small>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                      (click)="stepMap(selectededitProject)"
+                    >
+                      NEXT
+                    </button>
+
+                    <!-- <button type="submit"
+                    class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                    (click)="addprojectSubmit(selectededitProject)">{{projectActionBtn}} PROJECT</button> -->
+                  </div>
+                </app-tab1>
+              </mat-tab>
+
+              <mat-tab label="Step 2">
+                <app-tab2>
+                  <!-- <form action="" [formGroup]="mapForm"> -->
+                  <!-- <div class="row" style="margin-top: 5px">
+
+                      <div class="col-lg-6 modal2">
+                        <span class="full-width f-small  ">Latitude & Longitude</span>
+                        <input type="text" style="margin-top: 5px;" id="input" class="form-control f-small br-2 wth-80"
+                          max="999" formControlName="longitude" (input)="getLocation($event)"
+                          (keydown)="whiteSpaceCheck2($event)">
+
+                     
+
+                        <div *ngIf="mapform.longitude.hasError('pattern')" class="font-italic error-box">
+                          <small class="error-font">Not a Valid Lattitude & Longitude! </small>
+                        </div>
+                      </div>
+                    </div> -->
+                  <!-- </form> -->
+
+                  <!-- <iframe [src]='mapsURL | safe ' width="100%" height="250" style="position: relative;top:10px"
+                    frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen>
+                  </iframe> -->
+                  <!-- <div class="text-center">
+                    <button type="submit"
+                      class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                      (click)="finalAddprojectSubmit(selectededitProject)">{{projectActionBtn}} PROJECT</button>
+                  </div> -->
+
+                  <!-- Google Map Integration -->
+                  <div class="row">
+                    <!-- <input
+    style="position: absolute"
+    class="input"
+    [(ngModel)]="autocompleteInput"
+    #addresstext
+    style="padding: 12px 20px; border: 1px solid #ccc; width: 400px"
+  /> -->
+  <div class="form-allign col-md-12">
+    
+    <form class="col-md-6" action="" [formGroup]="mapForm">
+      <svg class="my-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M57.7 193l9.4 16.4c8.3 14.5 21.9 25.2 38 29.8L163 255.7c17.2 4.9 29 20.6 29 38.5l0 39.9c0 11 6.2 21 16 25.9s16 14.9 16 25.9l0 39c0 15.6 14.9 26.9 29.9 22.6c16.1-4.6 28.6-17.5 32.7-33.8l2.8-11.2c4.2-16.9 15.2-31.4 30.3-40l8.1-4.6c15-8.5 24.2-24.5 24.2-41.7l0-8.3c0-12.7-5.1-24.9-14.1-33.9l-3.9-3.9c-9-9-21.2-14.1-33.9-14.1L257 256c-11.1 0-22.1-2.9-31.8-8.4l-34.5-19.7c-4.3-2.5-7.6-6.5-9.2-11.2c-3.2-9.6 1.1-20 10.2-24.5l5.9-3c6.6-3.3 14.3-3.9 21.3-1.5l23.2 7.7c8.2 2.7 17.2-.4 21.9-7.5c4.7-7 4.2-16.3-1.2-22.8l-13.6-16.3c-10-12-9.9-29.5 .3-41.3l15.7-18.3c8.8-10.3 10.2-25 3.5-36.7l-2.4-4.2c-3.5-.2-6.9-.3-10.4-.3C163.1 48 84.4 108.9 57.7 193zM464 256c0-36.8-9.6-71.4-26.4-101.5L412 164.8c-15.7 6.3-23.8 23.8-18.5 39.8l16.9 50.7c3.5 10.4 12 18.3 22.6 20.9l29.1 7.3c1.2-9 1.8-18.2 1.8-27.5zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/></svg>
+      <input
+        [(ngModel)]="combinedCoordinates"
+        placeholder="Enter Latitude & Longitude ....."
+        type="text"
+        class="form-control my-inp-margin input_gmap my-margin-left"
+        (input)="getLocation($event)"
+        (keydown)="whiteSpaceCheck2($event)"
+        (input)="updateWithLatLng(latitudes, longitudes)"
+        formControlName="longitude"
+      />
+
+      <div
+        *ngIf="mapform.longitude.hasError('pattern')"
+        class="font-italic error-box"
+      >
+        <small class="error-font"
+          >Not a Valid Lattitude & Longitude!
+        </small>
+      </div>
+
+  
+    </form>
+
+    <hr class="line-tag"/><sapn class="line-span">OR</sapn>
+    <svg
+    class="my-svg"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 384 512"
+  >
+    <path
+      d="M32 32C32 14.3 46.3 0 64 0L320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-29.5 0 11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3L32 352c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64 64 64C46.3 64 32 49.7 32 32zM160 384l64 0 0 96c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-96z"
+    />
+  </svg>
+
+    <input
+      type="text"
+      [(ngModel)]="link"
+      placeholder="Enter location link ....."
+      class="gmap-inp form-control col-md-6" 
+      (input)="extractCoordinates()"
+
+    />
+
+<!--  
+    <button
+      (click)="extractCoordinates()"
+      class="animated-button"
+    >
+      Get &nbsp;
+
+ 
+    </button> -->
+  </div>
+                    <div
+                      #map
+                      style="height: 300px; width: 750px; position: relative"
+                    ></div>
+                    <!-- <label>Latitude & Longitude</label> -->
+                    <br />
+                  </div>
+                  <!-- Google Map Integration Ends-->
+                </app-tab2>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- project add in team -->
+    <div class="modal fade" data-backdrop="static" id="teamprojectModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 2%; padding-bottom: 0">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{ projectAction }}</span>
+            </div>
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                (click)="backFun2()"
+                #teamcloseModal
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <mat-tab-group [selectedIndex]="selectedIndex" #tabGroup>
+            <mat-tab label="Step 1" id="firstTab" class="firstTab">
+              <app-tab1>
+                <div
+                  class="modal-header r-border"
+                  style="padding: 0 !important"
+                >
+                  <div class="row full-width">
+                    <div class="col-md-7">
+                      <div class="profileimage">
+                        <input
+                          type="file"
+                          style="float: right"
+                          id="uploadImage"
+                          (change)="fileChangeEvent($event)"
+                          accept=".jpg"
+                        />
+                        <img
+                          class="rounded-circle"
+                          #img
+                          style="float: right"
+                          width="80px"
+                          height="80px"
+                          [src]="images"
+                          onerror="this.src='assets/image/pro-default.png'"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="imgCropDisplay">
+                        <image-cropper
+                          *ngIf="showImg"
+                          [imageChangedEvent]="imageChangedEvent"
+                          [maintainAspectRatio]="true"
+                          [aspectRatio]="4 / 4"
+                          [resizeToWidth]="256"
+                          format="png"
+                          (imageCropped)="imageCropped($event)"
+                          (imageLoaded)="imageLoaded()"
+                          (cropperReady)="cropperReady()"
+                          (loadImageFailed)="loadImageFailed()"
+                        >
+                        </image-cropper>
+                      </div>
+                    </div>
+                    <div class="col-md-1">
+                      <div class="cropBtn" *ngIf="showImg">
+                        <button
+                          class="btn-primary btn-secon-bg br-2 text-fnt80 app-color"
+                          (click)="saveImage()"
+                        >
+                          Crop
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                  <form [formGroup]="addTeamProjectForm">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <span class="full-width f-small">Project Name</span>
+                        <input
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          [(ngModel)]="selectededitProject.project_name"
+                          formControlName="projectname"
+                        />
+
+                        <div
+                          *ngIf="
+                            frmTeam.projectname.hasError('required') &&
+                            frmTeam.projectname.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please enter the Project name</small
+                          >
+                        </div>
+                        <div
+                          *ngIf="frmTeam.projectname.hasError('pattern')"
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Numbers & Special characters not allowed!</small
+                          >
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <span class="full-width f-small">Area</span>
+
+                        <input
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          [(ngModel)]="selectededitProject.address"
+                          formControlName="area"
+                        />
+
+                        <div
+                          *ngIf="
+                            frmTeam.area.hasError('required') &&
+                            frmTeam.area.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please enter the Area name</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <span class="full-width f-small">State</span>
+
+                        <select
+                          class="form-control f-small br-2 wth-80"
+                          formControlName="state"
+                          [(ngModel)]="selectededitProject.state"
+                          (change)="getCities($event)"
+                        >
+                          <option selected disabled [value]="null"></option>
+                          <option
+                            *ngFor="let state of stateList"
+                            [value]="state.code"
+                          >
+                            {{ state.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            frmTeam.state.hasError('required') &&
+                            frmTeam.state.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the State name</small
+                          >
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6">
+                        <span class="full-width f-small">Description</span>
+
+                        <textarea
+                          type="text"
+                          class="form-control f-small br-2 wth-80"
+                          style="min-height: 33px; max-height: 33px"
+                          [(ngModel)]="selectededitProject.description"
+                          formControlName="description"
+                        ></textarea>
+
+                        <div
+                          *ngIf="
+                            frmTeam.description.hasError('required') &&
+                            frmTeam.description.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the Description</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-3" style="margin-top: -3%">
+                      <div class="col-lg-6">
+                        <span class="full-width f-small">City</span>
+
+                        <select
+                          class="form-control f-small br-2 wth-80"
+                          [(ngModel)]="selectededitProject.city"
+                          formControlName="city"
+                        >
+                          <option selected disabled [value]="null"></option>
+                          <option
+                            *ngFor="let city of cityList"
+                            [value]="city.name"
+                          >
+                            {{ city.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            frmTeam.city.hasError('required') &&
+                            frmTeam.city.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the City name</small
+                          >
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-lg-6" *ngIf="!showAdd"> -->
+                      <div class="col-lg-6">
+                        <span class="full-width f-small">Status</span>
+
+                        <select
+                          class="form-control br-2 wth-80"
+                          [(ngModel)]="selectededitProject.status"
+                          formControlName="status"
+                          placeholder="Status"
+                        >
+                          <option
+                            *ngFor="let item of statusList"
+                            [value]="item.name"
+                          >
+                            {{ item.name }}
+                          </option>
+                        </select>
+
+                        <div
+                          *ngIf="
+                            frmTeam.status.hasError('required') &&
+                            frmTeam.status.touched
+                          "
+                          class="font-italic error-box"
+                        >
+                          <small class="error-font"
+                            >Please Select the Status</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                      (click)="movetoMap(selectededitProject)"
+                    >
+                      NEXT
+                    </button>
+                    <!-- <button type="submit"
+                      class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                      (click)="addteamprojectSubmit(selectededitProject)">{{projectActionBtn}} PROJECT</button> -->
+                  </div>
+                </div>
+              </app-tab1>
+            </mat-tab>
+            <mat-tab label="Step 2" class="firstTab">
+              <app-tab2>
+                <!-- Google Map Integration -->
+
+                <div class="row">
+                  <!-- <input
+    style="position: absolute"
+    class="input"
+    [(ngModel)]="autocompleteInput"
+    #addresstext
+    style="padding: 12px 20px; border: 1px solid #ccc; width: 400px"
+  /> -->
+  <div class="form-allign">
+    <form action="" [formGroup]="mapForm">
+      <input
+        [(ngModel)]="combinedCoordinates"
+        placeholder="Enter Latitude & Longitude ....."
+        type="text"
+        class="form-control my-inp-margin input_gmap my-margin-left"
+        (input)="getLocation($event)"
+        (keydown)="whiteSpaceCheck2($event)"
+        (input)="updateWithLatLng(latitudes, longitudes)"
+        formControlName="longitude"
+      />
+
+      <div
+        *ngIf="mapform.longitude.hasError('pattern')"
+        class="font-italic error-box"
+      >
+        <small class="error-font"
+          >Not a Valid Lattitude & Longitude!
+        </small>
+      </div>
+
+  
+    </form>
+    <hr class="line-tag"/><sapn class="line-span">OR</sapn>
+    <input
+      type="text"
+      [(ngModel)]="link"
+      placeholder="Enter location link ....."
+      class="gmap-inp form-control"
+      (input)="extractCoordinates()"
+
+    />
+
+  
+ 
+    
+    <!-- <button
+      (click)="extractCoordinates()"
+      class="animated-button"
+    >
+      Get &nbsp;
+
+      <svg
+        class="my-svg"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 384 512"
+      >
+        <path
+          d="M32 32C32 14.3 46.3 0 64 0L320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-29.5 0 11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3L32 352c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64 64 64C46.3 64 32 49.7 32 32zM160 384l64 0 0 96c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-96z"
+        />
+      </svg>
+    </button> -->
+  </div>
+                  <div
+                    #map
+                    style="height: 300px; width: 750px; position: relative"
+                  ></div>
+                 
+                </div>
+
+                <!-- Google Map Integration Ends-->
+
+                <!-- <form [formGroup]="mapForm">
+                  <div class="row" style="margin-top: 5px">
+
+                    <div class="col-lg-6">
+                      <span class="full-width f-small ">Latitude & Longitude </span>
+
+                      <input type="text" id="numberinput" class="form-control f-small br-2 wth-80" max="999"
+                        formControlName="longitude" (input)="getLocation($event)">
+
+                   
+                    </div>
+
+
+                  </div>
+                </form> -->
+
+                <!-- <iframe [src]='mapsURL | safe ' width="100%" height="400" style="position: relative;padding:10px"
+                  frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen>
+                </iframe> -->
+                <div class="text-center">
+                  <button
+                    type="submit"
+                    style="position: relative; bottom: 10px"
+                    class="btn btn-primary btn-bg mt-1 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+                    (click)="addteamprojectSubmit(selectededitProject)"
+                  >
+                    {{ projectActionBtn }} PROJECT
+                  </button>
+                </div>
+              </app-tab2>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD CATEGORY -->
+    <div class="modal fade" id="catModal" data-backdrop="static">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="text-align: right">
+            <div class="col-md-12">
+              <button
+                *ngIf="!catList"
+                (click)="categoryList()"
+                style="opacity: 0.6; width: auto"
+                class="btn btn-bg btn-primary semiBold-font app-bg add-cate"
+              >
+                AVAILABLE CATEGORIES <i class="fa fa-arrow-right"></i></button
+              ><br />
+            </div>
+          </div>
+          <div class="row" style="padding: 1px 15px 0px 25px">
+            <div class="col-md-6">
+              <div
+                class="row full-width"
+                *ngIf="catList"
+                style="padding-left: 2%; font-size: 16px"
+              >
+                <p (click)="backBtn()">
+                  <i class="fa fa-long-arrow-left" aria-hidden="true"></i> BACK
+                </p>
+              </div>
+              <span class="semiBold-font">{{ categoryAction }}</span>
+            </div>
+
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                #closeCatModal
+                (click)="backBtn()"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form
+              [formGroup]="addCategoryForm"
+              *ngIf="!catList"
+              style="padding: 0% 10% 1% 10%"
+            >
+              <div class="row padrightleft">
+                <span class="full-width f-small required-field pl-2"
+                  >Category Name</span
+                >
+
+                <input
+                  type="text"
+                  class="form-control f-small br-2 wth-80"
+                  [(ngModel)]="catData.category_name"
+                  formControlName="categoryname"
+                />
+
+                <div
+                  *ngIf="
+                    frmCat.categoryname.hasError('required') &&
+                    frmCat.categoryname.touched
+                  "
+                  class="font-italic error-box"
+                >
+                  <small class="error-font"
+                    >Please Enter the Category name</small
+                  >
+                </div>
+              </div>
+              <div class="row padrightleft">
+                <span class="full-width f-small required-field pl-2"
+                  >Description</span
+                >
+
+                <textarea
+                  type="text"
+                  class="form-control f-small br-2 wth-80"
+                  [(ngModel)]="catData.description"
+                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                  minlength="1"
+                  maxlength="250"
+                  formControlName="description"
+                ></textarea>
+
+                <div
+                  *ngIf="
+                    frmCat.description.hasError('required') &&
+                    frmCat.description.touched
+                  "
+                  class="font-italic error-box"
+                >
+                  <small class="error-font">Please Enter the Description</small>
+                </div>
+              </div>
+
+              <div class="row padrightleft">
+                <span class="full-width f-small required-field pl-2"
+                  >User Type</span
+                >
+                <select
+                  class="form-control f-small br-2 wth-80"
+                  [(ngModel)]="catData.role_id"
+                  formControlName="userType"
+                >
+                  <option selected disabled [value]="null"></option>
+                  <option
+                    *ngFor="let roles of userRolesList"
+                    [ngValue]="roles.role_id"
+                  >
+                    {{ roles.role }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    frmCat.userType.hasError('required') &&
+                    frmCat.userType.touched
+                  "
+                  class="font-italic error-box"
+                >
+                  <small class="error-font">Please select the User Type</small>
+                </div>
+
+                <!-- <span class="full-width f-small required-field">User Type</span>
+                <select class="form-control f-small br-2 wth-80" formControlName="userType"
+                  [(ngModel)]="catData.role_id">
+                  <option selected disabled [value]="null"></option>
+                  <option *ngFor="let roles of userRolesList" [ngValue]="roles.role_id">{{ roles.role
+                                            }}</option>
+                </select> -->
+                <!-- <div *ngIf="frmcat.userType.hasError('required') && frmcat.userType.touched" class="font-italic error-box">
+                                    <small>Please select the User Type</small>
+                                </div> -->
+              </div>
+            </form>
+            <div *ngIf="catList">
+              <div class="row">
+                <div class="col-md-4" style="max-width: none">
+                  <i class="fa fa-search searchIcon" aria-hidden="true"></i>
+                  <input
+                    type="text"
+                    style="border: 1px solid"
+                    [(ngModel)]="searchCat"
+                    [ngModelOptions]="{ standalone: true }"
+                    class="form-control br-2 semiBold-font searchBox2"
+                    (input)="checkCat($event)"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="text-center"
+                style="width: 100%"
+                *ngIf="categoriesList == ''"
+              >
+                <p *ngIf="categoriesList?.length == 0 || categoriesList == ''">
+                  No categories Available
+                </p>
+              </div>
+              <div class="cat-style" id="style-7">
+                <div class="row full-width" *ngFor="let cat of categoriesList">
+                  <!-- <div class="text-center" style="width:100%;">
+                  <p *ngIf="cat?.length == 0 || cat == ''">No categories Available</p>
+                </div> -->
+
+                  <div style="padding-left: 4em" class="col-sm-10">
+                    <div
+                      class="semiBold-font"
+                      style="max-width: 340px; word-wrap: break-word"
+                    >
+                      {{ cat.category_name }}
+                    </div>
+                    <p
+                      class="light-font"
+                      style="max-width: 340px; word-wrap: break-word"
+                    >
+                      {{ cat.description }}
+                    </p>
+                  </div>
+                  <div class="col-sm-2">
+                    <i
+                      class="fa fa-edit"
+                      data-toggle="modal"
+                      (click)="addcategory(cat)"
+                    ></i>
+                    <i
+                      class="fa fa-trash"
+                      style="padding-left: 25px"
+                      (click)="deleteCat(cat)"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center" *ngIf="!catList && formHandle">
+              <button
+                type="submit"
+                class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                (click)="addCategorySubmit()"
+              >
+                Add
+              </button>
+            </div>
+            <div class="text-center" *ngIf="!catList && !formHandle">
+              <button
+                type="submit"
+                class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                (click)="editCategorySubmit(catData.category_id)"
+              >
+                Edit Category
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="viewPicModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 5%">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{
+                selectedProject.project_name
+              }}</span>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="margin-left: 5%">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="profileimage" style="text-align: center">
+                  <img
+                    class="feedmodalImg"
+                    for="img"
+                    src="{{ http.imageURL }}{{ selectedProject.project_img }}"
+                    onerror="this.src='assets/image/project.jpg'"
+                    alt="Profile image"
+                    width="50%"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div>
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="square-jelly-box" class="spinner1">
+    <ng-template #spinnerContent>
+        <div style="text-align: center; color: white;">
+        Loading for s3...
+      </div>
+    </ng-template>
+  </ngx-spinner>
+</div> -->
+
+<!-- mapsURL is the key -->

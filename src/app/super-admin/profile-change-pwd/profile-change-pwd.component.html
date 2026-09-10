@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="main">
+
+        <div class="mainContent">
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="orderModal">
+        <div class="modal-dialog orderModalDialog">
+            <div class="modal-content">
+                <div class="modal-header r-border">
+                    <h5 class="modal-title">View Orders</h5>
+                    <!-- <div class="card upload-card"> -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <!-- </div> -->
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                     <div class="displayOrders">
+                        <!-- <div class="row">
+                            <div class="col-md-6">
+                                <h6>{{ viewOrderList.machine_name }}</h6>
+                                <p><span class="title">Order ID :</span> {{ viewOrderList.order_id }}</p>
+                                <p><span class="title">Payment Type :</span> {{ viewOrderList.payment_type }}</p>
+                                <p><span class="title" *ngIf="viewOrderList.coupon_code != null || viewOrderList.coupon_code != undefined">Coupon Code :</span> {{ viewOrderList.coupon_code }}</p>
+                                <p><span class="title" *ngIf="viewOrderList.discount_type != null || viewOrderList.discount_type != undefined">Discount Type :</span> {{ viewOrderList.discount_type }}</p>
+                                <p><span class="title" *ngIf="viewOrderList.discounted_amount != null || viewOrderList.discounted_amount != undefined">Discounted Amount :</span> INR {{ viewOrderList.discounted_amount }}</p>
+                                <p><span class="title">Total Amount :</span> INR {{ viewOrderList.total_amount }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="secondry-color" style="float: right; font-weight: bold;">{{ dataService.dateFormat(viewOrderList.date) }}</p>
+                            </div>
+                        </div> -->
+                        <br>
+                        <table class="table orderTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Category Name</th>
+                                    <th scope="col">Flavour Name</th>
+                                    <th scope="col">Product Quantity</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col" style="width:25%;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr class="app-color" *ngFor="let product of viewOrderList.products">
+                                    <td>
+                                        <span style="margin-right:0.7em;">
+                                            <img [src]="http.imageURL + product.product_img" onerror="this.src='assets/image/user.svg'"
+                                            style="float:left;margin-right: 1em;" width="20px" height="20px" class="rounded mx-auto d-block">
+                                        </span>
+                                        {{ product.product_name }}
+                                    </td>
+                                    <td>{{ product.category_name }}</td>
+                                    <td>{{ product.flavour_name }}</td>
+                                    <td>{{ product.prod_qty }}</td>
+                                    <td>Rs {{ product.price }}</td>
+                                    <td style="text-align: justify;">{{ product.product_description }}</td>
+                                 </tr> -->
+                            </tbody>
+                        </table>
+    
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,1004 @@
+<div class="container">
+  <div class="main">
+    <div class="row">
+      <div class="col-md-4">
+        <i class="fa fa-search searchIcon" aria-hidden="true"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          style="background: white !important"
+          class="form-control semiBold-font searchBox"
+          (ngModelChange)="chngFun($event)"
+          placeholder="Search"
+          aria-label="Search"
+        />
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-2"></div>
+      <div class="col-md-2">
+        <button
+          (click)="addProject()"
+          class="btn btn-secon-bg btn-primary semiBold-font app-bg add-project"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          (click)="addModal()"
+        >
+          ADD TEAM</button
+        ><br />
+      </div>
+    </div>
+
+    <div class="gymDsgn">
+      <div class="row" *ngIf="teamList as filterResults">
+        <!-- | filter:searchText | filter:searchdrop -->
+        <div class="text-center" style="width: 100%">
+          <!-- <p *ngIf="">No Projects Available</p> -->
+          <p *ngIf="filterResults.length == 0 || teamList == ''">
+            No Teams Available
+          </p>
+        </div>
+
+        <div
+          class="col-md-3"
+          style="margin-top: 2em"
+          *ngFor="
+            let item of filterResults
+              | paginate
+                : {
+                    itemsPerPage: 12,
+                    currentPage: page,
+                    totalItems: totalLength
+                  }
+          "
+        >
+          <div class="dashCard" style="width: 12.5rem">
+            <div class="dropdown-dots">
+              <i
+                class="fa fa-ellipsis-h"
+                mat-button
+                [matMenuTriggerFor]="menu"
+                style="float: right; font-size: 1em"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                (click)="addProjectTeam(item)"
+                data-toggle="modal"
+                data-target="#addProjectModal"
+              >
+                Map Projects
+              </button>
+              <button
+                mat-menu-item
+                (click)="addProjectTeam(item)"
+                data-toggle="modal"
+                data-target="#adduserModal"
+              >
+                Map Users
+              </button>
+              <button
+                mat-menu-item
+                (click)="editProject(item)"
+                data-toggle="modal"
+                data-target="#exampleModal"
+              >
+                Edit
+              </button>
+              <button mat-menu-item (click)="deleteProject(item)">
+                Delete
+              </button>
+            </mat-menu>
+            <div class="row">
+              <div class="profileImage" style="position: relative">
+                <i
+                  class="fa fa-users"
+                  style="
+                    font-size: 16px;
+                    margin-top: 10px;
+                    color: #3b5998 !important;
+                  "
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <div
+                style="
+                  padding-top: 10px;
+                  position: absolute;
+                  right: 32px;
+                  font-size: 13px;
+                "
+              >
+                <span
+                  (click)="view_usersmodal(item)"
+                  data-toggle="modal"
+                  data-target="#viewUsersModal"
+                  class="zoomin"
+                >
+                  {{ item?.users }} Users
+                </span>
+                <span style="color: #c7c7ce"> | </span>
+                <span
+                  (click)="view_projectsmodal(item)"
+                  data-toggle="modal"
+                  data-target="#viewProjectsModal"
+                  class="zoomin"
+                >
+                  {{ item?.projects }} Projects
+                </span>
+              </div>
+            </div>
+            <div class="row" (click)="viewProjects(item)">
+              <div class="col-md-12">
+                <div class="textDsgn">
+                  <span class="semiBold-font text_wrap">{{
+                    item.team_name | uppercase
+                  }}</span>
+                  <p
+                    class="text_wrap"
+                    style="
+                      margin-right: 3px;
+                      font-size: 13px;
+                      color: #3b5998 !important;
+                      display: -webkit-box;
+                      -webkit-line-clamp: 1;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: normal;
+                    "
+                  >
+                    <span
+                      ><i
+                        class="fa fa-pencil-square-o"
+                        style="margin-right: 8px; color: #3b5998 !important"
+                        aria-hidden="true"
+                      ></i></span
+                    >{{ item.description }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearFix" *ngIf="teamList != '' && teamList.length > 12">
+        <pagination-controls class="mt-5" (pageChange)="page = $event">
+        </pagination-controls>
+      </div>
+    </div>
+    <br />
+
+    <div class="modal fade" data-backdrop="static" id="viewProjectsModal">
+      <div class="modal-dialog">
+        <div class="modal-content" style="color: black; width: 35rem">
+          <div class="row" style="padding: 5%">
+            <div class="col-md-6 semiBold-font">
+              TEAM
+              <span
+                class="semiBold-font"
+                style="color: #3b5998; padding-top: 5%; padding-left: 1%"
+              >
+                - {{ TeamAction | uppercase }}</span
+              >
+            </div>
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                #viewProjectsModal
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="height: 450px; padding: 10px 40px">
+            <p *ngIf="projectDetails.length == 0 || projectDetails == ''">
+              No Projects Available
+            </p>
+
+            <div
+              style="
+                max-height: 400px;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                padding-top: 15px;
+              "
+              id="style-7"
+              *ngIf="projectDetails.length > 0"
+            >
+              <div class="row" *ngFor="let projectsDet of projectDetails">
+                <div class="col-md-1"></div>
+
+                <div class="col-md">
+                  <div>
+                    <img
+                      style="
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 50% !important;
+                        position: relative;
+                        top: -5px;
+                      "
+                      class="rounded-circle"
+                      src="https://mta.multitechcorp.in/mta-img/{{
+                        projectsDet?.project_img
+                      }}"
+                      onerror="this.src='assets/image/project.jpg'"
+                      class="float-left"
+                    />
+                  </div>
+                  <div style="padding-left: 4em">
+                    <div
+                      class="float-right"
+                      (click)="deleteproject_inteam(projectsDet)"
+                    >
+                      <i
+                        class="fa fa-trash"
+                        style="position: absolute; right: 51px; color: #3b5998"
+                        aria-hidden="true"
+                      ></i>
+                    </div>
+                    <div
+                      class="semiBold-font"
+                      style="width: 80%; word-wrap: break-word"
+                    >
+                      {{ projectsDet.project_name }}
+                    </div>
+                    <!-- <p style="font-size: 13px;">{{projectsDet.mobile_no}}</p> -->
+                  </div>
+                  <hr />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="viewUsersModal" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 5%">
+            <div class="col-md-6 semiBold-font">
+              TEAM
+              <span
+                class="semiBold-font"
+                style="color: #3b5998; padding-top: 5%; padding-left: 1%"
+              >
+                - {{ TeamAction | uppercase }}</span
+              >
+            </div>
+            <div class="col-md-6">
+              <button
+                type="button"
+                class="close"
+                #userCloseModal
+                data-dismiss="modal"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <div
+              style="
+                max-height: 400px;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                padding-top: 15px;
+              "
+              id="style-7"
+            >
+              <p *ngIf="teamUsers.length == 0 || teamUsers == ''">
+                No Users Available
+              </p>
+
+              <div *ngIf="teamUsers.length > 0">
+                <div class="row" *ngFor="let users of teamUsers">
+                  <div class="col-md-1"></div>
+
+                  <div class="col-md">
+                    <div>
+                      <img
+                        style="
+                          height: 50px;
+                          width: 50px;
+                          border-radius: 50% !important;
+                          position: relative;
+                          top: -5px;
+                        "
+                        src="{{http.imageURL}}{{ users.user_img }}"
+                        onerror="this.src='assets/image/user.svg'"
+                        class="float-left rounded-circle"
+                      />
+                    </div>
+                    <div style="padding-left: 4em">
+                      <div class="float-right" (click)="deleteUser(users)">
+                        <i
+                          class="fa fa-trash"
+                          style="
+                            position: absolute;
+                            right: 51px;
+                            color: #3b5998;
+                          "
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                      <div
+                        class="semiBold-font"
+                        style="max-width: 200px; word-wrap: break-word"
+                      >
+                        {{ users.name }}
+                      </div>
+                      <p style="font-size: 13px">{{ users.mobile_no }}</p>
+                    </div>
+                    <hr />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD CATEGORY -->
+      <div class="modal fade" data-backdrop="static" id="catModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black">
+            <div class="row" style="text-align: right">
+              <div class="col-md-12">
+                <button
+                  *ngIf="!catList"
+                  (click)="categoryList()"
+                  style="opacity: 0.6; width: auto"
+                  class="btn btn-bg btn-primary semiBold-font app-bg add-cate"
+                >
+                  AVAILABLE CATEGORIES <i class="fa fa-arrow-right"></i></button
+                ><br />
+              </div>
+            </div>
+            <div class="row" style="padding: 5%">
+              <div class="col-md-6">
+                <div
+                  class="row full-width"
+                  *ngIf="catList"
+                  style="padding-left: 2%; font-size: 16px"
+                >
+                  <p (click)="backBtn()">
+                    <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                    BACK
+                  </p>
+                </div>
+                <span class="semiBold-font">{{ categoryAction }}</span>
+              </div>
+
+              <div class="col-md-6">
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  #viewProjectsModal
+                  #closeCatModal
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form
+                [formGroup]="addCategoryForm"
+                *ngIf="!catList"
+                style="padding: 0% 10% 1% 10%"
+              >
+                <div class="row padrightleft">
+                  <span class="full-width f-small required-field"
+                    >Category Name</span
+                  >
+
+                  <input
+                    type="text"
+                    class="form-control f-small br-2 wth-80"
+                    [(ngModel)]="catData.category_name"
+                    formControlName="categoryname"
+                  />
+
+                  <div
+                    *ngIf="
+                      frmCat.categoryname.hasError('required') &&
+                      frmCat.categoryname.touched
+                    "
+                    class="font-italic error-box"
+                  >
+                    <small class="error-font"
+                      >Please enter the Category name</small
+                    >
+                  </div>
+                </div>
+                <div class="row padrightleft">
+                  <span class="full-width f-small required-field"
+                    >Description</span
+                  >
+
+                  <textarea
+                    type="text"
+                    class="form-control f-small br-2 wth-80"
+                    [(ngModel)]="catData.description"
+                    formControlName="description"
+                  ></textarea>
+
+                  <div
+                    *ngIf="
+                      frmCat.description.hasError('required') &&
+                      frmCat.description.touched
+                    "
+                    class="font-italic error-box"
+                  >
+                    <small class="error-font"
+                      >Please enter the Description</small
+                    >
+                  </div>
+                </div>
+
+                <div class="row padrightleft">
+                  <span class="full-width f-small required-field"
+                    >User Type</span
+                  >
+                  <select
+                    class="form-control f-small br-2 wth-80"
+                    formControlName="userType"
+                    [(ngModel)]="catData.role_id"
+                  >
+                    <option selected disabled [value]="null"></option>
+                    <option
+                      *ngFor="let roles of userRolesList"
+                      [ngValue]="roles.role_id"
+                    >
+                      {{ roles.role }}
+                    </option>
+                  </select>
+                  <!-- <div *ngIf="frmcat.userType.hasError('required') && frmcat.userType.touched" class="font-italic error-box">
+                                    <small>Please select the User Type</small>
+                                </div> -->
+                </div>
+              </form>
+              <div *ngIf="catList">
+                <div class="row full-width" *ngFor="let cat of categoriesList">
+                  <div style="padding-left: 4em" class="col-sm-10">
+                    <div class="semiBold-font">{{ cat.category_name }}</div>
+                    <p class="light-font">{{ cat.description }}</p>
+                  </div>
+                  <div class="col-sm-2">
+                    <i
+                      class="fa fa-edit"
+                      data-toggle="modal"
+                      (click)="addcategory(cat)"
+                    ></i>
+                    <i
+                      class="fa fa-trash"
+                      style="padding-left: 25px"
+                      (click)="deleteCat(cat)"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center" *ngIf="!catList && formHandle">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                  (click)="addCategorySubmit()"
+                >
+                  Add Category
+                </button>
+              </div>
+              <div class="text-center" *ngIf="!catList && !formHandle">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 app-color"
+                  (click)="editCategorySubmit(catData.category_id)"
+                >
+                  Edit Category
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="viewPicModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="color: black">
+            <div class="row" style="padding: 5%">
+              <div class="col-md-6">
+                <span class="semiBold-font">{{
+                  selectedProject.project_name
+                }}</span>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="close" data-dismiss="modal">
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="margin-left: 5%">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="profileimage" style="text-align: center">
+                    <img
+                      class="feedmodalImg"
+                      for="img"
+                      src="{{ http.imageURL }}{{ selectedProject.project_img }}"
+                      onerror="this.src='assets/image/bg.jpg'"
+                      alt="Profile image"
+                      width="100%"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chnge -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" data-backdrop="static" id="exampleModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="color: black">
+        <div class="row" style="padding: 5%">
+          <div class="col-md-6">
+            <span class="semiBold-font">{{ projectAction }}</span>
+          </div>
+          <div class="col-md-6">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              #closeModalPro
+              (click)="closeModal()"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-header r-border" style="padding: 0 !important">
+          <div class="row full-width"></div>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form [formGroup]="addProjectForm">
+            <div class="row">
+              <div class="col-lg-6">
+                <span class="full-width f-small">Team Name</span>
+                <input
+                  type="text"
+                  class="form-control f-small br-2 wth-80"
+                  formControlName="teamname"
+                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                  minlength="1"
+                  maxlength="50"
+                />
+
+                <div
+                  *ngIf="
+                    frm.teamname.hasError('required') && frm.teamname.touched
+                  "
+                  class="font-italic error-box"
+                >
+                  <small class="error-font">Please Enter the Team name</small>
+                </div>
+                <div
+                  *ngIf="frm.teamname.hasError('pattern')"
+                  class="font-italic error-box"
+                >
+                  <small class="error-font"
+                    >Numbers & Special characters not allowed!</small
+                  >
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <!-- <div class="col-md-6">
+                <span class=" full-width f-small">Projects</span>
+                <select class="form-control f-small br-2 wth-80" formControlName="prof"
+                  [(ngModel)]="projectList.prof">
+                  <option selected disabled [value]="null"></option>
+                  <option *ngFor="let city of prof_staff" [ngValue]="city.category_id">{{city.category_name}}
+                  </option>
+                </select>
+              </div> -->
+                <span class="full-width f-small">Description</span>
+
+              <textarea type="text" class="form-control f-small br-2 wth-80" style="max-height: 33px !important;" id="style-7"
+                formControlName="description" id="descript"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                minlength="1" maxlength="200"></textarea>
+
+                <div
+                  *ngIf="
+                    frm.description.hasError('required') &&
+                    frm.description.touched
+                  "
+                  class="font-italic error-box"
+                >
+                  <small class="error-font">Please Enter the Description</small>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="text-center">
+            <button
+              type="submit"
+              class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+              (click)="addprojectSubmit(selectededitProject)"
+            >
+              {{ projectActionBtn }} TEAM
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addProjectModal" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="color: black">
+        <div class="row" style="padding: 4% 4% 2% 4%">
+          <div class="col-md-6">
+            <span class="semiBold-font">{{ projectAction }}</span>
+          </div>
+          <div class="col-md-6">
+            <button
+              type="button"
+              class="close"
+              #closeModal
+              data-dismiss="modal"
+              (click)="backFun2()"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4" style="margin-left: 14px">
+              <i class="fa fa-search searchIcon" aria-hidden="true"></i>
+              <input
+                type="text"
+                style="
+                  background: white !important;
+                  border: 1px solid rgba(0, 0, 0, 0.54) !important;
+                  margin-top: 1%;
+                  border-radius: 0.25rem !important;
+                "
+                [(ngModel)]="searchProject"
+                [ngModelOptions]="{ standalone: true }"
+                class="form-control br-2 semiBold-font searchBox"
+                (input)="checkProject($event)"
+                placeholder="Search Projects"
+                aria-label="Search"
+                id="auto"
+              />
+            </div>
+          </div>
+          <div class="row" style="display: flex; justify-content: center">
+            <div *ngIf="projectList == ''" style="margin-top: 14px">
+              <!-- <input
+                class="form-control wth-100"
+                type="text"
+                placeholder="No Projects"
+                readonly
+              /> -->
+              <p>No Project Search Results!</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" *ngIf="projectList != ''">
+              <div
+                style="
+                  background-color: #fff;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <div
+                  style="
+                    max-height: 350px;
+                    overflow-x: hidden;
+                    overflow-y: scroll;
+                  "
+                  id="style-7"
+                >
+                  <li
+                    class="list-group-item"
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: end;
+                    "
+                  >
+                    <strong class="" style="font-size: 13px; margin-left: 73px"
+                      >Select All</strong
+                    >
+                    <input
+                      class="end"
+                      type="checkbox"
+                      [(ngModel)]="masterSelected"
+                      name="list_name"
+                      value="m1"
+                      (change)="checkUncheckAll()"
+                    />
+                  </li>
+                  <ul
+                    class="list-group"
+                    *ngFor="let item of projectList;let i = index"
+                    style="display: flex; flex-direction: row"
+                  >
+                    <li
+                      class="list-group-item list"
+                      (click)="toggleCheckbox(item)"
+                    >
+                      <span>
+                        <img
+                          class="rounded-circle"
+                          style="height: 30px; width: 30px"
+                          src="{{ http.imageURL }}{{ item?.project_img }}"
+                          onerror="this.src = 'assets/image/project.jpg'"
+                        />
+                      </span>
+                      <span style="font-size: 12px">{{
+                        item?.project_name
+                      }}</span>
+                      <input
+                        class="end"
+                        id="checkbox-{{i}}"
+                        type="checkbox"
+                        [(ngModel)]="item.isSelected"
+                        name="list_name"
+                        value="{{ item.project_id }}"
+                        (change)="isAllSelected()"
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="viewError"
+            class=""
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding-top: 20px;
+            "
+          >
+            <div *ngIf="MultiselectErr" class="font-italic error-box">
+              <small class="error-font">Please Select Project</small>
+            </div>
+          </div>
+          <div class="text-center pt-3">
+            <button
+              type="submit"
+              *ngIf="projectList?.length > 0 || projectList != ''"
+              class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 text-fnt80 semiBold-font app-color"
+              (click)="addteamSubmit(item)"
+            >
+              {{ projectActionBtn }} PROJECTS
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="adduserModal" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="color: black">
+        <div class="row" style="padding: 4% 4% 0 1%">
+          <div class="col-md-6">
+            <span class="semiBold-font">Map User to Team</span>
+          </div>
+          <div class="col-md-6">
+            <button
+              type="button"
+              class="close"
+              (click)="backFun()"
+              #adduserModal
+              data-dismiss="modal"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <!-- <form [formGroup]="mapUserForm"> -->
+          <div class="row user-content">
+            <div class="col-lg-6">
+              <span class="full-width f-small">User Roles</span>
+              <select
+                class="form-control wth-80"
+                [(ngModel)]="role_id"
+                (change)="getUsers(role_id)"
+              >
+                <option value="" disabled selected>Select User</option>
+                <option
+                  *ngFor="let role of userRolesList"
+                  [value]="role.role_id"
+                >
+                  {{ role.role }}
+                </option>
+              </select>
+              <div
+                *ngIf="role_id === null && role_id !== undefined"
+                class="font-italic error-box"
+              >
+                <small class="error-font">Please Select the User Roles</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row user-content">
+            <div class="col-lg-6">
+              <div *ngIf="userSearch" class="wth-100">
+                <div class="col-md-12" style="padding-left: 0">
+                  <i
+                    class="fa fa-search searchIcon"
+                    style="left: 6px !important"
+                    aria-hidden="true"
+                  ></i>
+                  <input
+                    type="text"
+                    style="
+                      background: white !important;
+                      border: 1px solid rgba(0, 0, 0, 0.54) !important;
+                      margin-top: 1%;
+                      border-radius: 0.25rem !important;
+                      width: 105%;
+                    "
+                    [(ngModel)]="searchUser"
+                    class="form-control br-2 semiBold-font searchBox"
+                    placeholder="Search Users"
+                    aria-label="Search"
+                    (input)="checkUser($event)"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </div>
+              </div>
+
+              <div *ngIf="userList == ''" style="margin-top: 14px">
+                <input
+                  class="form-control wth-100"
+                  type="text"
+                  placeholder="No Users"
+                  readonly
+                />
+              </div>
+
+              <div class="multiselect" *ngIf="userList != ''">
+                <span class="full-width f-small">User Name</span>
+                <div class="selectBox" (click)="showCheckboxes()">
+                  <select class="form-control">
+                    <option>All Users</option>
+                  </select>
+                  <div class="overSelect"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div
+                      style="
+                        background-color: #fff;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        style="
+                          max-height: 270px;
+                          overflow-x: hidden;
+                          max-width: 320px;
+                          overflow-y: scroll;
+                        "
+                        id="style-7"
+                      >
+                        <li
+                          class="list-group-item"
+                          style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: end;
+                          "
+                        >
+                          <strong
+                            class=""
+                            style="font-size: 13px; margin-left: 16px"
+                            >Select All</strong
+                          >
+                          <input
+                            class="end"
+                            type="checkbox"
+                            [(ngModel)]="masterSelected2"
+                            name="list_name"
+                            value="m1"
+                            (change)="checkUncheckAll2()"
+                          />
+                        </li>
+                        <ul
+                          class="list-group"
+                          *ngFor="let item of userList"
+                          style="display: flex; flex-direction: row"
+                        >
+                          <li
+                            class="list-group-item list"
+                            (click)="toggleCheckbox2(item)"
+                          >
+                            <span style="font-size: 12px">{{
+                              item?.name
+                            }}</span>
+                            <input
+                              class="end"
+                              type="checkbox"
+                              [(ngModel)]="item.isSelected"
+                              name="list_name"
+                              value="{{ item.user_id }}"
+                              (change)="isAllSelected2()"
+                            />
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row user-content">
+            <div class="col-md-6">
+              <small
+                class="error-font"
+                style="position: absolute; bottom: -6px; font-size: 11px"
+                *ngIf="MultiselectErr && userList.length > 0"
+                class="font-italic error-box"
+                >Please Select the User Name</small
+              >
+            </div>
+          </div>
+
+          <!-- </form> -->
+          <div class="text-center">
+            <button
+              type="submit"
+              class="btn btn-primary btn-bg mt-3 br-2 width-45 semiBold-font app-color"
+              (click)="adduserSubmit()"
+            >
+              Map User
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

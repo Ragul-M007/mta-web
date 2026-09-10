@@ -1,0 +1,476 @@
+$app-color: #e9e7e7;
+
+.tabview {
+    .nav-item {
+        border: none !important;
+        border-bottom: 1px solid !important;
+        padding-left: 10%;
+    }
+
+    th {
+        border: none;
+        padding-bottom: 2%;
+    }
+}
+
+.tab-container {
+    border-radius: 1em;
+
+
+
+}
+
+.searchBox {
+    margin-bottom: 0.5em !important;
+    padding-left: 25px;
+}
+
+.searchdiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    input {
+        position: relative;
+    }
+
+    i {
+        position: absolute;
+        left: 0px;
+    }
+
+}
+
+.searchIcon {
+    position: absolute;
+    top: 0.8em;
+    left: 25px;
+}
+
+.feedImg {
+    width: 17vw;
+    height: 25vh;
+    border-radius: 10px;
+}
+
+.feedmodalImg {
+    width: 50%;
+    border-radius: 20px;
+}
+
+.nav-item {
+
+    padding-left: 6%;
+}
+
+.textDsgn {
+    padding-top: 1em;
+    text-align: left;
+
+    span {
+        font-size: 12px;
+    }
+
+    i {
+        padding-left: 1em;
+    }
+
+    line-height: 1.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%
+}
+
+.actionIcon {
+    text-align: right;
+}
+
+.descript {
+    display: block;
+    padding: 1em;
+    text-align: left;
+}
+
+.dashCard {
+    margin: 0.5em;
+    font-size: 0.9em;
+    text-align: center;
+    // border-radius: 10px;
+    background-color: transparent;
+    color: black;
+    border-radius: 15px;
+
+    // box-shadow: 0px 4px 8px 0px #757575;
+    .dashboardTop {
+        padding: 1em;
+        // border-radius: 10px;
+        // background-color: #fff;
+
+        .roleTxt {
+            font-size: 0.8em;
+            margin-bottom: 0.5em;
+            margin-top: 1em;
+        }
+
+        .countTxt {
+            font-weight: bold;
+        }
+    }
+}
+
+.add-user {
+    margin: 5%;
+}
+
+.main-content {
+    padding: 2%;
+    font-size: 90%;
+}
+
+.main {
+    margin-left: 2em;
+    border-radius: 10px;
+}
+
+.card {
+    background-color: transparent;
+    border-radius: 0 !important;
+}
+
+.pad-cent {
+    padding-left: 20%;
+}
+
+.wth-80 {
+    width: 80%;
+}
+
+.tab-content {
+    // padding: 2%;
+    // background: #eff5ff;
+    // border-radius: 15px;
+}
+
+.text-fnt80 {
+    color: gray;
+}
+
+tbody {
+    text-align: center;
+    color: #2699fb;
+}
+
+thead {
+    color: #939698;
+    text-align: center;
+}
+
+.searchBox {
+    border-radius: 30px;
+    background-color: #fff;
+    font-size: 0.9em;
+    border-color: #fff;
+}
+
+.btnAddRef {
+    float: right;
+    border-radius: 30px;
+    font-size: 0.9em;
+}
+
+.inner-addon {
+    position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon {
+    left: 0px;
+}
+
+.right-addon .glyphicon {
+    right: 0px;
+}
+
+/* add padding  */
+.left-addon input {
+    padding-left: 30px;
+}
+
+.right-addon input {
+    padding-right: 30px;
+}
+
+
+
+
+body {
+    background-color: #bcd9f5
+}
+
+.app-bg {
+    float: right;
+}
+
+.card {
+    // max-width: 25rem;
+    padding: 0;
+    border: none;
+    border-radius: 0.5rem
+}
+
+.nav-link {
+    color: grey;
+    font-weight: 500
+}
+
+.nav-link:hover {
+    color: #e9e7e7;
+}
+
+a.active {
+    border-bottom: 2px solid #fff;
+}
+
+.nav-link:hover {
+    color: grey;
+}
+
+.nav-pills .nav-link.active {
+    color: #3B597C;
+    background-color: white;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-weight: 600;
+    border-bottom: 2px solid #3b5998;
+}
+
+.table thead th {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: $app-color;
+}
+
+.table td {
+    border-bottom: 1px solid #dee2e6;
+    border-top: 0px;
+    color: $app-color;
+    font-size: 0.8em;
+}
+
+.third {
+    padding: 0 1.5rem 0 1.5rem
+}
+
+label {
+    font-weight: 500;
+    color: rgb(104, 104, 104)
+}
+
+.btn-success {
+    float: right
+}
+
+.form-control:focus {
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+}
+
+// select {
+//     -webkit-appearance: none;
+//     -moz-appearance: none;
+//     text-indent: 1px;
+//     text-overflow: ""
+// }
+
+ul {
+    list-style: none;
+    margin-top: 1rem;
+    padding-inline-start: 0
+}
+
+.search {
+    padding: 0 1rem 0 1rem
+}
+
+.ccontent li .wrapp {
+    padding: 0.3rem 1rem 0.001rem 1rem
+}
+
+.ccontent li .wrapp div {
+    font-weight: 600
+}
+
+.ccontent li .wrapp p {
+    font-weight: 360
+}
+
+.ccontent li:hover {
+    background-color: rgb(117, 93, 255);
+    color: white
+}
+
+.addinfo {
+    padding: 0 1rem
+}
+
+.table th {
+    border: none;
+}
+
+#addOfferModal,
+#mapOfferModal {
+    .modal-body {
+        // text-align: center;
+        padding: 5%;
+        padding-top: 0% !important;
+    }
+
+    .row {
+        padding: 2%;
+    }
+
+    .form-control {
+        font-size: 0.8em;
+    }
+}
+
+.drop-down {
+    width: auto;
+    background: #fff;
+    border: none;
+    color: $app-color;
+    font-size: 80%;
+    cursor: pointer;
+}
+
+.form-control {
+    border-radius: 20px;
+
+}
+
+.add-gym-btn {
+    position: absolute;
+    right: 2em;
+    width: 10%;
+}
+
+.upload-card {
+    text-align: center;
+    width: 90%;
+}
+
+.imgBox {
+    .card-img-top {
+        width: 60px;
+    }
+}
+
+#uploadImage {
+    position: absolute;
+    cursor: pointer;
+    margin-left: 12em;
+    margin-top: 2em;
+    opacity: 0;
+}
+
+.card {
+    border: 0px;
+}
+
+.card-body {
+    p {
+        font-size: 80% !important;
+    }
+}
+
+#userModal {
+    .modal-body {
+        // text-align: center;
+        padding: 5%;
+        padding-top: 0% !important;
+    }
+
+    .row {
+        padding: 1%;
+    }
+
+    input,
+    select,
+    textarea {
+        border: none;
+    }
+}
+
+input,
+textarea,
+select {
+    background-color: #fff !important;
+    border: 1px solid rgba(0, 0, 0, .54) !important;
+    margin-top: 1% !important;
+    border-radius: 0.25rem !important;
+
+}
+
+.profileImage {
+    display: flex;
+    width: 50%;
+    margin: auto;
+    position: relative;
+}
+
+#uploadImage {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    margin-left: 0;
+    margin-top: 2em;
+    opacity: 0;
+}
+
+
+.statusIcon {
+    padding-right: 0.5em;
+    color: #000;
+}
+
+.text-areas {
+    width: 91% !important;
+    // height: 0 !important;
+    min-height: 45% !important;
+    max-height: 50% !important;
+   
+    
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 700px !important;
+    }
+}
+
+.chatList {
+    background-color: white !important;
+}
+
+.replies {
+    padding: 1%;
+}
+
+.card-body {
+    padding: 5px 20px 0px 20px;
+}
+.round-circle{
+    border-radius: 20px;
+}
+small{
+    color: red !important;
+    font-weight: bolder;
+    font-size: 12px;
+  }

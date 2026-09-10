@@ -1,0 +1,303 @@
+<div class="container">
+  <div class="main-content light-font">
+    <div class="row">
+      <div class="col-md-5 ml-4" style="margin-left:28px ;">
+
+        <div><input type="text" style="background: white !important; font-size: 11px;font-weight: bold;"
+            class="form-control br-2  searchBox" [(ngModel)]="searchText" placeholder="Search" aria-label="Search" />
+        </div>
+        <div><i class="fa fa-search searchIcon" style="top: 1.2em !important;" aria-hidden="true"></i></div>
+
+
+      </div>
+    </div>
+    <div class="container card d-flex justify-content-center">
+      <!-- nav options -->
+      <div class="row">
+        <div class="col-md-8">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active semiBold-font" id="general-tab" data-toggle="pill" (click)="feeds()"
+                href="#newsfeed" role="tab" aria-controls="pills-home" aria-selected="true">News Feeds</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link semiBold-font" id="gym-owner-tab" data-toggle="pill" (click)="highlights()"
+                href="#highlights" role="tab" aria-controls="pills-home" aria-selected="true">Highlights</a>
+            </li>
+          </ul>
+          <!-- content -->
+        </div>
+        <div class="col-md-4">
+          <button (click)="adduser()" class="btn btn-bg btn-primary app-bg semiBold-font add-user" data-toggle="modal"
+            data-target="#userModal" (click)="addModal()">
+            Add NewsFeed / Highlights
+          </button>
+          <br />
+        </div>
+      </div>
+      <div class="tab-content" id="pills-tabContent p-3">
+        <!-- 1st card -->
+        <div class="tab-pane fade show active" id="newsfeed" role="tabpanel" aria-labelledby="general-tab">
+          <div class="tab-container">
+            <div class="main">
+              <div class="card-columns full-width" style="column-count: 1; border-radius: 10px">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="feedList | filter : searchText as filterfeedResults">
+                    <div class="text-center">
+                      <h5 *ngIf="feedList == null" class="text-center">
+                        No Feed Available
+                      </h5>
+                      <h5 *ngIf="filterfeedResults.length == 0" class="text-center">
+                        No Feed Available
+                      </h5>
+                    </div>
+                    <div class="col-md-3" style="margin-top: 2em" *ngFor="let item of filterfeedResults">
+                      <div class="dashCard">
+                        <div class="row" (click)="viewFeed(item)" data-toggle="modal" data-target="#viewFeedModal">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileimage">
+                              <img class="feedImg" for="img" src="{{ http.imageURL + item.img_url }}"
+                                onerror="this.src='assets/image/bg.jpg'" alt="Profile image" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-8">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.title_text }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="textDsgn">
+                              <span class="actionIcon"><i class="fa fa-pencil" (click)="editFeed(item)"
+                                  data-toggle="modal" data-target="#userModal"></i>
+                                <i class="fa fa-trash" (click)="deleteFeed(item)"></i></span>
+                            </div>
+                          </div>
+                          <div class="textDsgn">
+                            <p class="light-font" style="padding-left: 15px">
+                              {{ item.description }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 2nd card -->
+
+        <!-- 1st card -->
+        <div class="tab-pane fade" id="highlights" role="tabpanel" aria-labelledby="gym-owner-tab">
+          <div class="tab-container">
+            <div class="main">
+              <div class="card-columns full-width" style="column-count: 1; border-radius: 10px">
+                <div class="gymDsgn">
+                  <div class="row" *ngIf="
+                      hightlightList | filter : searchText as filterhighResults
+                    ">
+                    <div class="text-center" style="width: 100%">
+                      <h5 *ngIf="hightlightList == ''" class="text-center">
+                        No Highlights Available
+                      </h5>
+
+                    </div>
+                    <div class="col-md-3" style="margin-top: 2em" *ngFor="let item of filterhighResults">
+                      <div class="dashCard">
+                        <div class="row" (click)="viewFeed(item)" data-toggle="modal" data-target="#viewFeedModal">
+                          <div class="col-md-12">
+                            <!-- <div class="imgBox"> -->
+                            <div class="profileimage">
+                              <img class="feedImg" for="img" src="{{ http.imageURL + item.img_url }}"
+                                onerror="this.src='assets/image/bg.jpg'" alt="Profile image" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-8">
+                            <div class="textDsgn">
+                              <span class="semiBold-font">{{ item.title_text }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="textDsgn">
+                              <span class="actionIcon"><i class="fa fa-pencil" (click)="editFeed(item)"
+                                  data-toggle="modal" data-target="#userModal"></i>
+                                <i class="fa fa-trash" (click)="deleteFeed(item)"></i></span>
+                            </div>
+                          </div>
+                          <div class="textDsgn">
+                            <p class="light-font" style="padding-left: 15px">
+                              {{ item.description }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 2nd card -->
+      </div>
+    </div>
+
+    <div class="modal fade" data-backdrop="static" id="userModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 5%">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{ action }} NewsFeed / Highlights</span>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="close" #closeModal data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="margin-left: 5%">
+            <form [formGroup]="feedForm">
+              <div class="row" style="display: flex; justify-content: center;">
+                <div class="col-md-4" style="position: relative;right: 10%;">
+                                  
+                  <div class="profileimage" style="display: flex;">
+                    <span class="full-width f-small text-center">Upload File</span>
+
+                    <input type="file" style="float:right;" id="uploadImage" #fileInput
+                      (change)="fileChangeEvent($event)"  accept=".jpg"  formControlName="filename"/>
+
+                    <img class="rounded-circle" #img style="float:right;" width="80px" height="80px"
+                      onerror="this.src='assets/image/bg.jpg'" [src]="images"  /> 
+                  </div>
+
+                  <!-- <input type="file" (change)="fileChangeEvent($event)" accept=".jpg"
+                    class="form-control f-small br-2 wth-80 uploaddocs" id="uploaddocs" formControlName="filename"
+                    #fileInput />
+                  <img class="rounded-circle" #img style="float:right;" width="80px" height="80px" [src]="images"
+                    onerror="this.src='assets/image/pro-default.png'" /> -->
+                  <div *ngIf="
+                      frm.filename.hasError('required') && frm.filename.touched
+                    " class="font-italic error-box">
+                    <small>Please select a File</small>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <span class="full-width f-small  required-field">Feed Type</span>
+                  <select class="form-control f-small br-2 wth-80" formControlName="feedType" placeholder="">
+                    <option selected disabled [value]="null" hidden>
+                      Select Feed type
+                    </option>
+                    <option *ngFor="let feed of feedTypeList" [ngValue]="feed.id">
+                      {{ feed.name }}
+                    </option>
+                  </select>
+                  <div *ngIf="
+                      frm.feedType.hasError('required') && frm.feedType.touched
+                    " class="font-italic error-box">
+                    <small>Please select the Feed Type</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <!-- <div class="input-group-prepend wth-50"> -->
+                  <span class="full-width f-small required-field">Title</span>
+                  <!-- </div> -->
+                  <!-- <input type="text" class="form-control addGym br-2 wth-80" formControlName="userType"> -->
+
+                  <input type="text" class="form-control f-small br-2 wth-80" formControlName="title" />
+
+                  <div *ngIf="frm.title.hasError('required') && frm.title.touched" class="font-italic error-box">
+                    <small>Please enter title</small>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md">
+                  <!-- <div class="input-group-prepend wth-50"> -->
+                  <span class="full-width f-small required-field">Description</span>
+                  <!-- </div> -->
+                  <!-- <input type="text" class="form-control addGym br-2 wth-80" formControlName="userType"> -->
+                  <!-- <select class="form-control  br-2 wth-80" formControlName="username">
+                                            <option selected disabled [value]="null"></option>
+                                            <option *ngFor="let user of userList" [ngValue]="user.user_id">{{ user.name
+                                                }}</option>
+                                        </select> -->
+                  <textarea type="text" class="form-control f-small br-2 wth-80 text-areas" 
+                    formControlName="description"></textarea>
+
+                  <div *ngIf="
+                      frm.description.hasError('required') &&
+                      frm.description.touched
+                    " class="font-italic error-box">
+                    <small>Please enter description</small>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-bg mt-3 br-2 mr-5 width-45 semiBold-font app-color"
+                (click)="uploadSubmit()" style="text-transform: uppercase">
+                {{ action }}ijfwebf
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="viewFeedModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: black">
+          <div class="row" style="padding: 5%">
+            <div class="col-md-6">
+              <span class="semiBold-font">{{ selectedFeedV.title_text }}</span>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="close" data-dismiss="modal" #closeModal>
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body" style="margin-left: 5%">
+            <div class="dashCard">
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- <div class="imgBox"> -->
+                  <div class="profileimage">
+                    <img class="feedmodalImg" for="img" src="{{ http.imageURL + selectedFeedV.img_url }}"
+                      onerror="this.src='assets/image/bg.jpg'" alt="Profile image" />
+                  </div>
+                </div>
+              </div>
+              <div class="row descript">
+                <h6 class="semiBold-font">Description :</h6>
+                <p class="light-font">{{ selectedFeedV.description }}</p>
+              </div>
+              <div class="row descript" style="display: block">
+                <h6 class="light-font">
+                  Added on : {{ selectedFeedV.created_at | date }}
+                </h6>
+                <h6 class="light-font">
+                  Updated on : {{ selectedFeedV.updated_at | date }}
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

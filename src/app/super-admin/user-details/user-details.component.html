@@ -1,0 +1,79 @@
+<div class="container">
+
+    <div class="main" style="color:black">
+        
+           
+        <div class="row full-width" style="padding-left:2%;font-size: 16px;" >
+            <p (click)="backClicked()"><i class="fa fa-long-arrow-left "  aria-hidden="true"></i> BACK</p>
+        </div>
+          
+                <div class="row full-width" >
+                                            
+                    <div class="col-sm-8"  style="text-align:left">
+                        <div class="img-style">
+                        <img style="width:60px;height: 60px;" src="{{http.imageURL}}{{projectDetails.user_img}}" onerror="this.src='assets/image/user.svg'"
+                            class="float-left rounded-circle">
+                    </div>
+                    <div style="margin-left:60px">
+                        <div class="semiBold-font" >{{projectDetails.name}}</div>
+                        <p class="light-font"><i class="fa fa-map-marker secondry-color"></i>  {{projectDetails.city}}, {{projectDetails.state}} <br><span class="light-font"> {{projectDetails.area}}</span></p>
+                        
+
+                        <p class="light-font">Email :  <span class="secondry-color">{{projectDetails.email}} </span> |  Mobile: <span class="secondry-color">{{projectDetails.mobile_no}}</span></p>
+
+                    </div>
+                        
+                    </div>
+                    </div>
+               
+           
+      
+
+        <hr><br>
+        <p *ngIf="projectList == ''" class="text-center semiBold-font">No Projects Available</p>
+
+        <div class="gymDsgn">
+            <div class="row">
+                <div class="col-md-3"  *ngFor="let item of projectList">
+                    <div class="dashCard" (click)="viewProjects(item)">
+                        <!-- <div class="iconTop">
+                            <i class="fa fa-pencil-square-o dashIcon" style="margin-right: 0.7em;" aria-hidden="true"
+                                data-toggle="modal" data-target="#gymModal" (click)="editGym(item)"></i>
+                            <i class="fa fa-trash-o dashIcon" aria-hidden="true" (click)="deleteGym(item.user_id)"></i>
+                        </div>    
+                        <br> -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                    <!-- <div class="imgBox"> -->
+                            <div class="profileimage" >
+                                <img class="card-img-top rounded-circle" style="height: 60px; width: 60px;" for="img"  src="{{http.imageURL}}{{item.project_img}}"
+                                    onerror="this.src='assets/image/user.svg'" alt="Profile image">
+                                </div>
+                            </div>
+                        </div>
+                            <div class="row">
+                            <div class="col-md-12" style="padding-right:0px;">
+                                <div class="textDsgn">
+                                <span class="semiBold-font">{{ item.project_name }}</span>
+                                
+                                <p class="light-font"><i class="fa fa-map-marker secondry-color"></i><span class="address light-font">{{item.address}},{{item.city}},{{item.state}}</span></p>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+        
+            </div>
+        </div>
+        <br>
+
+       
+
+        <!-- <div style="text-align:center !important;">
+            <pagination-controls (pageChange)="p = $event" previousLabel="" nextLabel=""></pagination-controls>
+        </div> -->
+    </div>
+    </div>
