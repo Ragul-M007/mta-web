@@ -9,15 +9,20 @@ import { async } from '@angular/core/testing';
 })
 export class HttpService {
 
-  // UAT URL 
+  // UAT URL
   // serverURL = "https://uatmta.multitechcorp.in/mta/";
   // imageURL = "https://uatmta.multitechcorp.in/mta-img/";
   // web_socket_url="https://uatmta.multitechcorp.in:5022/";
 
-  //live URL
-  serverURL = "https://mta.multitechcorp.in/mta/";
-  imageURL = "https://mta.multitechcorp.in/mta-img/";
-  web_socket_url="https://mta.multitechcorp.in:5022/";
+  // live URL
+  // serverURL = "https://mta.multitechcorp.in/mta/";
+  // imageURL = "https://mta.multitechcorp.in/mta-img/";
+  // web_socket_url="https://mta.multitechcorp.in:5022/";
+
+  //LOCAL dev (backend on this PC — web opens in browser here)
+  serverURL = "http://localhost:3000/mta/";
+  imageURL = "http://localhost:3000/mta-img/";
+  web_socket_url="http://localhost:5022/";
 
   defaultImage = "src/assets/image/user.svg";
   paginationCount = 8;
