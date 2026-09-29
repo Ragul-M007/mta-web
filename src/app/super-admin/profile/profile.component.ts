@@ -181,7 +181,7 @@ export class ProfileComponent implements OnInit {
       userType: ['', Validators.compose([Validators.required])],
       userName: ['', Validators.compose([Validators.required])],
       dob: ['', Validators.compose([])],
-      annDate: ['', Validators.compose([])],
+      annDate: [null, Validators.compose([])], // null (not '') so a blank anniversary is stored as NULL, not an invalid datetime
       email: ['', Validators.compose([Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")])],
       phoneno: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)])],
       state: ['', Validators.compose([Validators.required])],
@@ -205,7 +205,7 @@ export class ProfileComponent implements OnInit {
       userType: ['', Validators.compose([Validators.required])],
       userName: ['', Validators.compose([Validators.required])],
       dob: ['', Validators.compose([])],
-      annDate: [currentdate, Validators.compose([])],
+      annDate: [null, Validators.compose([])], // was DD-MM-YYYY 'currentdate' — the datetime column rejects it; null = no anniversary
       email: ['', Validators.compose([Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")])],
       phoneno: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)])],
       state: ['', Validators.compose([Validators.required])],

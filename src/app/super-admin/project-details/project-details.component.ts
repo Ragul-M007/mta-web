@@ -291,7 +291,7 @@ export class ProjectDetailsComponent implements OnInit {
       userType: ['', Validators.compose([Validators.required])],
       userName: ['', Validators.compose([Validators.required])],
       dob: ['', Validators.compose([Validators.required])],
-      annDate: ['', Validators.compose([])],
+      annDate: [null, Validators.compose([])], // null so a blank anniversary is stored as NULL (avoids strict-mode datetime error)
       email: [
         '',
         Validators.compose([

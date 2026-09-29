@@ -1040,8 +1040,18 @@ export class UserComponent implements OnInit {
     // this.userData.annDate =currentdate;
     this.userData.loginpin = item.loginpin;
     this.userData.images = item.user_img;
-    // this.userData.prof = item.prof;
-
+    // The edit modal's Profession <select> (newAdduser2 block) binds to finalusersLists, which
+    // editUser never populated -> dropdown showed empty. Fill it for this user's role, mirroring
+    // the role->list mapping in searchReset().
+    this.finalusersLists =
+      item.role_id == 2 ? this.prof_staff :
+      item.role_id == 3 ? this.prof_vendors :
+      item.role_id == 4 ? this.prof_consultants :
+      item.role_id == 5 ? this.prof_contractors :
+      item.role_id == 6 ? this.prof_clients : [];
+    // prof is stored as the category_id (a number); set it so the matching option is preselected
+    // (and so saving doesn't blank it). The string branch below still converts a legacy name -> id.
+    this.userData.prof = item.prof;
 
     if (typeof item.prof === 'string') {
       if (item.role_id == 6) {
@@ -1231,7 +1241,10 @@ export class UserComponent implements OnInit {
       userType: ['', Validators.compose([Validators.required])],
       userName: ['', Validators.compose([Validators.required])],
       dob: ['', Validators.compose([])],
-      annDate: [currentdate, Validators.compose([])],
+      // annDate default is null (the "Date of Anniversary" input is commented out in the template).
+      // Was `currentdate` (DD-MM-YYYY) which MySQL's datetime column rejects on create/update;
+      // null makes create INSERT NULL and update drop the key (QueryGenerator drops null), preserving anniver_date.
+      annDate: [null, Validators.compose([])],
       email: [
         '',
         Validators.compose([
